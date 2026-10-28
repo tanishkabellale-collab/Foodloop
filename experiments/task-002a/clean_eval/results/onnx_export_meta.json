@@ -1,0 +1,49 @@
+{
+  "task": "TASK-002B-1",
+  "model_architecture": "resnet18",
+  "source_checkpoint": "C:\\Users\\LOQ\\Documents\\FOODLOOP\\experiments\\task-002a\\clean_eval\\checkpoints\\resnet18_best.pt",
+  "source_epoch": 4,
+  "source_val_loss": 0.0514,
+  "source_val_acc": 0.9874,
+  "onnx_output_path": "C:\\Users\\LOQ\\Documents\\FOODLOOP\\experiments\\task-002a\\clean_eval\\checkpoints\\resnet18_foodloop.onnx",
+  "onnx_file_size_mb": 42.63,
+  "onnx_version": "1.23.2",
+  "opset_version": 17,
+  "is_self_contained": true,
+  "input_name": "input",
+  "input_shape": [
+    1,
+    3,
+    224,
+    224
+  ],
+  "input_dtype": "FP32",
+  "output_name": "logits",
+  "output_shape": [
+    1,
+    2
+  ],
+  "output_dtype": "FP32",
+  "export_duration_s": 1.9468,
+  "preprocessing_contract": {
+    "channels": "RGB",
+    "resize": 256,
+    "center_crop": 224,
+    "normalization_mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "normalization_std": [
+      0.229,
+      0.224,
+      0.225
+    ]
+  },
+  "output_mapping": {
+    "0": "visually_acceptable",
+    "1": "visually_unsuitable"
+  },
+  "candidate_experimental_threshold": 0.2,
+  "default_threshold": 0.5
+}

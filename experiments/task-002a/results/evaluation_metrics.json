@@ -1,0 +1,294 @@
+{
+  "resnet18": {
+    "total_parameters": 11177538,
+    "checkpoint_size_mb": 42.71,
+    "metrics": {
+      "accuracy": 0.9858,
+      "balanced_accuracy": 0.9863,
+      "macro_precision": 0.9848,
+      "macro_recall": 0.9863,
+      "macro_f1": 0.9855,
+      "rotten_precision": 0.9918,
+      "rotten_recall": 0.9837,
+      "rotten_f1": 0.9878,
+      "fresh_precision": 0.9778,
+      "fresh_recall": 0.9888,
+      "fresh_f1": 0.9832,
+      "confusion_matrix": {
+        "TN": 88,
+        "FP": 1,
+        "FN": 2,
+        "TP": 121
+      },
+      "false_positive_rate": 0.0112,
+      "false_negative_rate": 0.0163,
+      "roc_auc": 0.9973,
+      "pr_auc": 0.9982,
+      "threshold_analysis": [
+        {
+          "threshold_tau": 0.1,
+          "rotten_precision": 0.9457,
+          "rotten_recall": 0.9919,
+          "rotten_f1": 0.9683,
+          "false_positive_rate": 0.0787,
+          "false_negative_rate": 0.0081,
+          "TP": 122,
+          "FP": 7,
+          "TN": 82,
+          "FN": 1
+        },
+        {
+          "threshold_tau": 0.2,
+          "rotten_precision": 0.9603,
+          "rotten_recall": 0.9837,
+          "rotten_f1": 0.9719,
+          "false_positive_rate": 0.0562,
+          "false_negative_rate": 0.0163,
+          "TP": 121,
+          "FP": 5,
+          "TN": 84,
+          "FN": 2
+        },
+        {
+          "threshold_tau": 0.3,
+          "rotten_precision": 0.9758,
+          "rotten_recall": 0.9837,
+          "rotten_f1": 0.9798,
+          "false_positive_rate": 0.0337,
+          "false_negative_rate": 0.0163,
+          "TP": 121,
+          "FP": 3,
+          "TN": 86,
+          "FN": 2
+        },
+        {
+          "threshold_tau": 0.4,
+          "rotten_precision": 0.9918,
+          "rotten_recall": 0.9837,
+          "rotten_f1": 0.9878,
+          "false_positive_rate": 0.0112,
+          "false_negative_rate": 0.0163,
+          "TP": 121,
+          "FP": 1,
+          "TN": 88,
+          "FN": 2
+        },
+        {
+          "threshold_tau": 0.5,
+          "rotten_precision": 0.9918,
+          "rotten_recall": 0.9837,
+          "rotten_f1": 0.9878,
+          "false_positive_rate": 0.0112,
+          "false_negative_rate": 0.0163,
+          "TP": 121,
+          "FP": 1,
+          "TN": 88,
+          "FN": 2
+        },
+        {
+          "threshold_tau": 0.6,
+          "rotten_precision": 0.9917,
+          "rotten_recall": 0.9756,
+          "rotten_f1": 0.9836,
+          "false_positive_rate": 0.0112,
+          "false_negative_rate": 0.0244,
+          "TP": 120,
+          "FP": 1,
+          "TN": 88,
+          "FN": 3
+        },
+        {
+          "threshold_tau": 0.7,
+          "rotten_precision": 0.9917,
+          "rotten_recall": 0.9675,
+          "rotten_f1": 0.9794,
+          "false_positive_rate": 0.0112,
+          "false_negative_rate": 0.0325,
+          "TP": 119,
+          "FP": 1,
+          "TN": 88,
+          "FN": 4
+        },
+        {
+          "threshold_tau": 0.8,
+          "rotten_precision": 0.9917,
+          "rotten_recall": 0.9675,
+          "rotten_f1": 0.9794,
+          "false_positive_rate": 0.0112,
+          "false_negative_rate": 0.0325,
+          "TP": 119,
+          "FP": 1,
+          "TN": 88,
+          "FN": 4
+        },
+        {
+          "threshold_tau": 0.9,
+          "rotten_precision": 1.0,
+          "rotten_recall": 0.9593,
+          "rotten_f1": 0.9793,
+          "false_positive_rate": 0.0,
+          "false_negative_rate": 0.0407,
+          "TP": 118,
+          "FP": 0,
+          "TN": 89,
+          "FN": 5
+        }
+      ]
+    },
+    "latency_cpu": {
+      "iterations": 100,
+      "mean_latency_ms": 24.81,
+      "median_latency_ms": 24.58,
+      "p95_latency_ms": 27.84,
+      "p99_latency_ms": 28.3,
+      "min_latency_ms": 22.07,
+      "max_latency_ms": 28.54
+    }
+  },
+  "efficientnet_b0": {
+    "total_parameters": 4010110,
+    "checkpoint_size_mb": 15.58,
+    "metrics": {
+      "accuracy": 0.9764,
+      "balanced_accuracy": 0.9781,
+      "macro_precision": 0.9741,
+      "macro_recall": 0.9781,
+      "macro_f1": 0.9759,
+      "rotten_precision": 0.9917,
+      "rotten_recall": 0.9675,
+      "rotten_f1": 0.9794,
+      "fresh_precision": 0.9565,
+      "fresh_recall": 0.9888,
+      "fresh_f1": 0.9724,
+      "confusion_matrix": {
+        "TN": 88,
+        "FP": 1,
+        "FN": 4,
+        "TP": 119
+      },
+      "false_positive_rate": 0.0112,
+      "false_negative_rate": 0.0325,
+      "roc_auc": 0.9977,
+      "pr_auc": 0.9984,
+      "threshold_analysis": [
+        {
+          "threshold_tau": 0.1,
+          "rotten_precision": 0.9248,
+          "rotten_recall": 1.0,
+          "rotten_f1": 0.9609,
+          "false_positive_rate": 0.1124,
+          "false_negative_rate": 0.0,
+          "TP": 123,
+          "FP": 10,
+          "TN": 79,
+          "FN": 0
+        },
+        {
+          "threshold_tau": 0.2,
+          "rotten_precision": 0.9457,
+          "rotten_recall": 0.9919,
+          "rotten_f1": 0.9683,
+          "false_positive_rate": 0.0787,
+          "false_negative_rate": 0.0081,
+          "TP": 122,
+          "FP": 7,
+          "TN": 82,
+          "FN": 1
+        },
+        {
+          "threshold_tau": 0.3,
+          "rotten_precision": 0.9528,
+          "rotten_recall": 0.9837,
+          "rotten_f1": 0.968,
+          "false_positive_rate": 0.0674,
+          "false_negative_rate": 0.0163,
+          "TP": 121,
+          "FP": 6,
+          "TN": 83,
+          "FN": 2
+        },
+        {
+          "threshold_tau": 0.4,
+          "rotten_precision": 0.9756,
+          "rotten_recall": 0.9756,
+          "rotten_f1": 0.9756,
+          "false_positive_rate": 0.0337,
+          "false_negative_rate": 0.0244,
+          "TP": 120,
+          "FP": 3,
+          "TN": 86,
+          "FN": 3
+        },
+        {
+          "threshold_tau": 0.5,
+          "rotten_precision": 0.9917,
+          "rotten_recall": 0.9675,
+          "rotten_f1": 0.9794,
+          "false_positive_rate": 0.0112,
+          "false_negative_rate": 0.0325,
+          "TP": 119,
+          "FP": 1,
+          "TN": 88,
+          "FN": 4
+        },
+        {
+          "threshold_tau": 0.6,
+          "rotten_precision": 0.9916,
+          "rotten_recall": 0.9593,
+          "rotten_f1": 0.9752,
+          "false_positive_rate": 0.0112,
+          "false_negative_rate": 0.0407,
+          "TP": 118,
+          "FP": 1,
+          "TN": 88,
+          "FN": 5
+        },
+        {
+          "threshold_tau": 0.7,
+          "rotten_precision": 1.0,
+          "rotten_recall": 0.9431,
+          "rotten_f1": 0.9707,
+          "false_positive_rate": 0.0,
+          "false_negative_rate": 0.0569,
+          "TP": 116,
+          "FP": 0,
+          "TN": 89,
+          "FN": 7
+        },
+        {
+          "threshold_tau": 0.8,
+          "rotten_precision": 1.0,
+          "rotten_recall": 0.9187,
+          "rotten_f1": 0.9576,
+          "false_positive_rate": 0.0,
+          "false_negative_rate": 0.0813,
+          "TP": 113,
+          "FP": 0,
+          "TN": 89,
+          "FN": 10
+        },
+        {
+          "threshold_tau": 0.9,
+          "rotten_precision": 1.0,
+          "rotten_recall": 0.8537,
+          "rotten_f1": 0.9211,
+          "false_positive_rate": 0.0,
+          "false_negative_rate": 0.1463,
+          "TP": 105,
+          "FP": 0,
+          "TN": 89,
+          "FN": 18
+        }
+      ]
+    },
+    "latency_cpu": {
+      "iterations": 100,
+      "mean_latency_ms": 31.36,
+      "median_latency_ms": 30.74,
+      "p95_latency_ms": 37.0,
+      "p99_latency_ms": 48.1,
+      "min_latency_ms": 25.61,
+      "max_latency_ms": 49.15
+    }
+  }
+}

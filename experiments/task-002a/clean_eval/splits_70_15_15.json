@@ -1,0 +1,5340 @@
+{
+  "random_seed": 42,
+  "split_ratios": "70% Train / 15% Validation / 15% Test",
+  "total_count": 1058,
+  "train_count": 740,
+  "val_count": 159,
+  "test_count": 159,
+  "train_binary_distribution": {
+    "1": 430,
+    "0": 310
+  },
+  "val_binary_distribution": {
+    "1": 92,
+    "0": 67
+  },
+  "test_binary_distribution": {
+    "1": 92,
+    "0": 67
+  },
+  "train_fine_distribution": {
+    "rotten_apple": 161,
+    "rotten_banana": 157,
+    "rotten_orange": 112,
+    "fresh_apple": 111,
+    "fresh_banana": 103,
+    "fresh_orange": 96
+  },
+  "val_fine_distribution": {
+    "rotten_apple": 34,
+    "rotten_banana": 34,
+    "fresh_apple": 24,
+    "rotten_orange": 24,
+    "fresh_banana": 22,
+    "fresh_orange": 21
+  },
+  "test_fine_distribution": {
+    "rotten_apple": 35,
+    "rotten_banana": 33,
+    "rotten_orange": 24,
+    "fresh_apple": 24,
+    "fresh_banana": 22,
+    "fresh_orange": 21
+  },
+  "train_data": [
+    {
+      "Id": "train_706.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_678.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_805.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_26.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_877.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_483.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_920.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_922.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1022.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_791.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_7.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_367.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_81.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1044.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_56.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_70.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1028.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_915.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_916.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_340.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_964.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_629.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_331.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_839.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_633.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_701.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_137.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_345.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_601.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_66.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_620.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_955.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_439.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_15.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_93.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_707.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_623.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_599.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_659.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_477.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_602.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_176.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_295.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_694.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_961.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_945.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_888.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_493.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_528.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_583.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_837.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_201.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_521.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1004.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_134.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_140.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_247.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_289.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_538.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_444.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_517.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1016.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_412.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_436.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_848.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_465.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_907.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_971.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_952.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_404.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1012.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_687.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_337.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_857.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_128.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_829.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_613.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_997.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_386.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_814.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_10.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_631.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_563.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_987.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_244.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_487.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_132.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_605.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_606.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_446.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_754.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_398.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_435.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_181.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_709.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_618.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_675.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_103.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_482.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_445.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_27.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_956.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_739.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_662.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_395.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_705.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_568.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_468.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_112.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_347.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_256.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_179.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_149.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_668.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_836.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_263.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_423.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_506.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_539.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_790.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_481.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_108.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_548.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_801.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1038.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_738.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_937.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_851.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_759.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_83.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_359.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_959.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_473.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1018.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_76.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_117.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_248.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_688.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_988.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_560.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_12.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_497.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_104.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_305.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_408.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_815.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_703.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_996.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1042.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_155.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_991.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_781.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_879.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_390.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_88.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_424.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_118.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_79.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_198.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_196.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_821.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_559.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_150.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1054.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_615.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_110.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_872.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_44.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_324.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_495.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_933.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_99.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_844.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_554.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_60.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_38.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_11.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_84.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_730.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_113.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_880.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_358.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_574.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_717.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1014.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_486.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1046.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_788.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_740.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_316.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_778.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_748.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1029.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_29.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_310.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_33.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_230.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1002.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_725.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_47.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_847.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_275.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_304.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_489.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_771.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_743.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1021.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_280.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_666.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_537.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_551.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_344.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_375.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_749.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_35.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_297.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_336.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_927.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_775.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_441.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_842.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_52.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_292.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_949.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1032.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_348.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_672.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_652.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_504.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_191.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_24.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_830.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_800.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_20.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_911.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_478.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_873.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_760.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_341.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_969.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1049.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_98.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_682.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_410.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_822.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_770.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_723.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_138.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_736.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_406.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_503.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_912.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_204.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1039.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_274.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_425.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_450.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_980.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1013.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_378.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_649.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_777.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_845.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_995.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_294.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_611.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_817.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_536.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1057.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_63.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_372.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_373.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_381.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_317.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_467.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_867.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_362.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_507.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_793.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_419.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_195.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_744.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_169.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_710.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_470.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_130.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_610.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_163.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_970.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_558.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_133.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_686.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_813.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_810.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_429.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_475.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_127.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_53.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_223.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_642.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_616.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_49.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_233.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_254.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_261.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_209.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_69.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_640.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_85.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_172.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_205.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1043.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1052.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_626.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_187.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_288.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_403.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_43.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_905.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_671.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_384.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_448.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_863.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_579.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_229.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_374.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_582.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_549.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_143.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_930.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_164.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_585.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_309.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_136.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1026.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_794.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_657.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_237.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_142.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_722.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_727.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1030.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_900.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_947.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_928.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_807.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_36.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_494.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_430.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_846.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_516.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_783.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_948.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_505.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_471.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_311.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_792.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_923.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_5.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_798.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_645.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_365.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_166.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_746.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_363.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_693.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_202.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_658.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_239.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_96.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_73.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_210.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_474.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_938.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_908.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_509.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_716.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_500.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_910.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_508.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_385.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_929.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_438.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_804.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1023.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_371.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_598.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_728.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_985.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_496.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_174.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_349.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_587.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_588.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_648.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_564.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_484.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_90.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_330.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_449.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1010.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_630.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_302.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_129.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_490.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_249.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_653.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_999.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_566.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_167.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1041.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_769.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_719.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_882.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_392.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1001.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_219.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_389.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_535.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_306.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1003.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1027.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_183.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_761.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1006.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_216.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_78.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_251.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_212.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_552.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1036.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_679.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_447.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_255.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_146.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_354.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_957.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_515.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_580.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_71.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_572.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_257.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_89.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_126.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_206.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_993.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_834.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_876.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_635.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_3.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_426.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_603.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_758.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_192.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_459.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_569.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_396.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_966.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_518.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_94.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_673.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_958.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_866.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_523.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_240.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1015.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_573.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_541.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_870.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_463.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_319.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_105.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_13.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_904.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_577.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_153.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_21.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_121.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_763.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_926.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_643.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_492.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_755.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_37.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_524.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_853.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_581.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_379.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_231.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_416.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_116.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_951.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_519.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_674.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_752.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_632.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_420.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_400.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_983.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_906.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_122.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_875.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_284.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_225.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_661.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_698.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_54.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_891.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_833.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_644.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_235.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_55.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_421.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_23.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_555.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_59.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_977.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_65.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_466.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_917.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_627.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_784.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_570.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_276.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_773.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_885.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_293.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_502.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_884.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_676.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1008.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_501.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_370.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_114.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_74.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_433.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_936.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_51.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_796.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_542.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_227.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_584.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_325.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_692.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_383.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_721.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_647.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_346.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_356.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_200.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_58.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_220.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_994.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_246.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_697.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_513.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_859.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_962.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_871.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_101.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_160.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_561.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_699.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_498.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_954.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_925.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_594.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_342.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_685.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_592.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_852.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_62.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_283.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_979.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_151.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_409.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_185.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_360.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_148.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_596.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_529.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_224.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_282.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_461.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_639.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_726.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_812.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_454.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_756.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_214.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_157.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_525.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_550.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_123.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1045.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_417.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_897.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_571.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_604.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_106.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_328.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_747.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_762.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_322.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_303.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_776.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_67.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_443.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_651.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_217.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_258.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_278.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_315.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_268.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_298.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_660.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_634.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_291.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_526.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_197.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1033.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_250.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_413.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_522.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_557.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_168.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_617.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_612.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_95.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1011.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_427.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_107.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_245.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_238.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_479.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1017.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_388.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_921.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1025.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_578.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_321.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_476.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_914.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_218.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_858.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_260.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_731.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_530.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_308.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_273.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_656.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_226.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_46.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_313.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_982.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_111.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_881.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_984.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_355.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_405.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_718.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_965.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_397.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_72.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_865.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1009.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_894.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_40.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_586.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_918.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_826.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_178.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_696.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_567.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_271.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_215.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_22.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_369.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_967.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_841.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_234.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_695.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_253.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_464.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_953.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_702.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_158.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1034.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_326.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_351.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_990.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_64.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_512.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_236.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_527.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_135.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_296.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1056.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_391.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_546.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_734.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_82.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_380.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_314.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_434.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_145.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_544.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_825.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_228.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_242.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_281.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_2.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_277.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_6.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1005.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1051.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_774.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_86.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_162.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_377.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_575.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_514.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_510.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_333.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_711.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_290.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_745.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1055.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_899.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_607.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_323.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_462.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_460.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_272.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_840.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_795.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_835.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_42.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_520.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    }
+  ],
+  "val_data": [
+    {
+      "Id": "train_619.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_540.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_180.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_799.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_733.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_318.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_854.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_431.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_279.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_407.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_14.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_457.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_641.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_803.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_942.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_828.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_402.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_243.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_869.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_565.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_974.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_670.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_232.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_320.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_628.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_819.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_789.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_472.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_764.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_874.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_361.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_115.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_724.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_732.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_924.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_491.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_452.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_194.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_903.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_787.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_30.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_353.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_887.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_934.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_655.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_811.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_893.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_712.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_677.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_485.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_68.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_211.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_432.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_511.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_986.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_556.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_809.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_156.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_131.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_757.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_175.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_299.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_4.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_735.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_266.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_327.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_638.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_368.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_119.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_177.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_589.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_545.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_222.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_364.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_850.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_636.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1053.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_742.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_667.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_267.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_889.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_154.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1035.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_77.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_892.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_437.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1024.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_860.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_944.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_708.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_57.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_855.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_823.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_207.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_741.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_797.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_664.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_329.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_338.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_737.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_750.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_684.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_453.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_382.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_39.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_264.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_387.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_75.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_335.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_269.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_683.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_981.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_534.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_190.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_831.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_532.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_19.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_772.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_553.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_102.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_189.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1020.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_864.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_287.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_87.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_960.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_41.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_286.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_597.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1000.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_203.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_139.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_689.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_469.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_300.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_931.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_595.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_265.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_650.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_691.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_366.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_768.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_943.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_259.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_252.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_862.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1040.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_646.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_8.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_895.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_334.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_715.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_31.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_932.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_713.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_940.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_480.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_608.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_357.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    }
+  ],
+  "test_data": [
+    {
+      "Id": "train_352.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_827.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_963.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_91.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_782.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_690.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_939.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_978.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_543.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_972.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_415.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_624.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_720.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_147.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_422.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_159.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_883.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_637.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_32.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_440.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_700.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_141.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_109.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_802.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_780.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_968.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_270.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_199.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_849.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1019.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_241.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_193.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_92.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_152.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_868.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1007.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_751.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_665.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_714.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_339.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_816.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_950.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_414.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_9.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_208.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_935.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_376.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_663.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_80.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_786.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_28.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_332.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1048.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_785.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_411.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_590.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_350.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_221.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_45.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1037.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_886.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_913.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_100.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_669.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_838.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_625.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_593.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_186.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_165.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_170.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_312.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_609.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_120.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_989.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_262.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_973.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1047.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1031.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_343.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_25.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_17.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_173.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_729.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_808.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_48.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_654.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_806.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_61.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_681.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_765.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_898.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_992.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_998.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_393.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_843.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_18.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_182.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_161.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_562.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_456.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_399.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_946.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_975.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_896.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_856.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_124.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_909.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_576.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_767.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_144.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_184.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_499.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_285.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_307.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_753.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_301.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_941.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_919.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_902.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_488.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_704.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_531.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_213.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_878.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_1050.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_451.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_861.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_901.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_16.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_832.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_680.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_976.png",
+      "Label": "fresh_orange",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_621.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_890.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_591.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_125.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_50.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_442.png",
+      "Label": "rotten_banana",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_600.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_428.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_533.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_394.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_622.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_1058.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_455.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_97.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_818.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_458.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_171.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_188.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_418.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_547.png",
+      "Label": "fresh_apple",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_820.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_614.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_401.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_779.png",
+      "Label": "fresh_banana",
+      "binary_label": 0
+    },
+    {
+      "Id": "train_766.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_34.png",
+      "Label": "rotten_orange",
+      "binary_label": 1
+    },
+    {
+      "Id": "train_824.png",
+      "Label": "rotten_apple",
+      "binary_label": 1
+    }
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "task": "TASK-002B-1",
+  "onnx_file": "C:\\Users\\LOQ\\Documents\\FOODLOOP\\experiments\\task-002a\\clean_eval\\checkpoints\\resnet18_foodloop.onnx",
+  "onnx_file_size_mb": 42.63,
+  "onnx_version": "1.23.2",
+  "onnxruntime_version": "1.31.1",
+  "opset_version": 17,
+  "model_architecture": "resnet18",
+  "model_version": "resnet18_v1.0.0_foodloop",
+  "structural_validation": {
+    "passed": true,
+    "input_name": "input",
+    "input_shape": [
+      1,
+      3,
+      224,
+      224
+    ],
+    "output_name": "logits",
+    "output_shape": [
+      1,
+      2
+    ]
+  },
+  "error_handling_test": {
+    "passed": true
+  },
+  "numerical_parity": {
+    "total_samples_evaluated": 159,
+    "max_logit_difference": 7.152557373046875e-06,
+    "max_probability_difference": 1.0132789611816406e-06,
+    "prediction_agreement_rate_tau_50": 1.0,
+    "prediction_agreement_rate_tau_20": 1.0,
+    "tolerance_threshold": 0.0001
+  },
+  "latency_benchmark": {
+    "iterations": 100,
+    "warmup_runs": 20,
+    "batch_size": 1,
+    "onnx_cpu": {
+      "mean_latency_ms": 9.18,
+      "median_latency_ms": 8.25,
+      "p95_latency_ms": 10.87,
+      "p99_latency_ms": 27.75
+    },
+    "pytorch_cpu_reference": {
+      "mean_latency_ms": 20.32,
+      "median_latency_ms": 20.13,
+      "p95_latency_ms": 22.83,
+      "p99_latency_ms": 24.84
+    }
+  },
+  "sample_output_contracts": [
+    {
+      "sample_index": 0,
+      "image_id": "train_352.png",
+      "ground_truth_binary": 1,
+      "fine_grained_label": "rotten_apple",
+      "predicted_class": 1,
+      "visual_assessment_label": "visually_unsuitable",
+      "confidence_score": 0.9999,
+      "probability_rotten": 0.9999,
+      "probability_fresh": 0.0001,
+      "model_version": "resnet18_v1.0.0_foodloop",
+      "numerical_logit_diff": 1.43e-06,
+      "numerical_prob_diff": 0.0
+    },
+    {
+      "sample_index": 1,
+      "image_id": "train_827.png",
+      "ground_truth_binary": 1,
+      "fine_grained_label": "rotten_apple",
+      "predicted_class": 1,
+      "visual_assessment_label": "visually_unsuitable",
+      "confidence_score": 0.9984,
+      "probability_rotten": 0.9984,
+      "probability_fresh": 0.0016,
+      "model_version": "resnet18_v1.0.0_foodloop",
+      "numerical_logit_diff": 9.5e-07,
+      "numerical_prob_diff": 0.0
+    },
+    {
+      "sample_index": 2,
+      "image_id": "train_963.png",
+      "ground_truth_binary": 1,
+      "fine_grained_label": "rotten_banana",
+      "predicted_class": 1,
+      "visual_assessment_label": "visually_unsuitable",
+      "confidence_score": 0.9985,
+      "probability_rotten": 0.9985,
+      "probability_fresh": 0.0015,
+      "model_version": "resnet18_v1.0.0_foodloop",
+      "numerical_logit_diff": 1.43e-06,
+      "numerical_prob_diff": 0.0
+    },
+    {
+      "sample_index": 3,
+      "image_id": "train_91.png",
+      "ground_truth_binary": 1,
+      "fine_grained_label": "rotten_apple",
+      "predicted_class": 1,
+      "visual_assessment_label": "visually_unsuitable",
+      "confidence_score": 0.9999,
+      "probability_rotten": 0.9999,
+      "probability_fresh": 0.0001,
+      "model_version": "resnet18_v1.0.0_foodloop",
+      "numerical_logit_diff": 2.38e-06,
+      "numerical_prob_diff": 0.0
+    },
+    {
+      "sample_index": 4,
+      "image_id": "train_782.png",
+      "ground_truth_binary": 1,
+      "fine_grained_label": "rotten_banana",
+      "predicted_class": 1,
+      "visual_assessment_label": "visually_unsuitable",
+      "confidence_score": 1.0,
+      "probability_rotten": 1.0,
+      "probability_fresh": 0.0,
+      "model_version": "resnet18_v1.0.0_foodloop",
+      "numerical_logit_diff": 1.43e-06,
+      "numerical_prob_diff": 0.0
+    }
+  ],
+  "output_mapping": {
+    "0": "visually_acceptable",
+    "1": "visually_unsuitable"
+  },
+  "candidate_experimental_threshold": 0.2,
+  "default_threshold": 0.5
+}

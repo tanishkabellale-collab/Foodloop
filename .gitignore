@@ -1,0 +1,46 @@
+# FoodLoop .gitignore
+
+# Dependencies
+node_modules/
+.venv/
+venv/
+env/
+
+# Environment Variables & Secrets
+.env
+.env.*
+!.env.example
+
+# Python Caches & Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Build & Bundler Artifacts
+dist/
+build/
+*.egg-info/
+.vite/
+
+# Logs & System Files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+Thumbs.db
+
+# Heavy Raw Datasets (splits, manifests, and CSVs remain tracked)
+experiments/task-002a/data/images/
+
+# Intermediate PyTorch Checkpoints (heavy raw training weights)
+*.pt
+*.pth
+*.ckpt
+
+# Keep the production-ready verified ONNX model artifact
+!experiments/task-002a/clean_eval/checkpoints/resnet18_foodloop.onnx

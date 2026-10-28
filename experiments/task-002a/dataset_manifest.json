@@ -1,0 +1,64 @@
+{
+  "status": "DATASETS_VERIFIED",
+  "verified_at": "2026-10-28T21:56:00+05:30",
+  "datasets": [
+    {
+      "dataset_name": "Fruit Classification Dataset (Kaggle/HF mirror)",
+      "source_url": "https://huggingface.co/datasets/menasi11/fruit-classification",
+      "license": "Open Data / Public Domain",
+      "total_labeled_images": 1058,
+      "classes": {
+        "rotten_apple": 230,
+        "rotten_banana": 224,
+        "rotten_orange": 160,
+        "fresh_apple": 159,
+        "fresh_banana": 147,
+        "fresh_orange": 138
+      },
+      "fresh_count": 444,
+      "rotten_count": 614,
+      "image_format": "PNG (RGB)",
+      "sample_resolutions": [
+        "312x310",
+        "258x286",
+        "474x422",
+        "418x422",
+        "374x408",
+        "548x390"
+      ],
+      "background_type": "Controlled / White studio background (Isolated)",
+      "foodloop_relevance": "Directly evaluates fresh_produce surface decay on 3 major fruit types",
+      "limitations": "Lacks vegetables (tomatoes, onions), leafy greens, bulk cafeteria trays, and low-light kitchen noise."
+    },
+    {
+      "dataset_name": "Bread Mold Dataset (marescanog/breadMold)",
+      "source_url": "https://huggingface.co/datasets/marescanog/breadMold",
+      "license": "OpenRail",
+      "train_samples": 234,
+      "test_samples": 59,
+      "total_samples": 293,
+      "train_class_distribution": {
+        "healthy_bread_0": 184,
+        "moldy_bread_1": 50
+      },
+      "test_class_distribution": {
+        "healthy_bread_0": 46,
+        "moldy_bread_1": 13
+      },
+      "total_moldy_samples": 63,
+      "image_format": "PNG / JPEG byte arrays",
+      "foodloop_relevance": "Evaluates visible mold screening for bakery items",
+      "limitations": "Severe sample size limitation (only 63 moldy images across entire dataset); class imbalance (78.5% healthy); restricted to Western sandwich bread slices; zero Indian breads or pastries."
+    }
+  ],
+  "cooked_meals_status": {
+    "dataset_name": "Commercial Cooked Meal Spoilage Dataset",
+    "availability": "NON-EXISTENT / RESEARCH GAP",
+    "finding": "No public or scientific RGB dataset exists for fresh vs. spoiled cooked meals. Microbial proliferation in prepared curries, rice, or stews does not yield reliable visible signatures during operational rescue windows (2-6 hours)."
+  },
+  "packaged_sealed_status": {
+    "dataset_name": "Packaged Food Hermetic Seal Integrity Dataset",
+    "availability": "NON-EXISTENT / RESEARCH GAP",
+    "finding": "Standard RGB photos cannot evaluate contents inside opaque packaging or detect microscopic seal failures."
+  }
+}

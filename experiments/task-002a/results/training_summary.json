@@ -1,0 +1,136 @@
+{
+  "dataset": "menasi11/fruit-classification",
+  "train_samples": 846,
+  "test_samples": 212,
+  "device": "CPU (Intel i5-13450HX 16 threads)",
+  "models": {
+    "resnet18": {
+      "model_name": "resnet18",
+      "total_params": 11177538,
+      "trainable_params": 11177538,
+      "batch_size": 32,
+      "epochs": 5,
+      "optimizer": "AdamW",
+      "initial_lr": 0.0001,
+      "weight_decay": 0.01,
+      "scheduler": "CosineAnnealingLR",
+      "random_seed": 42,
+      "total_training_time_s": 1163.51,
+      "best_epoch": 5,
+      "best_val_loss": 0.06,
+      "best_val_acc": 0.9858,
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 0.1919,
+          "train_acc": 0.9267,
+          "val_loss": 0.0977,
+          "val_acc": 0.967,
+          "lr": 9e-05,
+          "duration_s": 305.71
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.0441,
+          "train_acc": 0.9858,
+          "val_loss": 0.0602,
+          "val_acc": 0.9717,
+          "lr": 6.5e-05,
+          "duration_s": 229.32
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.0191,
+          "train_acc": 0.9953,
+          "val_loss": 0.0715,
+          "val_acc": 0.9764,
+          "lr": 3.5e-05,
+          "duration_s": 107.75
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.0123,
+          "train_acc": 0.9953,
+          "val_loss": 0.0627,
+          "val_acc": 0.9811,
+          "lr": 1e-05,
+          "duration_s": 284.09
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.0064,
+          "train_acc": 0.9988,
+          "val_loss": 0.06,
+          "val_acc": 0.9858,
+          "lr": 0.0,
+          "duration_s": 236.34
+        }
+      ],
+      "checkpoint_path": "C:\\Users\\LOQ\\Documents\\FOODLOOP\\experiments\\task-002a\\checkpoints\\resnet18_best.pt"
+    },
+    "efficientnet_b0": {
+      "model_name": "efficientnet_b0",
+      "total_params": 4010110,
+      "trainable_params": 4010110,
+      "batch_size": 32,
+      "epochs": 5,
+      "optimizer": "AdamW",
+      "initial_lr": 0.0001,
+      "weight_decay": 0.01,
+      "scheduler": "CosineAnnealingLR",
+      "random_seed": 42,
+      "total_training_time_s": 441.23,
+      "best_epoch": 5,
+      "best_val_loss": 0.0806,
+      "best_val_acc": 0.9764,
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 0.4201,
+          "train_acc": 0.87,
+          "val_loss": 0.2467,
+          "val_acc": 0.9292,
+          "lr": 9e-05,
+          "duration_s": 115.45
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.1493,
+          "train_acc": 0.9622,
+          "val_loss": 0.1111,
+          "val_acc": 0.9717,
+          "lr": 6.5e-05,
+          "duration_s": 79.76
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.0782,
+          "train_acc": 0.9799,
+          "val_loss": 0.0924,
+          "val_acc": 0.9764,
+          "lr": 3.5e-05,
+          "duration_s": 79.66
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.0702,
+          "train_acc": 0.9835,
+          "val_loss": 0.0833,
+          "val_acc": 0.9764,
+          "lr": 1e-05,
+          "duration_s": 89.35
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.0678,
+          "train_acc": 0.9823,
+          "val_loss": 0.0806,
+          "val_acc": 0.9764,
+          "lr": 0.0,
+          "duration_s": 76.74
+        }
+      ],
+      "checkpoint_path": "C:\\Users\\LOQ\\Documents\\FOODLOOP\\experiments\\task-002a\\checkpoints\\efficientnet_b0_best.pt"
+    }
+  }
+}

@@ -1,0 +1,367 @@
+{
+  "split_strategy": "70% Train (740) / 15% Validation (159) / 15% Test (159)",
+  "train_samples": 740,
+  "val_samples": 159,
+  "test_samples_untouched": 159,
+  "device": "CPU (Intel i5-13450HX)",
+  "models": {
+    "resnet18": {
+      "model_name": "resnet18",
+      "total_params": 11177538,
+      "batch_size": 32,
+      "epochs": 5,
+      "optimizer": "AdamW",
+      "initial_lr": 0.0001,
+      "weight_decay": 0.01,
+      "scheduler": "CosineAnnealingLR",
+      "random_seed": 42,
+      "total_training_time_s": 230.94,
+      "best_epoch": 4,
+      "best_val_loss": 0.0514,
+      "best_val_acc": 0.9874,
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 0.1815,
+          "train_acc": 0.9243,
+          "val_loss": 0.118,
+          "val_acc": 0.9434,
+          "val_recall_defect": 0.913,
+          "val_f1": 0.9492,
+          "duration_s": 48.69
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.0392,
+          "train_acc": 0.9892,
+          "val_loss": 0.0775,
+          "val_acc": 0.9686,
+          "val_recall_defect": 0.9783,
+          "val_f1": 0.973,
+          "duration_s": 47.85
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.0278,
+          "train_acc": 0.9919,
+          "val_loss": 0.0545,
+          "val_acc": 0.9748,
+          "val_recall_defect": 0.9674,
+          "val_f1": 0.978,
+          "duration_s": 47.53
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.0108,
+          "train_acc": 1.0,
+          "val_loss": 0.0514,
+          "val_acc": 0.9874,
+          "val_recall_defect": 0.9891,
+          "val_f1": 0.9891,
+          "duration_s": 46.06
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.0098,
+          "train_acc": 0.9973,
+          "val_loss": 0.06,
+          "val_acc": 0.9874,
+          "val_recall_defect": 0.9783,
+          "val_f1": 0.989,
+          "duration_s": 40.61
+        }
+      ],
+      "checkpoint_path": "C:\\Users\\LOQ\\Documents\\FOODLOOP\\experiments\\task-002a\\clean_eval\\checkpoints\\resnet18_best.pt",
+      "validation_threshold_sweep": [
+        {
+          "tau": 0.1,
+          "val_precision": 0.9681,
+          "val_recall": 0.9891,
+          "val_f1": 0.9785,
+          "val_fpr": 0.0448,
+          "val_fnr": 0.0109,
+          "TP": 91,
+          "FP": 3,
+          "TN": 64,
+          "FN": 1
+        },
+        {
+          "tau": 0.2,
+          "val_precision": 0.9891,
+          "val_recall": 0.9891,
+          "val_f1": 0.9891,
+          "val_fpr": 0.0149,
+          "val_fnr": 0.0109,
+          "TP": 91,
+          "FP": 1,
+          "TN": 66,
+          "FN": 1
+        },
+        {
+          "tau": 0.3,
+          "val_precision": 0.9891,
+          "val_recall": 0.9891,
+          "val_f1": 0.9891,
+          "val_fpr": 0.0149,
+          "val_fnr": 0.0109,
+          "TP": 91,
+          "FP": 1,
+          "TN": 66,
+          "FN": 1
+        },
+        {
+          "tau": 0.4,
+          "val_precision": 0.9891,
+          "val_recall": 0.9891,
+          "val_f1": 0.9891,
+          "val_fpr": 0.0149,
+          "val_fnr": 0.0109,
+          "TP": 91,
+          "FP": 1,
+          "TN": 66,
+          "FN": 1
+        },
+        {
+          "tau": 0.5,
+          "val_precision": 0.9891,
+          "val_recall": 0.9891,
+          "val_f1": 0.9891,
+          "val_fpr": 0.0149,
+          "val_fnr": 0.0109,
+          "TP": 91,
+          "FP": 1,
+          "TN": 66,
+          "FN": 1
+        },
+        {
+          "tau": 0.6,
+          "val_precision": 0.989,
+          "val_recall": 0.9783,
+          "val_f1": 0.9836,
+          "val_fpr": 0.0149,
+          "val_fnr": 0.0217,
+          "TP": 90,
+          "FP": 1,
+          "TN": 66,
+          "FN": 2
+        },
+        {
+          "tau": 0.7,
+          "val_precision": 1.0,
+          "val_recall": 0.9783,
+          "val_f1": 0.989,
+          "val_fpr": 0.0,
+          "val_fnr": 0.0217,
+          "TP": 90,
+          "FP": 0,
+          "TN": 67,
+          "FN": 2
+        },
+        {
+          "tau": 0.8,
+          "val_precision": 1.0,
+          "val_recall": 0.9457,
+          "val_f1": 0.9721,
+          "val_fpr": 0.0,
+          "val_fnr": 0.0543,
+          "TP": 87,
+          "FP": 0,
+          "TN": 67,
+          "FN": 5
+        },
+        {
+          "tau": 0.9,
+          "val_precision": 1.0,
+          "val_recall": 0.9348,
+          "val_f1": 0.9663,
+          "val_fpr": 0.0,
+          "val_fnr": 0.0652,
+          "TP": 86,
+          "FP": 0,
+          "TN": 67,
+          "FN": 6
+        }
+      ],
+      "frozen_candidate_tau": 0.2
+    },
+    "efficientnet_b0": {
+      "model_name": "efficientnet_b0",
+      "total_params": 4010110,
+      "batch_size": 32,
+      "epochs": 5,
+      "optimizer": "AdamW",
+      "initial_lr": 0.0001,
+      "weight_decay": 0.01,
+      "scheduler": "CosineAnnealingLR",
+      "random_seed": 42,
+      "total_training_time_s": 435.85,
+      "best_epoch": 4,
+      "best_val_loss": 0.1084,
+      "best_val_acc": 0.9623,
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 0.4388,
+          "train_acc": 0.8865,
+          "val_loss": 0.2857,
+          "val_acc": 0.9182,
+          "val_recall_defect": 0.8587,
+          "val_f1": 0.924,
+          "duration_s": 70.73
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.1639,
+          "train_acc": 0.9635,
+          "val_loss": 0.1243,
+          "val_acc": 0.9623,
+          "val_recall_defect": 0.9348,
+          "val_f1": 0.9663,
+          "duration_s": 57.98
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.09,
+          "train_acc": 0.977,
+          "val_loss": 0.1374,
+          "val_acc": 0.9434,
+          "val_recall_defect": 0.9022,
+          "val_f1": 0.9486,
+          "duration_s": 83.2
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.0581,
+          "train_acc": 0.9905,
+          "val_loss": 0.1084,
+          "val_acc": 0.9623,
+          "val_recall_defect": 0.9348,
+          "val_f1": 0.9663,
+          "duration_s": 142.96
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.0551,
+          "train_acc": 0.9946,
+          "val_loss": 0.1271,
+          "val_acc": 0.956,
+          "val_recall_defect": 0.9239,
+          "val_f1": 0.9605,
+          "duration_s": 80.85
+        }
+      ],
+      "checkpoint_path": "C:\\Users\\LOQ\\Documents\\FOODLOOP\\experiments\\task-002a\\clean_eval\\checkpoints\\efficientnet_b0_best.pt",
+      "validation_threshold_sweep": [
+        {
+          "tau": 0.1,
+          "val_precision": 0.91,
+          "val_recall": 0.9891,
+          "val_f1": 0.9479,
+          "val_fpr": 0.1343,
+          "val_fnr": 0.0109,
+          "TP": 91,
+          "FP": 9,
+          "TN": 58,
+          "FN": 1
+        },
+        {
+          "tau": 0.2,
+          "val_precision": 0.9681,
+          "val_recall": 0.9891,
+          "val_f1": 0.9785,
+          "val_fpr": 0.0448,
+          "val_fnr": 0.0109,
+          "TP": 91,
+          "FP": 3,
+          "TN": 64,
+          "FN": 1
+        },
+        {
+          "tau": 0.3,
+          "val_precision": 0.978,
+          "val_recall": 0.9674,
+          "val_f1": 0.9727,
+          "val_fpr": 0.0299,
+          "val_fnr": 0.0326,
+          "TP": 89,
+          "FP": 2,
+          "TN": 65,
+          "FN": 3
+        },
+        {
+          "tau": 0.4,
+          "val_precision": 1.0,
+          "val_recall": 0.9348,
+          "val_f1": 0.9663,
+          "val_fpr": 0.0,
+          "val_fnr": 0.0652,
+          "TP": 86,
+          "FP": 0,
+          "TN": 67,
+          "FN": 6
+        },
+        {
+          "tau": 0.5,
+          "val_precision": 1.0,
+          "val_recall": 0.9348,
+          "val_f1": 0.9663,
+          "val_fpr": 0.0,
+          "val_fnr": 0.0652,
+          "TP": 86,
+          "FP": 0,
+          "TN": 67,
+          "FN": 6
+        },
+        {
+          "tau": 0.6,
+          "val_precision": 1.0,
+          "val_recall": 0.9348,
+          "val_f1": 0.9663,
+          "val_fpr": 0.0,
+          "val_fnr": 0.0652,
+          "TP": 86,
+          "FP": 0,
+          "TN": 67,
+          "FN": 6
+        },
+        {
+          "tau": 0.7,
+          "val_precision": 1.0,
+          "val_recall": 0.9022,
+          "val_f1": 0.9486,
+          "val_fpr": 0.0,
+          "val_fnr": 0.0978,
+          "TP": 83,
+          "FP": 0,
+          "TN": 67,
+          "FN": 9
+        },
+        {
+          "tau": 0.8,
+          "val_precision": 1.0,
+          "val_recall": 0.8696,
+          "val_f1": 0.9302,
+          "val_fpr": 0.0,
+          "val_fnr": 0.1304,
+          "TP": 80,
+          "FP": 0,
+          "TN": 67,
+          "FN": 12
+        },
+        {
+          "tau": 0.9,
+          "val_precision": 1.0,
+          "val_recall": 0.7717,
+          "val_f1": 0.8712,
+          "val_fpr": 0.0,
+          "val_fnr": 0.2283,
+          "TP": 71,
+          "FP": 0,
+          "TN": 67,
+          "FN": 21
+        }
+      ],
+      "frozen_candidate_tau": 0.2
+    }
+  }
+}
