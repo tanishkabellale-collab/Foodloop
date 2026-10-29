@@ -1,0 +1,639 @@
+backend/services/aiAssessmentService.js:216: new blank line at EOF.
+frontend/src/App.jsx:138: trailing whitespace.
+[32m+[m[32m      <Navbar[m[41m [m
+frontend/src/App.jsx:139: trailing whitespace.
+[32m+[m[32m        activeTab={activeTab}[m[41m [m
+frontend/src/App.jsx:140: trailing whitespace.
+[32m+[m[32m        onTabChange={handleTabChange}[m[41m [m
+frontend/src/App.jsx:148: trailing whitespace.
+[32m+[m[32m            <HeroSection[m[41m [m
+frontend/src/App.jsx:149: trailing whitespace.
+[32m+[m[32m              onTabChange={handleTabChange}[m[41m [m
+frontend/src/App.jsx:150: trailing whitespace.
+[32m+[m[32m              activeCount={activeCount}[m[41m [m
+frontend/src/App.jsx:154: trailing whitespace.
+[32m+[m[32m              <RecentActivity[m[41m [m
+frontend/src/App.jsx:155: trailing whitespace.
+[32m+[m[32m                donations={donations}[m[41m [m
+frontend/src/App.jsx:174: trailing whitespace.
+[32m+[m[32m            <DonationGrid[m[41m [m
+frontend/src/App.jsx:199: trailing whitespace.
+[32m+[m[32m            <DonorForm[m[41m [m
+frontend/src/App.jsx:210: trailing whitespace.
+[32m+[m[32m        <DonationDetailModal[m[41m [m
+frontend/src/components/DonationDetailModal.jsx:4: new blank line at EOF.
+frontend/src/components/analytics/AnalyticsView.jsx:118: trailing whitespace.
+[32m+[m[32m                    <div style={{[m[41m [m
+frontend/src/components/analytics/AnalyticsView.jsx:119: trailing whitespace.
+[32m+[m[32m                      width: `${pct}%`,[m[41m [m
+frontend/src/components/analytics/AnalyticsView.jsx:120: trailing whitespace.
+[32m+[m[32m                      height: '100%',[m[41m [m
+frontend/src/components/analytics/AnalyticsView.jsx:148: trailing whitespace.
+[32m+[m[32m                <div style={{[m[41m [m
+frontend/src/components/analytics/AnalyticsView.jsx:149: trailing whitespace.
+[32m+[m[32m                  width: `${total > 0 ? Math.round(((dietaryCounts.vegetarian || 0) / total) * 100) : 0}%`,[m[41m [m
+frontend/src/components/analytics/AnalyticsView.jsx:150: trailing whitespace.
+[32m+[m[32m                  height: '100%',[m[41m [m
+frontend/src/components/analytics/AnalyticsView.jsx:165: trailing whitespace.
+[32m+[m[32m                <div style={{[m[41m [m
+frontend/src/components/analytics/AnalyticsView.jsx:166: trailing whitespace.
+[32m+[m[32m                  width: `${total > 0 ? Math.round(((dietaryCounts.non_vegetarian || 0) / total) * 100) : 0}%`,[m[41m [m
+frontend/src/components/analytics/AnalyticsView.jsx:167: trailing whitespace.
+[32m+[m[32m                  height: '100%',[m[41m [m
+frontend/src/components/analytics/AnalyticsView.jsx:193: new blank line at EOF.
+frontend/src/components/common/CategoryPill.jsx:23: new blank line at EOF.
+frontend/src/components/common/EmptyState.jsx:43: trailing whitespace.
+[32m+[m[32m        <button[m[41m [m
+frontend/src/components/common/EmptyState.jsx:44: trailing whitespace.
+[32m+[m[32m          onClick={onAction}[m[41m [m
+frontend/src/components/common/EmptyState.jsx:56: new blank line at EOF.
+frontend/src/components/common/PlaceholderImage.jsx:73: new blank line at EOF.
+frontend/src/components/common/StatusBadge.jsx:60: new blank line at EOF.
+frontend/src/components/common/UrgencyTimer.jsx:54: new blank line at EOF.
+frontend/src/components/dashboard/HeroSection.jsx:23: trailing whitespace.
+[32m+[m[32m            <button[m[41m [m
+frontend/src/components/dashboard/HeroSection.jsx:24: trailing whitespace.
+[32m+[m[32m              type="button"[m[41m [m
+frontend/src/components/dashboard/HeroSection.jsx:32: trailing whitespace.
+[32m+[m[32m            <button[m[41m [m
+frontend/src/components/dashboard/HeroSection.jsx:33: trailing whitespace.
+[32m+[m[32m              type="button"[m[41m [m
+frontend/src/components/dashboard/HeroSection.jsx:67: new blank line at EOF.
+frontend/src/components/dashboard/ImpactMetrics.jsx:65: trailing whitespace.
+[32m+[m[32m        <MetricCard[m[41m [m
+frontend/src/components/dashboard/ImpactMetrics.jsx:72: trailing whitespace.
+[32m+[m[32m        <MetricCard[m[41m [m
+frontend/src/components/dashboard/ImpactMetrics.jsx:79: trailing whitespace.
+[32m+[m[32m        <MetricCard[m[41m [m
+frontend/src/components/dashboard/ImpactMetrics.jsx:86: trailing whitespace.
+[32m+[m[32m        <MetricCard[m[41m [m
+frontend/src/components/dashboard/ImpactMetrics.jsx:99: new blank line at EOF.
+frontend/src/components/dashboard/RecentActivity.jsx:7: trailing whitespace.
+[32m+[m[32mconst RecentActivity = ({[m[41m [m
+frontend/src/components/dashboard/RecentActivity.jsx:8: trailing whitespace.
+[32m+[m[32m  donations = [],[m[41m [m
+frontend/src/components/dashboard/RecentActivity.jsx:9: trailing whitespace.
+[32m+[m[32m  onSelectDonation,[m[41m [m
+frontend/src/components/dashboard/RecentActivity.jsx:10: trailing whitespace.
+[32m+[m[32m  onTabChange[m[41m [m
+frontend/src/components/dashboard/RecentActivity.jsx:23: trailing whitespace.
+[32m+[m[32m          <button[m[41m [m
+frontend/src/components/dashboard/RecentActivity.jsx:24: trailing whitespace.
+[32m+[m[32m            type="button"[m[41m [m
+frontend/src/components/dashboard/RecentActivity.jsx:25: trailing whitespace.
+[32m+[m[32m            className="btn btn-ghost"[m[41m [m
+frontend/src/components/dashboard/RecentActivity.jsx:46: trailing whitespace.
+[32m+[m[32m                <div[m[41m [m
+frontend/src/components/dashboard/RecentActivity.jsx:47: trailing whitespace.
+[32m+[m[32m                  key={d.id}[m[41m [m
+frontend/src/components/dashboard/RecentActivity.jsx:78: trailing whitespace.
+[32m+[m[32m                  <button[m[41m [m
+frontend/src/components/dashboard/RecentActivity.jsx:79: trailing whitespace.
+[32m+[m[32m                    type="button"[m[41m [m
+frontend/src/components/dashboard/RecentActivity.jsx:80: trailing whitespace.
+[32m+[m[32m                    className="btn btn-outline"[m[41m [m
+frontend/src/components/dashboard/RecentActivity.jsx:108: trailing whitespace.
+[32m+[m[32m            <button[m[41m [m
+frontend/src/components/dashboard/RecentActivity.jsx:109: trailing whitespace.
+[32m+[m[32m              type="button"[m[41m [m
+frontend/src/components/dashboard/RecentActivity.jsx:127: trailing whitespace.
+[32m+[m[32m            <button[m[41m [m
+frontend/src/components/dashboard/RecentActivity.jsx:128: trailing whitespace.
+[32m+[m[32m              type="button"[m[41m [m
+frontend/src/components/dashboard/RecentActivity.jsx:143: new blank line at EOF.
+frontend/src/components/donations/DonationCard.jsx:8: trailing whitespace.
+[32m+[m[32mconst DonationCard = ({[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:9: trailing whitespace.
+[32m+[m[32m  donation,[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:10: trailing whitespace.
+[32m+[m[32m  onSelect,[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:11: trailing whitespace.
+[32m+[m[32m  onAccept,[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:13: trailing whitespace.
+[32m+[m[32m  showActions = true[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:15: trailing whitespace.
+[32m+[m[32m  const {[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:16: trailing whitespace.
+[32m+[m[32m    id,[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:17: trailing whitespace.
+[32m+[m[32m    foodName,[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:19: trailing whitespace.
+[32m+[m[32m    quantity,[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:22: trailing whitespace.
+[32m+[m[32m    expiryTime,[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:24: trailing whitespace.
+[32m+[m[32m    location,[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:32: trailing whitespace.
+[32m+[m[41m  [m
+frontend/src/components/donations/DonationCard.jsx:42: trailing whitespace.
+[32m+[m[32m  const resolvedImageUrl = image_url[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:47: trailing whitespace.
+[32m+[m[32m    <div[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:48: trailing whitespace.
+[32m+[m[32m      className="card card-hoverable"[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:61: trailing whitespace.
+[32m+[m[32m          <img[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:62: trailing whitespace.
+[32m+[m[32m            src={resolvedImageUrl}[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:63: trailing whitespace.
+[32m+[m[32m            alt={displayName}[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:77: trailing whitespace.
+[32m+[m[32m        <div[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:115: trailing whitespace.
+[32m+[m[32m          <h3 style={{[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:116: trailing whitespace.
+[32m+[m[32m            fontSize: '1.15rem',[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:117: trailing whitespace.
+[32m+[m[32m            fontWeight: 700,[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:118: trailing whitespace.
+[32m+[m[32m            color: 'var(--color-primary)',[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:154: trailing whitespace.
+[32m+[m[32m        <div style={{[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:155: trailing whitespace.
+[32m+[m[32m          marginTop: 'auto',[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:156: trailing whitespace.
+[32m+[m[32m          paddingTop: '0.85rem',[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:157: trailing whitespace.
+[32m+[m[32m          borderTop: '1px solid var(--color-border)',[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:158: trailing whitespace.
+[32m+[m[32m          display: 'flex',[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:159: trailing whitespace.
+[32m+[m[32m          alignItems: 'center',[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:163: trailing whitespace.
+[32m+[m[32m          <button[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:165: trailing whitespace.
+[32m+[m[32m            className="btn btn-outline"[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:184: trailing whitespace.
+[32m+[m[32m                <button[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:186: trailing whitespace.
+[32m+[m[32m                  className="btn btn-secondary"[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:196: trailing whitespace.
+[32m+[m[32m                <button[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:198: trailing whitespace.
+[32m+[m[32m                  className="btn btn-primary"[m[41m [m
+frontend/src/components/donations/DonationCard.jsx:217: new blank line at EOF.
+frontend/src/components/donations/DonationDetailModal.jsx:2: trailing whitespace.
+[32m+[m[32mimport {[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:3: trailing whitespace.
+[32m+[m[32m  X,[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:4: trailing whitespace.
+[32m+[m[32m  MapPin,[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:5: trailing whitespace.
+[32m+[m[32m  Clock,[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:6: trailing whitespace.
+[32m+[m[32m  Scale,[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:7: trailing whitespace.
+[32m+[m[32m  Thermometer,[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:8: trailing whitespace.
+[32m+[m[32m  Calendar,[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:9: trailing whitespace.
+[32m+[m[32m  ExternalLink,[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:10: trailing whitespace.
+[32m+[m[32m  Sparkles,[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:11: trailing whitespace.
+[32m+[m[32m  CheckCircle2,[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:29: trailing whitespace.
+[32m+[m[32mconst DonationDetailModal = ({[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:30: trailing whitespace.
+[32m+[m[32m  donation,[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:31: trailing whitespace.
+[32m+[m[32m  onClose,[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:32: trailing whitespace.
+[32m+[m[32m  onAccept,[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:33: trailing whitespace.
+[32m+[m[32m  onCollect[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:72: trailing whitespace.
+[32m+[m[32m  const resolvedImageUrl = image_url[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:91: trailing whitespace.
+[32m+[m[32m      <div[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:92: trailing whitespace.
+[32m+[m[32m        className="modal-sheet"[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:101: trailing whitespace.
+[32m+[m[32m          <button[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:102: trailing whitespace.
+[32m+[m[32m            type="button"[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:103: trailing whitespace.
+[32m+[m[32m            className="btn btn-ghost"[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:114: trailing whitespace.
+[32m+[m[32m          <div style={{[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:115: trailing whitespace.
+[32m+[m[32m            width: '100%',[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:116: trailing whitespace.
+[32m+[m[32m            height: '240px',[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:117: trailing whitespace.
+[32m+[m[32m            borderRadius: 'var(--radius-lg)',[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:118: trailing whitespace.
+[32m+[m[32m            overflow: 'hidden',[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:120: trailing whitespace.
+[32m+[m[32m            backgroundColor: 'var(--color-bg-subtle)'[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:123: trailing whitespace.
+[32m+[m[32m              <img[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:124: trailing whitespace.
+[32m+[m[32m                src={resolvedImageUrl}[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:125: trailing whitespace.
+[32m+[m[32m                alt={displayName}[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:137: trailing whitespace.
+[32m+[m[32m            <div[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:158: trailing whitespace.
+[32m+[m[32m          <div style={{[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:159: trailing whitespace.
+[32m+[m[32m            padding: '1.25rem',[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:160: trailing whitespace.
+[32m+[m[32m            backgroundColor: 'var(--color-bg-base)',[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:161: trailing whitespace.
+[32m+[m[32m            borderRadius: 'var(--radius-md)',[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:191: trailing whitespace.
+[32m+[m[32m                    <span style={{[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:192: trailing whitespace.
+[32m+[m[32m                      fontSize: '0.75rem',[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:193: trailing whitespace.
+[32m+[m[32m                      fontWeight: isCurrent ? 700 : 500,[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:288: trailing whitespace.
+[32m+[m[32m                <a[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:396: trailing whitespace.
+[32m+[m[32m                  {food_category === 'fresh_produce'[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:397: trailing whitespace.
+[32m+[m[32m                    ? 'AI visual screening verified at registration (Model Contract: ResNet-18 Produce Triage).'[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:407: trailing whitespace.
+[32m+[m[32m          <button[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:408: trailing whitespace.
+[32m+[m[32m            type="button"[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:409: trailing whitespace.
+[32m+[m[32m            className="btn btn-outline"[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:421: trailing whitespace.
+[32m+[m[32m            <button[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:422: trailing whitespace.
+[32m+[m[32m              type="button"[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:432: trailing whitespace.
+[32m+[m[32m            <button[m[41m [m
+frontend/src/components/donations/DonationDetailModal.jsx:433: trailing whitespace.
+[32m+[m[32m              type="button"[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:21: trailing whitespace.
+[32m+[m[32mconst DonationGrid = ({[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:22: trailing whitespace.
+[32m+[m[32m  donations = [],[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:23: trailing whitespace.
+[32m+[m[32m  loading = false,[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:24: trailing whitespace.
+[32m+[m[32m  onRefresh,[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:25: trailing whitespace.
+[32m+[m[32m  onSelectDonation,[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:26: trailing whitespace.
+[32m+[m[32m  onAccept,[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:27: trailing whitespace.
+[32m+[m[32m  onCollect[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:64: trailing whitespace.
+[32m+[m[32m              <Search[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:65: trailing whitespace.
+[32m+[m[32m                size={18}[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:66: trailing whitespace.
+[32m+[m[32m                style={{[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:67: trailing whitespace.
+[32m+[m[32m                  position: 'absolute',[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:68: trailing whitespace.
+[32m+[m[32m                  left: '12px',[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:69: trailing whitespace.
+[32m+[m[32m                  top: '50%',[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:70: trailing whitespace.
+[32m+[m[32m                  transform: 'translateY(-50%)',[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:71: trailing whitespace.
+[32m+[m[32m                  color: 'var(--color-text-subtle)'[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:72: trailing whitespace.
+[32m+[m[32m                }}[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:74: trailing whitespace.
+[32m+[m[32m              <input[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:75: trailing whitespace.
+[32m+[m[32m                type="text"[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:85: trailing whitespace.
+[32m+[m[32m              <button[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:86: trailing whitespace.
+[32m+[m[32m                type="button"[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:87: trailing whitespace.
+[32m+[m[32m                className="btn btn-outline"[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:105: trailing whitespace.
+[32m+[m[32m              <button[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:129: trailing whitespace.
+[32m+[m[32m              <button[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:146: trailing whitespace.
+[32m+[m[32m              <button[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:147: trailing whitespace.
+[32m+[m[32m                type="button"[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:148: trailing whitespace.
+[32m+[m[32m                className="btn btn-ghost"[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:170: trailing whitespace.
+[32m+[m[32m        <EmptyState[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:183: trailing whitespace.
+[32m+[m[32m            <DonationCard[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:184: trailing whitespace.
+[32m+[m[32m              key={donation.id}[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:185: trailing whitespace.
+[32m+[m[32m              donation={donation}[m[41m [m
+frontend/src/components/donations/DonationGrid.jsx:198: new blank line at EOF.
+frontend/src/components/donor/DonorForm.jsx:3: trailing whitespace.
+[32m+[m[32mimport {[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:4: trailing whitespace.
+[32m+[m[32m  Package,[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:5: trailing whitespace.
+[32m+[m[32m  CheckCircle,[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:6: trailing whitespace.
+[32m+[m[32m  AlertCircle,[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:7: trailing whitespace.
+[32m+[m[32m  Camera,[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:8: trailing whitespace.
+[32m+[m[32m  Upload,[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:9: trailing whitespace.
+[32m+[m[32m  X,[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:10: trailing whitespace.
+[32m+[m[32m  Clock,[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:11: trailing whitespace.
+[32m+[m[32m  Thermometer,[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:12: trailing whitespace.
+[32m+[m[32m  Calendar,[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:13: trailing whitespace.
+[32m+[m[32m  MapPin,[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:14: trailing whitespace.
+[32m+[m[32m  Scale,[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:32: trailing whitespace.
+[32m+[m[32m  {[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:33: trailing whitespace.
+[32m+[m[32m    id: 'cooked_meals',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:34: trailing whitespace.
+[32m+[m[32m    label: 'Cooked Meals',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:35: trailing whitespace.
+[32m+[m[32m    icon: '🍲',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:36: trailing whitespace.
+[32m+[m[32m    desc: 'Prepared batches from catering, canteens, or kitchens'[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:38: trailing whitespace.
+[32m+[m[32m  {[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:39: trailing whitespace.
+[32m+[m[32m    id: 'fresh_produce',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:40: trailing whitespace.
+[32m+[m[32m    label: 'Fresh Produce',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:41: trailing whitespace.
+[32m+[m[32m    icon: '🍎',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:42: trailing whitespace.
+[32m+[m[32m    desc: 'Raw fruits, vegetables, and whole edible produce'[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:44: trailing whitespace.
+[32m+[m[32m  {[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:45: trailing whitespace.
+[32m+[m[32m    id: 'bakery',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:46: trailing whitespace.
+[32m+[m[32m    label: 'Bakery Goods',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:47: trailing whitespace.
+[32m+[m[32m    icon: '🍞',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:48: trailing whitespace.
+[32m+[m[32m    desc: 'Bread loaves, buns, pastries, and baked goods'[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:50: trailing whitespace.
+[32m+[m[32m  {[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:51: trailing whitespace.
+[32m+[m[32m    id: 'packaged_sealed',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:52: trailing whitespace.
+[32m+[m[32m    label: 'Packaged / Sealed',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:53: trailing whitespace.
+[32m+[m[32m    icon: '📦',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:54: trailing whitespace.
+[32m+[m[32m    desc: 'Factory-sealed grocery packages with best-before dates'[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:410: trailing whitespace.
+[32m+[m[32m            <span style={{[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:411: trailing whitespace.
+[32m+[m[32m              width: '28px',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:412: trailing whitespace.
+[32m+[m[32m              height: '28px',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:413: trailing whitespace.
+[32m+[m[32m              borderRadius: '50%',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:414: trailing whitespace.
+[32m+[m[32m              backgroundColor: 'var(--color-primary)',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:415: trailing whitespace.
+[32m+[m[32m              color: '#FFFFFF',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:416: trailing whitespace.
+[32m+[m[32m              display: 'flex',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:417: trailing whitespace.
+[32m+[m[32m              alignItems: 'center',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:418: trailing whitespace.
+[32m+[m[32m              justifyContent: 'center',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:419: trailing whitespace.
+[32m+[m[32m              fontWeight: 700,[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:420: trailing whitespace.
+[32m+[m[32m              fontSize: '0.8rem'[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:474: trailing whitespace.
+[32m+[m[32m            <input[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:492: trailing whitespace.
+[32m+[m[32m            <span style={{[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:493: trailing whitespace.
+[32m+[m[32m              width: '28px',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:494: trailing whitespace.
+[32m+[m[32m              height: '28px',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:495: trailing whitespace.
+[32m+[m[32m              borderRadius: '50%',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:496: trailing whitespace.
+[32m+[m[32m              backgroundColor: 'var(--color-primary)',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:497: trailing whitespace.
+[32m+[m[32m              color: '#FFFFFF',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:498: trailing whitespace.
+[32m+[m[32m              display: 'flex',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:499: trailing whitespace.
+[32m+[m[32m              alignItems: 'center',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:500: trailing whitespace.
+[32m+[m[32m              justifyContent: 'center',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:501: trailing whitespace.
+[32m+[m[32m              fontWeight: 700,[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:502: trailing whitespace.
+[32m+[m[32m              fontSize: '0.8rem'[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:549: trailing whitespace.
+[32m+[m[32m              <input[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:607: trailing whitespace.
+[32m+[m[32m            <span style={{[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:608: trailing whitespace.
+[32m+[m[32m              width: '28px',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:609: trailing whitespace.
+[32m+[m[32m              height: '28px',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:610: trailing whitespace.
+[32m+[m[32m              borderRadius: '50%',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:611: trailing whitespace.
+[32m+[m[32m              backgroundColor: 'var(--color-primary)',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:612: trailing whitespace.
+[32m+[m[32m              color: '#FFFFFF',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:613: trailing whitespace.
+[32m+[m[32m              display: 'flex',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:614: trailing whitespace.
+[32m+[m[32m              alignItems: 'center',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:615: trailing whitespace.
+[32m+[m[32m              justifyContent: 'center',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:616: trailing whitespace.
+[32m+[m[32m              fontWeight: 700,[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:617: trailing whitespace.
+[32m+[m[32m              fontSize: '0.8rem'[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:699: trailing whitespace.
+[32m+[m[32m                <input[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:716: trailing whitespace.
+[32m+[m[32m            <input[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:733: trailing whitespace.
+[32m+[m[32m            <span style={{[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:734: trailing whitespace.
+[32m+[m[32m              width: '28px',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:735: trailing whitespace.
+[32m+[m[32m              height: '28px',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:736: trailing whitespace.
+[32m+[m[32m              borderRadius: '50%',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:737: trailing whitespace.
+[32m+[m[32m              backgroundColor: 'var(--color-primary)',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:738: trailing whitespace.
+[32m+[m[32m              color: '#FFFFFF',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:739: trailing whitespace.
+[32m+[m[32m              display: 'flex',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:740: trailing whitespace.
+[32m+[m[32m              alignItems: 'center',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:741: trailing whitespace.
+[32m+[m[32m              justifyContent: 'center',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:742: trailing whitespace.
+[32m+[m[32m              fontWeight: 700,[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:743: trailing whitespace.
+[32m+[m[32m              fontSize: '0.8rem'[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:798: trailing whitespace.
+[32m+[m[32m                <img[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:799: trailing whitespace.
+[32m+[m[32m                  src={photoPreview}[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:800: trailing whitespace.
+[32m+[m[32m                  alt="Donation preview"[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:801: trailing whitespace.
+[32m+[m[32m                  style={{ width: '100%', height: '260px', objectFit: 'contain' }}[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:960: trailing whitespace.
+[32m+[m[32m          <input[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:986: trailing whitespace.
+[32m+[m[32m            <span style={{[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:987: trailing whitespace.
+[32m+[m[32m              width: '28px',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:988: trailing whitespace.
+[32m+[m[32m              height: '28px',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:989: trailing whitespace.
+[32m+[m[32m              borderRadius: '50%',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:990: trailing whitespace.
+[32m+[m[32m              backgroundColor: 'var(--color-primary)',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:991: trailing whitespace.
+[32m+[m[32m              color: '#FFFFFF',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:992: trailing whitespace.
+[32m+[m[32m              display: 'flex',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:993: trailing whitespace.
+[32m+[m[32m              alignItems: 'center',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:994: trailing whitespace.
+[32m+[m[32m              justifyContent: 'center',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:995: trailing whitespace.
+[32m+[m[32m              fontWeight: 700,[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:996: trailing whitespace.
+[32m+[m[32m              fontSize: '0.8rem'[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:1006: trailing whitespace.
+[32m+[m[32m            <input[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:1023: trailing whitespace.
+[32m+[m[32m              <input[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:1037: trailing whitespace.
+[32m+[m[32m              <input[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:1051: trailing whitespace.
+[32m+[m[32m          <button[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:1052: trailing whitespace.
+[32m+[m[32m            type="submit"[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:1055: trailing whitespace.
+[32m+[m[32m            style={{[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:1056: trailing whitespace.
+[32m+[m[32m              padding: '0.9rem 2.5rem',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:1057: trailing whitespace.
+[32m+[m[32m              fontSize: '1.05rem',[m[41m [m
+frontend/src/components/donor/DonorForm.jsx:1058: trailing whitespace.
+[32m+[m[32m              minWidth: '240px'[m[41m [m
+frontend/src/components/layout/Footer.jsx:16: trailing whitespace.
+[32m+[m[32m            <button[m[41m [m
+frontend/src/components/layout/Footer.jsx:17: trailing whitespace.
+[32m+[m[32m              type="button"[m[41m [m
+frontend/src/components/layout/Footer.jsx:23: trailing whitespace.
+[32m+[m[32m            <button[m[41m [m
+frontend/src/components/layout/Footer.jsx:24: trailing whitespace.
+[32m+[m[32m              type="button"[m[41m [m
+frontend/src/components/layout/Footer.jsx:30: trailing whitespace.
+[32m+[m[32m            <button[m[41m [m
+frontend/src/components/layout/Footer.jsx:31: trailing whitespace.
+[32m+[m[32m              type="button"[m[41m [m
+frontend/src/components/layout/Footer.jsx:37: trailing whitespace.
+[32m+[m[32m            <button[m[41m [m
+frontend/src/components/layout/Footer.jsx:38: trailing whitespace.
+[32m+[m[32m              type="button"[m[41m [m
+frontend/src/components/layout/Footer.jsx:44: trailing whitespace.
+[32m+[m[32m            <button[m[41m [m
+frontend/src/components/layout/Footer.jsx:45: trailing whitespace.
+[32m+[m[32m              type="button"[m[41m [m
+frontend/src/components/layout/Footer.jsx:68: new blank line at EOF.
+frontend/src/components/layout/Navbar.jsx:2: trailing whitespace.
+[32m+[m[32mimport {[m[41m [m
+frontend/src/components/layout/Navbar.jsx:3: trailing whitespace.
+[32m+[m[32m  LayoutDashboard,[m[41m [m
+frontend/src/components/layout/Navbar.jsx:4: trailing whitespace.
+[32m+[m[32m  Package,[m[41m [m
+frontend/src/components/layout/Navbar.jsx:5: trailing whitespace.
+[32m+[m[32m  GitFork,[m[41m [m
+frontend/src/components/layout/Navbar.jsx:6: trailing whitespace.
+[32m+[m[32m  BarChart3,[m[41m [m
+frontend/src/components/layout/Navbar.jsx:7: trailing whitespace.
+[32m+[m[32m  PlusCircle,[m[41m [m
+frontend/src/components/layout/Navbar.jsx:8: trailing whitespace.
+[32m+[m[32m  Sparkles[m[41m [m
+frontend/src/components/layout/Navbar.jsx:17: trailing whitespace.
+[32m+[m[32m          <div[m[41m [m
+frontend/src/components/layout/Navbar.jsx:32: trailing whitespace.
+[32m+[m[32m            <button[m[41m [m
+frontend/src/components/layout/Navbar.jsx:41: trailing whitespace.
+[32m+[m[32m            <button[m[41m [m
+frontend/src/components/layout/Navbar.jsx:63: trailing whitespace.
+[32m+[m[32m            <button[m[41m [m
+frontend/src/components/layout/Navbar.jsx:72: trailing whitespace.
+[32m+[m[32m            <button[m[41m [m
+frontend/src/components/layout/Navbar.jsx:84: trailing whitespace.
+[32m+[m[32m            <button[m[41m [m
+frontend/src/components/layout/Navbar.jsx:100: new blank line at EOF.
+frontend/src/components/matches/MatchesView.jsx:66: trailing whitespace.
+[32m+[m[32m          <button[m[41m [m
+frontend/src/components/matches/MatchesView.jsx:67: trailing whitespace.
+[32m+[m[32m            type="button"[m[41m [m
+frontend/src/components/matches/MatchesView.jsx:147: new blank line at EOF.
+frontend/src/components/ngo/NGODashboard.jsx:2: trailing whitespace.
+[32m+[m[32mimport {[m[41m [m
+frontend/src/components/ngo/NGODashboard.jsx:3: trailing whitespace.
+[32m+[m[32m  Building2,[m[41m [m
+frontend/src/components/ngo/NGODashboard.jsx:4: trailing whitespace.
+[32m+[m[32m  Search,[m[41m [m
+frontend/src/components/ngo/NGODashboard.jsx:5: trailing whitespace.
+[32m+[m[32m  Filter,[m[41m [m
+frontend/src/components/ngo/NGODashboard.jsx:6: trailing whitespace.
+[32m+[m[32m  RefreshCw,[m[41m [m
+frontend/src/components/ngo/NGODashboard.jsx:7: trailing whitespace.
+[32m+[m[32m  CheckCircle,[m[41m [m
+frontend/src/components/ngo/NGODashboard.jsx:8: trailing whitespace.
+[32m+[m[32m  Clock,[m[41m [m
+frontend/src/components/ngo/NGODashboard.jsx:22: trailing whitespace.
+[32m+[m[32mconst NGODashboard = ({[m[41m [m
+frontend/src/components/ngo/NGODashboard.jsx:23: trailing whitespace.
+[32m+[m[32m  donations = [],[m[41m [m
+frontend/src/components/ngo/NGODashboard.jsx:24: trailing whitespace.
+[32m+[m[32m  loading = false,[m[41m [m
+frontend/src/components/ngo/NGODashboard.jsx:25: trailing whitespace.
+[32m+[m[32m  onRefresh,[m[41m [m
+frontend/src/components/ngo/NGODashboard.jsx:26: trailing whitespace.
+[32m+[m[32m  onAccept,[m[41m [m
+frontend/src/components/ngo/NGODashboard.jsx:28: trailing whitespace.
+[32m+[m[32m  onSelectDonation[m[41m [m
+frontend/src/components/ngo/NGODashboard.jsx:79: trailing whitespace.
+[32m+[m[32m          <button[m[41m [m
+frontend/src/components/ngo/NGODashboard.jsx:138: trailing whitespace.
+[32m+[m[32m            <input[m[41m [m
+frontend/src/components/ngo/NGODashboard.jsx:177: trailing whitespace.
+[32m+[m[32m        <EmptyState[m[41m [m
+frontend/src/components/ngo/NGODashboard.jsx:184: trailing whitespace.
+[32m+[m[32m            <DonationCard[m[41m [m
+frontend/src/components/ngo/NGODashboard.jsx:200: new blank line at EOF.
+frontend/src/index.css:8: trailing whitespace.
+[32m+[m[41m  [m
+frontend/src/index.css:13: trailing whitespace.
+[32m+[m[41m  [m
+frontend/src/index.css:17: trailing whitespace.
+[32m+[m[41m  [m
+frontend/src/index.css:20: trailing whitespace.
+[32m+[m[41m  [m
+frontend/src/index.css:23: trailing whitespace.
+[32m+[m[41m  [m

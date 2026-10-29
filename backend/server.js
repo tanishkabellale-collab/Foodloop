@@ -1,8 +1,9 @@
-﻿const express = require('express');
+const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
+const { assessFoodImage } = require('./services/aiAssessmentService');
 
 const app = express();
 const PORT = 5000;
@@ -22,7 +23,7 @@ if (!fs.existsSync(UPLOADS_DIR)) {
 // Serve uploaded photos as static files
 app.use('/uploads', express.static(UPLOADS_DIR));
 
-// Configure Multer for local photo storage
+// Configure Multer for local photo disk storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, UPLOADS_DIR);
@@ -36,6 +37,20 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB max
+  fileFilter: (req, file, cb) => {
+    const allowedMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+    if (allowedMimes.includes(file.mimetype.toLowerCase())) {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid image type. Only JPG, PNG, and WebP images are allowed.'));
+    }
+  }
+});
+
+// Configure Multer memory storage for immediate AI assessment buffer handling
+const uploadAi = multer({
+  storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB max
   fileFilter: (req, file, cb) => {
     const allowedMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
@@ -125,6 +140,9 @@ function serializeDonation(d) {
     packaging_type: d.packaging_type || null,
     allergens: d.allergens || null,
     special_note: d.special_note || null,
+
+    // AI Visual Assessment (Optional)
+    ai_assessment: d.ai_assessment || null,
 
     // Status Lifecycle & Timestamps
     status: d.status || 'submitted',
@@ -217,7 +235,8 @@ app.post('/api/donations', (req, res) => {
       special_note,
       latitude,
       longitude,
-      donor_id
+      donor_id,
+      ai_assessment
     } = body;
 
     const finalTitle = (title || '').trim();
@@ -304,6 +323,16 @@ app.post('/api/donations', (req, res) => {
       return res.status(400).json({ error: `Packaging Type, if provided, must be 'sealed_covered' or 'open_loose'.` });
     }
 
+    // Optional AI Assessment payload parsing
+    let parsedAiAssessment = null;
+    if (ai_assessment) {
+      try {
+        parsedAiAssessment = typeof ai_assessment === 'string' ? JSON.parse(ai_assessment) : ai_assessment;
+      } catch (e) {
+        parsedAiAssessment = null;
+      }
+    }
+
     const nowISO = new Date().toISOString();
     const newDonation = {
       id: Date.now().toString(),
@@ -328,6 +357,9 @@ app.post('/api/donations', (req, res) => {
       packaging_type: packaging_type || null,
       allergens: allergens ? allergens.trim() : null,
       special_note: special_note ? special_note.trim() : null,
+
+      // AI Assessment Metadata
+      ai_assessment: parsedAiAssessment,
 
       status: 'submitted',
       created_at: nowISO,
@@ -383,6 +415,93 @@ app.patch('/api/donations/:id/collect', (req, res) => {
   donations[index].updated_at = new Date().toISOString();
   saveData();
   res.json(serializeDonation(donations[index]));
+});
+
+// 6. AI Visual Condition Assessment
+app.post('/api/ai/assess-image', (req, res) => {
+  uploadAi.single('image')(req, res, async (err) => {
+    if (err instanceof multer.MulterError) {
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({
+          assessment_status: 'rejected',
+          error: 'Image exceeds maximum allowed size of 5 MB.',
+          code: 'INVALID_IMAGE'
+        });
+      }
+      return res.status(400).json({
+        assessment_status: 'rejected',
+        error: `Upload error: ${err.message}`,
+        code: 'INVALID_IMAGE'
+      });
+    } else if (err) {
+      return res.status(400).json({
+        assessment_status: 'rejected',
+        error: err.message,
+        code: 'INVALID_IMAGE'
+      });
+    }
+
+    const food_category = req.body.food_category;
+    if (!food_category) {
+      return res.status(400).json({
+        error: 'Food category is required for visual assessment.',
+        code: 'MISSING_CATEGORY'
+      });
+    }
+
+    // For non-produce, short-circuit immediately without needing image buffer
+    if (food_category !== 'fresh_produce') {
+      try {
+        const result = await assessFoodImage(null, food_category);
+        return res.json(result);
+      } catch (unsupportedErr) {
+        return res.status(500).json({ error: unsupportedErr.message });
+      }
+    }
+
+    // For fresh produce, image buffer is required
+    let buffer = req.file ? req.file.buffer : null;
+
+    // Fallback: check if existing image_url was passed
+    if (!buffer && req.body.image_url) {
+      const localPath = path.join(__dirname, req.body.image_url.replace(/^\//, ''));
+      if (fs.existsSync(localPath)) {
+        try {
+          buffer = fs.readFileSync(localPath);
+        } catch (readErr) {
+          console.error("Failed to read image from image_url:", readErr);
+        }
+      }
+    }
+
+    if (!buffer) {
+      return res.status(400).json({
+        assessment_status: 'rejected',
+        error: 'Invalid image file. Only JPG, PNG, and WebP images up to 5 MB are supported.',
+        code: 'INVALID_IMAGE'
+      });
+    }
+
+    try {
+      const assessment = await assessFoodImage(buffer, food_category);
+      return res.json(assessment);
+    } catch (aiErr) {
+      console.error('Inference Error:', aiErr);
+      if (aiErr.code === 'INVALID_IMAGE') {
+        return res.status(400).json({
+          assessment_status: 'rejected',
+          error: aiErr.message,
+          code: 'INVALID_IMAGE'
+        });
+      }
+      return res.status(503).json({
+        assessment_status: 'failed',
+        reason: 'inference_engine_unavailable',
+        error: 'AI visual assessment engine is currently unavailable. Please proceed with standard donation intake.',
+        code: 'SERVICE_UNAVAILABLE'
+      });
+    }
+  });
 });
 
 // Global error handler
