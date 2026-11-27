@@ -40,7 +40,7 @@ const DonationCard = ({
 
   // Local image url resolver: no external loremflickr
   const resolvedImageUrl = image_url 
-    ? (image_url.startsWith('http') ? image_url : `http://localhost:5000${image_url}`)
+    ? (image_url.startsWith('http') ? image_url : `http://localhost:5001${image_url}`)
     : null;
 
   return (

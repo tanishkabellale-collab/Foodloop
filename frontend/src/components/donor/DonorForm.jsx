@@ -19,7 +19,7 @@ import {
   HelpCircle
 } from 'lucide-react';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'http://localhost:5001/api';
 
 // Helper to prefill pickup time (+3 hours default)
 const getDefaultPickupTime = () => {
@@ -116,20 +116,9 @@ const DonorForm = ({ onSuccess }) => {
     if (errorMsg) setErrorMsg('');
   };
 
-  // Triggers non-blocking AI assessment
+  // Triggers non-blocking AI visual assessment for any food category
   const runAiAssessment = async (file, category) => {
     if (!file) return;
-
-    if (category !== 'fresh_produce') {
-      setAiLoading(false);
-      setAiError('');
-      setAiResult({
-        assessment_status: 'requires_human_review',
-        reason: 'model_not_validated_for_category',
-        message: "AI visual assessment isn't validated for this food category."
-      });
-      return;
-    }
 
     setAiLoading(true);
     setAiError('');
@@ -138,18 +127,18 @@ const DonorForm = ({ onSuccess }) => {
     try {
       const dataAi = new FormData();
       dataAi.append('image', file);
-      dataAi.append('food_category', 'fresh_produce');
+      dataAi.append('food_category', category || 'unspecified');
 
       const res = await axios.post(`${API_URL}/ai/assess-image`, dataAi, {
         headers: { 'Content-Type': 'multipart/form-data' },
-        timeout: 10000 // 10s timeout
+        timeout: 18000
       });
 
       setAiResult(res.data);
     } catch (err) {
       console.warn('[AI Assessment] Non-blocking visual assessment notice:', err.message);
-      // Non-blocking fallback
-      setAiError('AI assessment unavailable — donation can still be submitted and reviewed manually.');
+      const serverErr = err.response?.data?.error;
+      setAiError(serverErr || 'AI image assessment is temporarily unavailable — you can retry or still submit your donation.');
       setAiResult(null);
     } finally {
       setAiLoading(false);
@@ -304,12 +293,17 @@ const DonorForm = ({ onSuccess }) => {
       if (aiResult && aiResult.assessment_status === 'completed') {
         data.append('ai_assessment', JSON.stringify({
           assessment_status: aiResult.assessment_status,
-          visual_assessment_label: aiResult.visual_assessment_label,
-          predicted_class: aiResult.predicted_class,
+          assessment_mode: aiResult.assessment_mode,
+          is_demo_fallback: Boolean(aiResult.is_demo_fallback),
+          suggested_food_category: aiResult.suggested_food_category,
+          possible_food_description: aiResult.possible_food_description,
+          packaging_condition_observations: aiResult.packaging_condition_observations || [],
+          suggested_dietary_labels: aiResult.suggested_dietary_labels || [],
+          missing_information: aiResult.missing_information || [],
+          confidence_level: aiResult.confidence_level,
           confidence_score: aiResult.confidence_score,
-          probability_fresh: aiResult.probability_fresh,
-          probability_rotten: aiResult.probability_rotten,
-          threshold_applied: aiResult.threshold_applied,
+          human_review_recommended: Boolean(aiResult.human_review_recommended),
+          human_review_reason: aiResult.human_review_reason || null,
           model_version: aiResult.model_version,
           assessed_at: new Date().toISOString()
         }));
@@ -825,6 +819,23 @@ const DonorForm = ({ onSuccess }) => {
                 </button>
               </div>
 
+              {/* Explicit Analyze / Re-analyze Action Bar */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', marginTop: '0.85rem', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+                  {photoFile?.name} ({photoFile ? Math.max(1, Math.round(photoFile.size / 1024)) : 0} KB)
+                </span>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  disabled={aiLoading}
+                  onClick={() => runAiAssessment(photoFile, formData.food_category)}
+                  style={{ padding: '0.45rem 0.9rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+                >
+                  <Sparkles size={14} />
+                  <span>{aiLoading ? 'Analyzing...' : aiResult ? 'Re-analyze Photo' : 'Analyze Photo'}</span>
+                </button>
+              </div>
+
               {/* 1. AI Loading State */}
               {aiLoading && (
                 <div style={{
@@ -839,104 +850,151 @@ const DonorForm = ({ onSuccess }) => {
                 }}>
                   <div className="spinner" style={{ width: '18px', height: '18px' }}></div>
                   <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--color-primary)' }}>
-                    Analyzing image...
+                    Analyzing visible image characteristics...
                   </div>
                 </div>
               )}
 
-              {/* 2. AI Assessment Completed (Fresh Produce) */}
+              {/* 2. AI Assessment Completed (Live Vision AI or Demo/Fallback) */}
               {aiResult && aiResult.assessment_status === 'completed' && (
                 <div style={{
                   marginTop: '1rem',
                   padding: '1.25rem',
                   borderRadius: 'var(--radius-md)',
-                  backgroundColor: aiResult.visual_assessment_label === 'visually_acceptable' ? 'var(--color-secondary-subtle)' : 'var(--color-danger-subtle)',
-                  border: aiResult.visual_assessment_label === 'visually_acceptable' ? '1px solid rgba(91, 140, 81, 0.3)' : '1px solid rgba(217, 72, 59, 0.3)'
+                  backgroundColor: aiResult.is_demo_fallback ? '#F8FAFC' : 'var(--color-secondary-subtle)',
+                  border: aiResult.is_demo_fallback ? '1px solid #CBD5E1' : '1px solid rgba(91, 140, 81, 0.35)'
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--color-primary)' }}>
-                      <Sparkles size={14} style={{ color: 'var(--color-accent)' }} />
-                      <span>AI Visual Assessment</span>
+                  {/* Header + Mode Badge + Confidence */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.03em', textTransform: 'uppercase', color: 'var(--color-primary)' }}>
+                        <Sparkles size={14} style={{ color: 'var(--color-accent)' }} />
+                        <span>AI Image Assessment</span>
+                      </span>
+                      <span style={{
+                        fontSize: '0.72rem',
+                        fontWeight: 700,
+                        padding: '0.18rem 0.55rem',
+                        borderRadius: '9999px',
+                        backgroundColor: aiResult.is_demo_fallback ? '#FEF3C7' : '#DCFCE7',
+                        color: aiResult.is_demo_fallback ? '#92400E' : '#166534',
+                        border: aiResult.is_demo_fallback ? '1px solid #FCD34D' : '1px solid #86EFAC'
+                      }}>
+                        {aiResult.is_demo_fallback
+                          ? 'DEMO / FALLBACK MODE (No API Key)'
+                          : `Live Vision AI (${aiResult.model_version})`}
+                      </span>
                     </div>
-                    <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>
-                      Model: {aiResult.model_version}
-                    </span>
-                  </div>
 
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
-                    <div style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.4rem',
-                      fontWeight: 800,
-                      fontSize: '1.05rem',
-                      color: aiResult.visual_assessment_label === 'visually_acceptable' ? '#2F6126' : '#A32A2A'
+                    <span style={{
+                      fontSize: '0.75rem',
+                      fontWeight: 700,
+                      padding: '0.18rem 0.55rem',
+                      borderRadius: '6px',
+                      backgroundColor: '#FFFFFF',
+                      border: '1px solid var(--color-border)',
+                      color: 'var(--color-primary)',
+                      textTransform: 'capitalize'
                     }}>
-                      {aiResult.visual_assessment_label === 'visually_acceptable' ? (
-                        <>
-                          <CheckCircle size={18} />
-                          <span>✓ Visually Acceptable</span>
-                        </>
-                      ) : (
-                        <>
-                          <AlertTriangle size={18} />
-                          <span>⚠ Visually Unsuitable</span>
-                        </>
-                      )}
-                    </div>
-                    <div className="tabular-nums" style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-primary)' }}>
-                      {Math.round((aiResult.confidence_score || 0) * 100)}% confidence
-                    </div>
-                  </div>
-
-                  {/* Probabilities Breakdown */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', marginBottom: '0.85rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.825rem' }}>
-                      <span style={{ color: 'var(--color-text-muted)' }}>Fresh appearance:</span>
-                      <span className="tabular-nums" style={{ fontWeight: 600, color: 'var(--color-primary)' }}>
-                        {Math.round((aiResult.probability_fresh || 0) * 100)}%
-                      </span>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.825rem' }}>
-                      <span style={{ color: 'var(--color-text-muted)' }}>Visible deterioration:</span>
-                      <span className="tabular-nums" style={{ fontWeight: 600, color: 'var(--color-primary)' }}>
-                        {Math.round((aiResult.probability_rotten || 0) * 100)}%
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Disclaimer */}
-                  <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', borderTop: '1px solid rgba(0,0,0,0.08)', paddingTop: '0.65rem', lineHeight: 1.45 }}>
-                    {aiResult.disclaimer || 'AI operational triage only. Does not certify food safety or detect pathogens, toxins, or internal spoilage.'}
-                  </div>
-                </div>
-              )}
-
-              {/* 3. Unsupported Category (Requires Human Review) */}
-              {aiResult && aiResult.assessment_status === 'requires_human_review' && (
-                <div style={{
-                  marginTop: '1rem',
-                  padding: '1rem 1.25rem',
-                  borderRadius: 'var(--radius-md)',
-                  backgroundColor: 'var(--color-bg-subtle)',
-                  border: '1px solid var(--color-border)'
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
-                    <HelpCircle size={16} style={{ color: 'var(--color-accent)' }} />
-                    <span style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--color-primary)' }}>
-                      Requires human review
+                      Confidence: {aiResult.confidence_level || 'low'}
+                      {typeof aiResult.confidence_score === 'number' ? ` (${Math.round(aiResult.confidence_score * 100)}%)` : ''}
                     </span>
                   </div>
-                  <div style={{ fontSize: '0.825rem', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>
-                    AI visual assessment isn't validated for this food category. Cooked meals, bakery, and packaged foods undergo standard inspection.
+
+                  {/* Human Review Warning */}
+                  {aiResult.human_review_recommended && (
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '0.5rem',
+                      padding: '0.65rem 0.85rem',
+                      borderRadius: 'var(--radius-sm)',
+                      backgroundColor: 'var(--color-warning-subtle)',
+                      border: '1px solid rgba(231, 165, 43, 0.45)',
+                      marginBottom: '0.85rem',
+                      fontSize: '0.82rem',
+                      color: '#78350F'
+                    }}>
+                      <AlertTriangle size={16} style={{ flexShrink: 0, marginTop: '2px', color: '#D97706' }} />
+                      <div>
+                        <strong>Human Review Recommended:</strong>{' '}
+                        {aiResult.human_review_reason || 'Manual verification is required before dispatch.'}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Suggested Category & Description */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem', marginBottom: '0.85rem' }}>
+                    <div style={{ fontSize: '0.84rem', color: 'var(--color-text-main)' }}>
+                      <strong style={{ color: 'var(--color-primary)' }}>Suggested Category:</strong>{' '}
+                      <span style={{ textTransform: 'capitalize' }}>
+                        {(aiResult.suggested_food_category || 'uncertain').replace(/_/g, ' ')}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '0.84rem', color: 'var(--color-text-main)', lineHeight: 1.45 }}>
+                      <strong style={{ color: 'var(--color-primary)' }}>Visible Description:</strong>{' '}
+                      {aiResult.possible_food_description}
+                    </div>
                   </div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--color-text-subtle)', fontStyle: 'italic' }}>
-                    AI operational triage only. Does not certify food safety.
+
+                  {/* Packaging / Condition Observations */}
+                  {Array.isArray(aiResult.packaging_condition_observations) && aiResult.packaging_condition_observations.length > 0 && (
+                    <div style={{ marginBottom: '0.75rem' }}>
+                      <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-primary)', marginBottom: '0.25rem' }}>
+                        Packaging &amp; Visible Condition Observations:
+                      </div>
+                      <ul style={{ margin: 0, paddingLeft: '1.15rem', fontSize: '0.81rem', color: 'var(--color-text-muted)', display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+                        {aiResult.packaging_condition_observations.map((obs, idx) => (
+                          <li key={idx}>{obs}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Suggested Dietary Labels */}
+                  {Array.isArray(aiResult.suggested_dietary_labels) && aiResult.suggested_dietary_labels.length > 0 && (
+                    <div style={{ marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
+                      <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-primary)' }}>
+                        Inferred Dietary Labels:
+                      </span>
+                      {aiResult.suggested_dietary_labels.map((lbl, idx) => (
+                        <span key={idx} style={{
+                          fontSize: '0.74rem',
+                          fontWeight: 600,
+                          padding: '0.15rem 0.55rem',
+                          borderRadius: '9999px',
+                          backgroundColor: '#FFFFFF',
+                          border: '1px solid var(--color-border)',
+                          color: 'var(--color-primary)'
+                        }}>
+                          {lbl}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Missing Information for Donor */}
+                  {Array.isArray(aiResult.missing_information) && aiResult.missing_information.length > 0 && (
+                    <div style={{ marginBottom: '0.85rem' }}>
+                      <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-primary)', marginBottom: '0.25rem' }}>
+                        Information Donor Should Confirm:
+                      </div>
+                      <ul style={{ margin: 0, paddingLeft: '1.15rem', fontSize: '0.81rem', color: 'var(--color-text-muted)', display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+                        {aiResult.missing_information.map((item, idx) => (
+                          <li key={idx}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Mandatory Safety Disclaimer */}
+                  <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', borderTop: '1px solid rgba(0,0,0,0.08)', paddingTop: '0.65rem', lineHeight: 1.45 }}>
+                    {aiResult.safety_disclaimer || aiResult.disclaimer}
                   </div>
                 </div>
               )}
 
-              {/* 4. AI Error Notice (Non-Blocking) */}
+              {/* 3. AI Error Notice with Retry (Non-Blocking) */}
               {aiError && (
                 <div style={{
                   marginTop: '1rem',
@@ -946,12 +1004,24 @@ const DonorForm = ({ onSuccess }) => {
                   border: '1px solid rgba(231, 165, 43, 0.35)',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.65rem'
+                  justifyContent: 'space-between',
+                  gap: '0.75rem',
+                  flexWrap: 'wrap'
                 }}>
-                  <Info size={16} style={{ color: 'var(--color-warning)', flexShrink: 0 }} />
-                  <div style={{ fontSize: '0.825rem', color: 'var(--color-text-main)' }}>
-                    {aiError}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flex: 1, minWidth: '220px' }}>
+                    <AlertCircle size={17} style={{ color: '#D97706', flexShrink: 0 }} />
+                    <div style={{ fontSize: '0.825rem', color: 'var(--color-text-main)' }}>
+                      {aiError}
+                    </div>
                   </div>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => runAiAssessment(photoFile, formData.food_category)}
+                    style={{ padding: '0.35rem 0.75rem', fontSize: '0.78rem' }}
+                  >
+                    Retry Analysis
+                  </button>
                 </div>
               )}
             </div>

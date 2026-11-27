@@ -1,12 +1,20 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
 const { assessFoodImage } = require('./services/aiAssessmentService');
+const { rankNgosForDonation } = require('./services/matchingService');
+const { MATCHING_WEIGHTS } = require('./config/matchingWeights');
+const { DEMO_NGOS } = require('./data/demoNgos');
+const { ROLES, revokeToken, createAuthStore } = require('./services/authService');
+const { createAuthMiddleware } = require('./middleware/authMiddleware');
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5001;
+const authStore = createAuthStore(process.env.USERS_FILE || undefined);
+const { authenticate, authorizeRoles } = createAuthMiddleware(authStore);
 
 app.use(cors());
 app.use(express.json());
@@ -146,6 +154,13 @@ function serializeDonation(d) {
 
     // Status Lifecycle & Timestamps
     status: d.status || 'submitted',
+    matched_ngo_id: d.matched_ngo_id || null,
+    matched_ngo_name: d.matched_ngo_name || null,
+    accepted_by_user_id: d.accepted_by_user_id || null,
+    review_status: d.review_status || null,
+    review_note: d.review_note || null,
+    reviewed_by: d.reviewed_by || null,
+    reviewed_at: d.reviewed_at || null,
     created_at: d.created_at || d.createdAt || new Date().toISOString(),
     updated_at: d.updated_at || d.created_at || d.createdAt || new Date().toISOString(),
 
@@ -162,25 +177,76 @@ function serializeDonation(d) {
   };
 }
 
-// 1. Get all donations
-app.get('/api/donations', (req, res) => {
-  const sorted = [...donations]
+// ============================================================================
+// AUTHENTICATION & RBAC ENDPOINTS
+// ============================================================================
+
+app.post('/api/auth/register', (req, res) => {
+  try {
+    const result = authStore.registerUser(req.body || {});
+    return res.status(201).json(result);
+  } catch (err) {
+    return res.status(err.status || 400).json({ error: err.message });
+  }
+});
+
+app.post('/api/auth/login', (req, res) => {
+  try {
+    const result = authStore.loginUser(req.body || {});
+    return res.json(result);
+  } catch (err) {
+    return res.status(err.status || 401).json({ error: err.message });
+  }
+});
+
+app.post('/api/auth/logout', authenticate, (req, res) => {
+  revokeToken(req.authToken);
+  return res.json({ message: 'Signed out successfully.' });
+});
+
+app.get('/api/auth/me', authenticate, (req, res) => {
+  return res.json({ user: req.user });
+});
+
+app.get('/api/auth/demo-accounts', (req, res) => {
+  if (process.env.NODE_ENV === 'production') {
+    return res.status(404).json({ error: 'Not available in production.' });
+  }
+  return res.json({ accounts: authStore.listDemoAccounts() });
+});
+
+// 1. Get all donations (Authenticated; DONOR sees own + legacy demo listings)
+app.get('/api/donations', authenticate, authorizeRoles(ROLES.DONOR, ROLES.NGO, ROLES.ADMIN), (req, res) => {
+  let visible = [...donations];
+  if (req.user.role === ROLES.DONOR) {
+    visible = visible.filter(
+      (d) => d.donor_id === req.user.id || (!d.donor_id && req.user.is_demo)
+    );
+  }
+  const sorted = visible
     .sort((a, b) => new Date(b.created_at || b.createdAt) - new Date(a.created_at || a.createdAt))
     .map(serializeDonation);
   res.json(sorted);
 });
 
 // 2. Get single donation by ID
-app.get('/api/donations/:id', (req, res) => {
+app.get('/api/donations/:id', authenticate, authorizeRoles(ROLES.DONOR, ROLES.NGO, ROLES.ADMIN), (req, res) => {
   const donation = donations.find(d => d.id === req.params.id);
   if (!donation) {
     return res.status(404).json({ error: 'Donation not found.' });
   }
+  if (
+    req.user.role === ROLES.DONOR &&
+    donation.donor_id &&
+    donation.donor_id !== req.user.id
+  ) {
+    return res.status(403).json({ error: 'Access denied. You can only view your own donations.' });
+  }
   res.json(serializeDonation(donation));
 });
 
-// 3. Create a donation (Supports Multipart/Form-Data with Photo and JSON)
-app.post('/api/donations', (req, res) => {
+// 3. Create a donation (DONOR or ADMIN only)
+app.post('/api/donations', authenticate, authorizeRoles(ROLES.DONOR, ROLES.ADMIN), (req, res) => {
   upload.single('photo')(req, res, (err) => {
     if (err instanceof multer.MulterError) {
       if (err.code === 'LIMIT_FILE_SIZE') {
@@ -336,7 +402,7 @@ app.post('/api/donations', (req, res) => {
     const nowISO = new Date().toISOString();
     const newDonation = {
       id: Date.now().toString(),
-      donor_id: donor_id || null,
+      donor_id: req.user.id,
       title: finalTitle,
       food_category,
       dietary_type,
@@ -379,8 +445,8 @@ app.post('/api/donations', (req, res) => {
   });
 });
 
-// 4. Accept a donation (NGO)
-app.patch('/api/donations/:id/accept', (req, res) => {
+// 4. Accept a donation (NGO or ADMIN only)
+app.patch('/api/donations/:id/accept', authenticate, authorizeRoles(ROLES.NGO, ROLES.ADMIN), (req, res) => {
   const { id } = req.params;
   const index = donations.findIndex(d => d.id === id);
 
@@ -393,18 +459,109 @@ app.patch('/api/donations/:id/accept', (req, res) => {
   }
 
   donations[index].status = 'accepted';
+  donations[index].accepted_by_user_id = req.user.id;
+  if (req.body && req.body.matched_ngo_id) {
+    donations[index].matched_ngo_id = String(req.body.matched_ngo_id);
+  }
+  if (req.body && req.body.matched_ngo_name) {
+    donations[index].matched_ngo_name = String(req.body.matched_ngo_name);
+  } else if (req.user.role === ROLES.NGO && !donations[index].matched_ngo_name) {
+    donations[index].matched_ngo_name = req.user.organization || req.user.name;
+  }
   donations[index].updated_at = new Date().toISOString();
   saveData();
   res.json(serializeDonation(donations[index]));
 });
 
-// 5. Collect a donation (NGO)
-app.patch('/api/donations/:id/collect', (req, res) => {
+// 4b. Intelligent NGO Matching for a specific donation
+app.get('/api/donations/:id/matches', authenticate, authorizeRoles(ROLES.DONOR, ROLES.NGO, ROLES.ADMIN), (req, res) => {
+  const id = (req.params.id || '').trim();
+  if (!id) {
+    return res.status(400).json({ error: 'Valid donation ID is required.' });
+  }
+
+  const donation = donations.find(d => d.id === id);
+  if (!donation) {
+    return res.status(404).json({ error: 'Donation not found.' });
+  }
+
+  if (
+    req.user.role === ROLES.DONOR &&
+    donation.donor_id &&
+    donation.donor_id !== req.user.id
+  ) {
+    return res.status(403).json({ error: 'Access denied. You can only view matches for your own donations.' });
+  }
+
+  try {
+    const serialized = serializeDonation(donation);
+    const ngos = Array.isArray(DEMO_NGOS) ? DEMO_NGOS : [];
+    const matches = rankNgosForDonation(serialized, ngos);
+
+    res.json({
+      donation: serialized,
+      ngos_source: 'demo_profiles',
+      ngos_count: ngos.length,
+      weights: MATCHING_WEIGHTS,
+      generated_at: new Date().toISOString(),
+      matches,
+    });
+  } catch (err) {
+    console.error('Matching Engine Error:', err);
+    res.status(500).json({ error: 'Failed to compute NGO matches for this donation.' });
+  }
+});
+
+// 4c. Batch Intelligent NGO Matching for all available/submitted donations (NGO or ADMIN)
+app.get('/api/matches', authenticate, authorizeRoles(ROLES.NGO, ROLES.ADMIN), (req, res) => {
+  try {
+    const activeStatuses = ['available', 'submitted'];
+    const activeDonations = donations
+      .filter(d => activeStatuses.includes((d.status || 'available').toLowerCase()))
+      .map(serializeDonation);
+
+    const ngos = Array.isArray(DEMO_NGOS) ? DEMO_NGOS : [];
+    const limit = Math.max(1, Math.min(20, parseInt(req.query.limit, 10) || 3));
+
+    const results = activeDonations.map((donation) => {
+      const ranked = rankNgosForDonation(donation, ngos);
+      return {
+        donation,
+        top_matches: ranked.slice(0, limit),
+        total_ngos_evaluated: ranked.length,
+      };
+    });
+
+    res.json({
+      ngos_source: 'demo_profiles',
+      weights: MATCHING_WEIGHTS,
+      generated_at: new Date().toISOString(),
+      donations_evaluated: results.length,
+      results,
+    });
+  } catch (err) {
+    console.error('Batch Matching Error:', err);
+    res.status(500).json({ error: 'Failed to compute NGO matches.' });
+  }
+});
+
+// 5. Collect a donation (NGO or ADMIN only)
+app.patch('/api/donations/:id/collect', authenticate, authorizeRoles(ROLES.NGO, ROLES.ADMIN), (req, res) => {
   const { id } = req.params;
   const index = donations.findIndex(d => d.id === id);
 
   if (index === -1) {
     return res.status(404).json({ error: 'Donation not found.' });
+  }
+
+  if (
+    req.user.role === ROLES.NGO &&
+    donations[index].accepted_by_user_id &&
+    donations[index].accepted_by_user_id !== req.user.id
+  ) {
+    return res.status(403).json({
+      error: 'Only the accepting NGO or an Admin can mark this donation as collected.',
+    });
   }
 
   if (donations[index].status === 'collected') {
@@ -417,8 +574,8 @@ app.patch('/api/donations/:id/collect', (req, res) => {
   res.json(serializeDonation(donations[index]));
 });
 
-// 6. AI Visual Condition Assessment
-app.post('/api/ai/assess-image', (req, res) => {
+// 6. AI Visual Condition Assessment (DONOR or ADMIN)
+app.post('/api/ai/assess-image', authenticate, authorizeRoles(ROLES.DONOR, ROLES.ADMIN), (req, res) => {
   uploadAi.single('image')(req, res, async (err) => {
     if (err instanceof multer.MulterError) {
       if (err.code === 'LIMIT_FILE_SIZE') {
@@ -441,33 +598,21 @@ app.post('/api/ai/assess-image', (req, res) => {
       });
     }
 
-    const food_category = req.body.food_category;
-    if (!food_category) {
-      return res.status(400).json({
-        error: 'Food category is required for visual assessment.',
-        code: 'MISSING_CATEGORY'
-      });
-    }
+    const food_category = req.body.food_category || 'unspecified';
 
-    // For non-produce, short-circuit immediately without needing image buffer
-    if (food_category !== 'fresh_produce') {
-      try {
-        const result = await assessFoodImage(null, food_category);
-        return res.json(result);
-      } catch (unsupportedErr) {
-        return res.status(500).json({ error: unsupportedErr.message });
-      }
-    }
-
-    // For fresh produce, image buffer is required
+    // Extract uploaded image buffer
     let buffer = req.file ? req.file.buffer : null;
+    let mimeType = req.file ? req.file.mimetype : 'image/jpeg';
 
     // Fallback: check if existing image_url was passed
     if (!buffer && req.body.image_url) {
-      const localPath = path.join(__dirname, req.body.image_url.replace(/^\//, ''));
-      if (fs.existsSync(localPath)) {
+      const safeRel = path.normalize(req.body.image_url).replace(/^(\.\.[/\\])+/, '').replace(/^\//, '');
+      const localPath = path.join(__dirname, safeRel);
+      if (localPath.startsWith(UPLOADS_DIR) && fs.existsSync(localPath)) {
         try {
           buffer = fs.readFileSync(localPath);
+          const ext = path.extname(localPath).toLowerCase();
+          mimeType = ext === '.png' ? 'image/png' : ext === '.webp' ? 'image/webp' : 'image/jpeg';
         } catch (readErr) {
           console.error("Failed to read image from image_url:", readErr);
         }
@@ -477,16 +622,16 @@ app.post('/api/ai/assess-image', (req, res) => {
     if (!buffer) {
       return res.status(400).json({
         assessment_status: 'rejected',
-        error: 'Invalid image file. Only JPG, PNG, and WebP images up to 5 MB are supported.',
+        error: 'Invalid or missing image file. Only JPG, PNG, and WebP images up to 5 MB are supported.',
         code: 'INVALID_IMAGE'
       });
     }
 
     try {
-      const assessment = await assessFoodImage(buffer, food_category);
+      const assessment = await assessFoodImage(buffer, food_category, { mimeType });
       return res.json(assessment);
     } catch (aiErr) {
-      console.error('Inference Error:', aiErr);
+      console.error('AI Assessment Error:', aiErr);
       if (aiErr.code === 'INVALID_IMAGE') {
         return res.status(400).json({
           assessment_status: 'rejected',
@@ -494,14 +639,70 @@ app.post('/api/ai/assess-image', (req, res) => {
           code: 'INVALID_IMAGE'
         });
       }
+      if (aiErr.code === 'AI_TIMEOUT') {
+        return res.status(504).json({
+          assessment_status: 'failed',
+          reason: 'ai_timeout',
+          error: 'AI vision analysis timed out. You can retry or proceed with standard donation submission.',
+          code: 'AI_TIMEOUT'
+        });
+      }
       return res.status(503).json({
         assessment_status: 'failed',
         reason: 'inference_engine_unavailable',
-        error: 'AI visual assessment engine is currently unavailable. Please proceed with standard donation intake.',
+        error: 'AI visual assessment engine is currently unavailable. Please retry or proceed with standard donation intake.',
         code: 'SERVICE_UNAVAILABLE'
       });
     }
   });
+});
+
+// 7. Admin Oversight & Review Endpoints (ADMIN only)
+app.get('/api/admin/overview', authenticate, authorizeRoles(ROLES.ADMIN), (req, res) => {
+  const serialized = donations.map(serializeDonation);
+  const flagged = serialized.filter(
+    (d) =>
+      d.review_status === 'flagged' ||
+      d.ai_assessment?.human_review_recommended === true ||
+      d.is_expired
+  );
+  const reviewed = serialized.filter((d) => Boolean(d.review_status));
+
+  res.json({
+    stats: {
+      total_donations: serialized.length,
+      flagged_count: flagged.length,
+      reviewed_count: reviewed.length,
+      pending_review_count: serialized.filter((d) => !d.review_status).length,
+    },
+    flagged_donations: flagged,
+    all_donations: serialized,
+  });
+});
+
+app.patch('/api/admin/donations/:id/review', authenticate, authorizeRoles(ROLES.ADMIN), (req, res) => {
+  const { id } = req.params;
+  const index = donations.findIndex((d) => d.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: 'Donation not found.' });
+  }
+
+  const { review_status, review_note } = req.body || {};
+  const validDecisions = ['approved', 'flagged', 'rejected'];
+  if (!review_status || !validDecisions.includes(review_status)) {
+    return res.status(400).json({
+      error: `review_status is required and must be one of: ${validDecisions.join(', ')}.`,
+    });
+  }
+
+  donations[index].review_status = review_status;
+  donations[index].review_note = review_note ? String(review_note).trim() : null;
+  donations[index].reviewed_by = req.user.name;
+  donations[index].reviewed_at = new Date().toISOString();
+  donations[index].updated_at = new Date().toISOString();
+  saveData();
+
+  res.json(serializeDonation(donations[index]));
 });
 
 // Global error handler
@@ -510,6 +711,10 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: err.message || 'Internal Server Error' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Backend server running on http://localhost:${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Backend server running on http://localhost:${PORT}`);
+  });
+}
+
+module.exports = { app, authStore };

@@ -1,4 +1,4 @@
-﻿# FoodLoop — Intelligent Food Rescue Platform
+# FoodLoop — Intelligent Food Rescue Platform
 
 FoodLoop is a software-based intelligent platform designed to reduce edible surplus food waste and connect donors (restaurants, hotels, college canteens, caterers, and events) with receiving organizations (NGOs, shelters, and food banks).
 
@@ -100,3 +100,56 @@ npm run dev -- --host 127.0.0.1 --port 5173
 - **Authentication:** Unauthenticated development environment; no user login or role-based access control.
 - **AI Assessment:** Photographs are uploaded and served, but computer vision screening models are not integrated.
 - **Matching:** Listings are displayed chronologically without algorithmic NGO capacity matching.
+
+
+---
+
+## 6. Intelligent NGO Matching Engine
+
+FoodLoop includes a deterministic, explainable NGO Matching Engine (`backend/services/matchingService.js`) with configurable weights (`backend/config/matchingWeights.js`) and isolated demo NGO profiles (`backend/data/demoNgos.js`).
+
+### Scoring Weights (100 Points Total)
+| Factor | Max Points | Description |
+|---|---:|---|
+| Food Category Compatibility | 25 | Matches donation `food_category` against NGO `accepted_categories`. |
+| Distance / Location | 20 | Uses Haversine distance when donor & NGO GPS coordinates exist; otherwise uses clearly labeled text-based service-area fallback without fabricating km. |
+| Capacity Fit | 20 | Compares estimated servings against NGO `available_capacity_servings`. Penalizes/caps matches that exceed capacity. |
+| Urgency & Deadline | 15 | Evaluates remaining pickup window against NGO pickup capability & response time. |
+| Dietary & Allergens | 10 | Checks `dietary_type` alignment and `excluded_allergens` conflicts. |
+| Pickup Readiness | 10 | Evaluates `operational_status` (`active`, `limited`, `paused`) and `pickup_capable`. |
+
+### Normalization & Limitations
+- **Missing Data:** Unknown factors earn `0` points (never falsely awarded maximum points) and are excluded from `known_max_points` so scores are normalized over known data, with `data_completeness` (%) and `missing_factors` disclosed in every response.
+- **Disclaimer:** Scores represent profile compatibility (`0–100`), **not** probability of pickup success and **not** food safety certification.
+- **Demo NGOs:** Currently uses 5 isolated demo NGO profiles (`is_demo: true`) until real NGO registration/database persistence is implemented.
+
+### API Endpoints
+- `GET /api/donations/:id/matches` — Returns ranked NGO recommendations and factor-by-factor explanations for a specific donation.
+- `GET /api/matches` — Returns top NGO recommendations across all `available` / `submitted` donations.
+
+#### Example Response (`GET /api/donations/:id/matches`)
+```json
+{
+  "ngos_source": "demo_profiles",
+  "weights": { "categoryCompatibility": 25, "distanceLocation": 20, "capacity": 20, "urgency": 15, "dietaryCompatibility": 10, "pickupReadiness": 10 },
+  "matches": [
+    {
+      "ngo_id": "demo-ngo-1",
+      "ngo_name": "Annapurna Community Kitchen",
+      "is_demo": true,
+      "score": 89,
+      "data_completeness": 100,
+      "recommendation_label": "Excellent Match",
+      "positive_reasons": ["NGO accepts \"cooked meals\" donations."],
+      "warnings": [],
+      "missing_factors": []
+    }
+  ]
+}
+```
+
+### Running Tests
+```bash
+cd backend
+npm test
+```
