@@ -4,9 +4,12 @@ const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
 const { assessFoodImage } = require('./services/aiAssessmentService');
+const { rankNgosForDonation } = require('./services/matchingService');
+const { MATCHING_WEIGHTS } = require('./config/matchingWeights');
+const { DEMO_NGOS } = require('./data/demoNgos');
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5001;
 
 app.use(cors());
 app.use(express.json());
@@ -146,6 +149,8 @@ function serializeDonation(d) {
 
     // Status Lifecycle & Timestamps
     status: d.status || 'submitted',
+    matched_ngo_id: d.matched_ngo_id || null,
+    matched_ngo_name: d.matched_ngo_name || null,
     created_at: d.created_at || d.createdAt || new Date().toISOString(),
     updated_at: d.updated_at || d.created_at || d.createdAt || new Date().toISOString(),
 
@@ -393,9 +398,79 @@ app.patch('/api/donations/:id/accept', (req, res) => {
   }
 
   donations[index].status = 'accepted';
+  if (req.body && req.body.matched_ngo_id) {
+    donations[index].matched_ngo_id = String(req.body.matched_ngo_id);
+  }
+  if (req.body && req.body.matched_ngo_name) {
+    donations[index].matched_ngo_name = String(req.body.matched_ngo_name);
+  }
   donations[index].updated_at = new Date().toISOString();
   saveData();
   res.json(serializeDonation(donations[index]));
+});
+
+// 4b. Intelligent NGO Matching for a specific donation
+app.get('/api/donations/:id/matches', (req, res) => {
+  const id = (req.params.id || '').trim();
+  if (!id) {
+    return res.status(400).json({ error: 'Valid donation ID is required.' });
+  }
+
+  const donation = donations.find(d => d.id === id);
+  if (!donation) {
+    return res.status(404).json({ error: 'Donation not found.' });
+  }
+
+  try {
+    const serialized = serializeDonation(donation);
+    const ngos = Array.isArray(DEMO_NGOS) ? DEMO_NGOS : [];
+    const matches = rankNgosForDonation(serialized, ngos);
+
+    res.json({
+      donation: serialized,
+      ngos_source: 'demo_profiles',
+      ngos_count: ngos.length,
+      weights: MATCHING_WEIGHTS,
+      generated_at: new Date().toISOString(),
+      matches,
+    });
+  } catch (err) {
+    console.error('Matching Engine Error:', err);
+    res.status(500).json({ error: 'Failed to compute NGO matches for this donation.' });
+  }
+});
+
+// 4c. Batch Intelligent NGO Matching for all available/submitted donations
+app.get('/api/matches', (req, res) => {
+  try {
+    const activeStatuses = ['available', 'submitted'];
+    const activeDonations = donations
+      .filter(d => activeStatuses.includes((d.status || 'available').toLowerCase()))
+      .map(serializeDonation);
+
+    const ngos = Array.isArray(DEMO_NGOS) ? DEMO_NGOS : [];
+    const limit = Math.max(1, Math.min(20, parseInt(req.query.limit, 10) || 3));
+
+    const results = activeDonations.map((donation) => {
+      const ranked = rankNgosForDonation(donation, ngos);
+      return {
+        donation,
+        top_matches: ranked.slice(0, limit),
+        total_ngos_evaluated: ranked.length,
+      };
+    });
+
+    res.json({
+      ngos_source: 'demo_profiles',
+      weights: MATCHING_WEIGHTS,
+      generated_at: new Date().toISOString(),
+      donations_evaluated: results.length,
+      results,
+    });
+  } catch (err) {
+    console.error('Batch Matching Error:', err);
+    res.status(500).json({ error: 'Failed to compute NGO matches.' });
+  }
 });
 
 // 5. Collect a donation (NGO)

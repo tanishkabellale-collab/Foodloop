@@ -70,7 +70,7 @@ const DonationDetailModal = ({
   const isCollected = status === 'collected';
 
   const resolvedImageUrl = image_url 
-    ? (image_url.startsWith('http') ? image_url : `http://localhost:5000${image_url}`)
+    ? (image_url.startsWith('http') ? image_url : `http://localhost:5001${image_url}`)
     : null;
 
   // Determine current lifecycle step index

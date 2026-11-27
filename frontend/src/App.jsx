@@ -1,40 +1,40 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
-// Layout Components
-import Navbar from './components/layout/Navbar';
-import Footer from './components/layout/Footer';
+/* ── Layout ──────────────────────────────────────────── */
+import Sidebar from './components/layout/Sidebar';
+import TopBar from './components/layout/TopBar';
 
-// Dashboard Components
-import HeroSection from './components/dashboard/HeroSection';
-import ImpactMetrics from './components/dashboard/ImpactMetrics';
-import RecentActivity from './components/dashboard/RecentActivity';
+/* ── Dashboard ───────────────────────────────────────── */
+import DashboardView from './components/dashboard/DashboardView';
 
-// Donations Components
+/* ── Existing Feature Views ──────────────────────────── */
 import DonationGrid from './components/donations/DonationGrid';
 import DonationDetailModal from './components/donations/DonationDetailModal';
-
-// Specific Views
 import DonorForm from './components/donor/DonorForm';
 import MatchesView from './components/matches/MatchesView';
 import AnalyticsView from './components/analytics/AnalyticsView';
 
-const API_URL = 'http://localhost:5000/api';
+/* ── New Placeholder Pages ───────────────────────────── */
+import PickupDeliveryPage from './components/pages/PickupDeliveryPage';
+import AdminReviewPage from './components/pages/AdminReviewPage';
+import SettingsPage from './components/pages/SettingsPage';
+
+import './App.css';
+
+const API_URL = 'http://localhost:5001/api';
+const VALID_TABS = ['dashboard','donations','matches','analytics','create','pickup','admin','settings'];
 
 function App() {
-  // Sync tab with URL search parameter ?tab=... (default: 'dashboard')
+  /* ── Tab / Routing State ───────────────────────── */
   const getInitialTab = () => {
     try {
       const params = new URLSearchParams(window.location.search);
       const tab = params.get('tab');
-      const validTabs = ['dashboard', 'donations', 'matches', 'analytics', 'create'];
-      if (tab && validTabs.includes(tab)) return tab;
-      // Backward-compat check for older hash or query format
+      if (tab && VALID_TABS.includes(tab)) return tab;
       if (params.get('view') === 'ngo') return 'donations';
       if (params.get('view') === 'donor') return 'create';
-    } catch (e) {
-      // Fallback
-    }
+    } catch (e) { /* fallback */ }
     return 'dashboard';
   };
 
@@ -42,21 +42,22 @@ function App() {
   const [donations, setDonations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedDonation, setSelectedDonation] = useState(null);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Update tab and URL query param
+  /* ── Tab Navigation ────────────────────────────── */
   const handleTabChange = useCallback((tab) => {
     setActiveTab(tab);
+    setMobileMenuOpen(false);
     try {
       const url = new URL(window.location.href);
       url.searchParams.set('tab', tab);
       window.history.pushState({}, '', url);
-    } catch (e) {
-      // Ignore if pushState fails
-    }
+    } catch (e) { /* ignore */ }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // Fetch all donations
+  /* ── Data Fetching ─────────────────────────────── */
   const fetchDonations = useCallback(async (showLoading = false) => {
     if (showLoading) setLoading(true);
     try {
@@ -69,40 +70,34 @@ function App() {
     }
   }, []);
 
-  // Initial fetch and gentle background poll (every 5 seconds)
   useEffect(() => {
     fetchDonations(true);
-
-    const intervalId = setInterval(() => {
-      fetchDonations(false);
-    }, 5000);
-
-    return () => clearInterval(intervalId);
+    const id = setInterval(() => fetchDonations(false), 5000);
+    return () => clearInterval(id);
   }, [fetchDonations]);
 
-  // Handle browser back/forward buttons
+  /* ── Browser Back/Forward ──────────────────────── */
   useEffect(() => {
-    const handlePopState = () => {
+    const handlePop = () => {
       const params = new URLSearchParams(window.location.search);
       const tab = params.get('tab') || 'dashboard';
       setActiveTab(tab);
     };
-
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    window.addEventListener('popstate', handlePop);
+    return () => window.removeEventListener('popstate', handlePop);
   }, []);
 
-  // Claim / Accept Donation
-  const handleAccept = async (id) => {
+  /* ── Accept / Collect (Optimistic) ─────────────── */
+  const handleAccept = async (id, ngoInfo = null) => {
     try {
-      // Optimistic update
-      setDonations(prev =>
-        prev.map(d => d.id === id ? { ...d, status: 'accepted' } : d)
-      );
-      if (selectedDonation && selectedDonation.id === id) {
-        setSelectedDonation(prev => ({ ...prev, status: 'accepted' }));
-      }
-      await axios.patch(`${API_URL}/donations/${id}/accept`);
+      const patchUpdate = {
+        status: 'accepted',
+        ...(ngoInfo?.matched_ngo_id ? { matched_ngo_id: ngoInfo.matched_ngo_id } : {}),
+        ...(ngoInfo?.matched_ngo_name ? { matched_ngo_name: ngoInfo.matched_ngo_name } : {}),
+      };
+      setDonations(prev => prev.map(d => d.id === id ? { ...d, ...patchUpdate } : d));
+      if (selectedDonation?.id === id) setSelectedDonation(prev => ({ ...prev, ...patchUpdate }));
+      await axios.patch(`${API_URL}/donations/${id}/accept`, ngoInfo || {});
       fetchDonations(false);
     } catch (error) {
       console.error('Failed to accept donation:', error);
@@ -110,16 +105,10 @@ function App() {
     }
   };
 
-  // Collect Donation
   const handleCollect = async (id) => {
     try {
-      // Optimistic update
-      setDonations(prev =>
-        prev.map(d => d.id === id ? { ...d, status: 'collected' } : d)
-      );
-      if (selectedDonation && selectedDonation.id === id) {
-        setSelectedDonation(prev => ({ ...prev, status: 'collected' }));
-      }
+      setDonations(prev => prev.map(d => d.id === id ? { ...d, status: 'collected' } : d));
+      if (selectedDonation?.id === id) setSelectedDonation(prev => ({ ...prev, status: 'collected' }));
       await axios.patch(`${API_URL}/donations/${id}/collect`);
       fetchDonations(false);
     } catch (error) {
@@ -128,50 +117,48 @@ function App() {
     }
   };
 
+  /* ── Derived State ─────────────────────────────── */
   const activeCount = donations.filter(
     d => (d.status || 'available') === 'available' || d.status === 'submitted'
   ).length;
 
+  /* ── Render ────────────────────────────────────── */
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      {/* Persistent Global Header */}
-      <Navbar 
-        activeTab={activeTab} 
-        onTabChange={handleTabChange} 
-        activeDonationsCount={activeCount}
+    <div className="app-layout">
+      {/* Mobile Overlay */}
+      {mobileMenuOpen && (
+        <div className="sidebar-overlay" onClick={() => setMobileMenuOpen(false)} />
+      )}
+
+      {/* Sidebar Navigation */}
+      <Sidebar
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+        collapsed={sidebarCollapsed}
+        onToggleCollapse={() => setSidebarCollapsed(prev => !prev)}
+        mobileOpen={mobileMenuOpen}
       />
 
-      {/* Main View Container */}
-      <main style={{ flex: '1 0 auto' }}>
-        {activeTab === 'dashboard' && (
-          <div>
-            <HeroSection 
-              onTabChange={handleTabChange} 
-              activeCount={activeCount} 
+      {/* Main Content Area */}
+      <div className={`app-main ${sidebarCollapsed ? 'sidebar-is-collapsed' : ''}`}>
+        <TopBar
+          activeTab={activeTab}
+          activeDonationsCount={activeCount}
+          onMobileMenuToggle={() => setMobileMenuOpen(prev => !prev)}
+        />
+
+        <main className="app-content">
+          {activeTab === 'dashboard' && (
+            <DashboardView
+              donations={donations}
+              loading={loading}
+              onTabChange={handleTabChange}
+              onSelectDonation={setSelectedDonation}
             />
-            <div className="container section-spacing">
-              <ImpactMetrics donations={donations} />
-              <RecentActivity 
-                donations={donations} 
-                onSelectDonation={setSelectedDonation}
-                onTabChange={handleTabChange}
-              />
-            </div>
-          </div>
-        )}
+          )}
 
-        {activeTab === 'donations' && (
-          <div className="container section-spacing">
-            <div style={{ marginBottom: '1.75rem' }}>
-              <h1 style={{ fontSize: '2rem', color: 'var(--color-primary)', marginBottom: '0.35rem' }}>
-                Surplus Food Directory
-              </h1>
-              <p style={{ fontSize: '1rem', color: 'var(--color-text-muted)', margin: 0 }}>
-                Explore live surplus food listings registered by verified community kitchens and donors.
-              </p>
-            </div>
-
-            <DonationGrid 
+          {activeTab === 'donations' && (
+            <DonationGrid
               donations={donations}
               loading={loading}
               onRefresh={() => fetchDonations(true)}
@@ -179,44 +166,48 @@ function App() {
               onAccept={handleAccept}
               onCollect={handleCollect}
             />
-          </div>
-        )}
+          )}
 
-        {activeTab === 'matches' && (
-          <div className="container section-spacing">
-            <MatchesView onTabChange={handleTabChange} />
-          </div>
-        )}
+          {activeTab === 'create' && (
+            <DonorForm onSuccess={() => fetchDonations(false)} />
+          )}
 
-        {activeTab === 'analytics' && (
-          <div className="container section-spacing">
-            <AnalyticsView donations={donations} />
-          </div>
-        )}
-
-        {activeTab === 'create' && (
-          <div className="container section-spacing">
-            <DonorForm 
-              onSuccess={() => {
-                fetchDonations(false);
-              }}
+          {activeTab === 'matches' && (
+            <MatchesView
+              donations={donations}
+              onAccept={handleAccept}
+              onTabChange={handleTabChange}
+              onSelectDonation={setSelectedDonation}
             />
-          </div>
-        )}
-      </main>
+          )}
 
-      {/* Reusable Donation Detail Modal */}
+          {activeTab === 'analytics' && (
+            <AnalyticsView donations={donations} />
+          )}
+
+          {activeTab === 'pickup' && (
+            <PickupDeliveryPage onTabChange={handleTabChange} />
+          )}
+
+          {activeTab === 'admin' && (
+            <AdminReviewPage onTabChange={handleTabChange} />
+          )}
+
+          {activeTab === 'settings' && (
+            <SettingsPage />
+          )}
+        </main>
+      </div>
+
+      {/* Donation Detail Modal (Global) */}
       {selectedDonation && (
-        <DonationDetailModal 
+        <DonationDetailModal
           donation={selectedDonation}
           onClose={() => setSelectedDonation(null)}
           onAccept={handleAccept}
           onCollect={handleCollect}
         />
       )}
-
-      {/* Global Brand Footer */}
-      <Footer onTabChange={handleTabChange} />
     </div>
   );
 }
