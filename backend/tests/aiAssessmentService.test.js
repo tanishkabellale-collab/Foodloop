@@ -137,3 +137,4 @@ test('6. Handles AI provider HTTP errors and timeouts gracefully', async () => {
     (err) => err.code === 'AI_TIMEOUT'
   );
 });
+

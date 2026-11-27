@@ -1,54 +1,190 @@
-import React from 'react';
-import { ShieldCheck, Eye, FileSearch, History, UserCheck, ArrowRight, Sparkles } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
+import {
+  ShieldCheck,
+  AlertTriangle,
+  CheckCircle2,
+  XCircle,
+  Flag,
+  RefreshCw,
+} from 'lucide-react';
 
-const PLANNED_FEATURES = [
-  { icon: FileSearch, title: 'Review Queue', desc: 'Centralized inspection queue for donations flagged as questionable by AI visual assessment.' },
-  { icon: Eye, title: 'AI Override Controls', desc: 'Authorized reviewers can approve or reject AI triage decisions with auditable reasoning.' },
-  { icon: History, title: 'Audit Trail', desc: 'Complete, tamper-evident log of all review actions, timestamps, and reviewer identities.' },
-  { icon: UserCheck, title: 'Role-Based Access', desc: 'Only verified admin and authorized reviewer accounts can access the review dashboard.' },
-];
+const API_URL = 'http://localhost:5001/api';
 
-const AdminReviewPage = ({ onTabChange }) => (
-  <div className="placeholder-page">
-    <div className="placeholder-hero">
-      <div className="placeholder-icon-ring" style={{ backgroundColor: 'rgba(139,92,246,0.1)', color: '#8B5CF6' }}>
-        <ShieldCheck size={32} />
+const AdminReviewPage = () => {
+  const [overview, setOverview] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [filter, setFilter] = useState('flagged'); // 'flagged' | 'all'
+  const [actionLoadingId, setActionLoadingId] = useState(null);
+
+  const fetchOverview = useCallback(async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const res = await axios.get(`${API_URL}/admin/overview`);
+      setOverview(res.data);
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to load admin review queue.');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchOverview();
+  }, [fetchOverview]);
+
+  const handleReviewDecision = async (donationId, decision) => {
+    setActionLoadingId(donationId);
+    try {
+      await axios.patch(`${API_URL}/admin/donations/${donationId}/review`, {
+        review_status: decision,
+        review_note: `Marked ${decision} via Admin Review Dashboard`,
+      });
+      await fetchOverview();
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to save review decision.');
+    } finally {
+      setActionLoadingId(null);
+    }
+  };
+
+  if (loading && !overview) {
+    return (
+      <div className="matches-loading">
+        <RefreshCw size={24} className="spin-icon" />
+        <p>Loading Admin Review Queue...</p>
       </div>
-      <div className="placeholder-badge">
-        <Sparkles size={14} />
-        <span>Coming Soon</span>
-      </div>
-      <h1 className="placeholder-title">Admin Review Dashboard</h1>
-      <p className="placeholder-desc">
-        A human oversight layer for quality assurance. When AI visual screening flags a donation
-        as questionable, authorized reviewers inspect the listing and make the final
-        eligibility decision — ensuring no edible food is wrongly rejected.
-      </p>
-      <button className="btn btn-primary" onClick={() => onTabChange('donations')}>
-        <span>View All Donations</span>
-        <ArrowRight size={16} />
-      </button>
-    </div>
+    );
+  }
 
-    <div className="placeholder-features-title">Planned Capabilities</div>
-    <div className="placeholder-features-grid">
-      {PLANNED_FEATURES.map(f => (
-        <div key={f.title} className="placeholder-feature-card">
-          <div className="placeholder-feature-icon" style={{ backgroundColor: 'rgba(139,92,246,0.08)', color: '#8B5CF6' }}>
-            <f.icon size={22} />
+  const stats = overview?.stats || {};
+  const list =
+    filter === 'flagged'
+      ? overview?.flagged_donations || []
+      : overview?.all_donations || [];
+
+  return (
+    <div className="matches-page">
+      <div className="matches-header-card">
+        <div className="matches-header-top">
+          <div>
+            <div className="matches-badge">
+              <ShieldCheck size={14} />
+              <span>RBAC Protected • Admin Oversight</span>
+            </div>
+            <h2 className="matches-title">Admin Review Dashboard</h2>
+            <p className="matches-subtitle">
+              Inspect flagged or AI-recommended listings, verify expired deadlines, and record auditable human review decisions.
+            </p>
           </div>
-          <h4>{f.title}</h4>
-          <p>{f.desc}</p>
+          <button type="button" className="btn btn-secondary" onClick={fetchOverview} disabled={loading}>
+            <RefreshCw size={15} className={loading ? 'spin-icon' : ''} />
+            <span>Refresh Queue</span>
+          </button>
         </div>
-      ))}
-    </div>
 
-    <div className="placeholder-current-note">
-      <ShieldCheck size={16} />
-      <span>Currently, all donations are visible to all users. Authentication and role-based reviewer access will be implemented in a future milestone.</span>
+        <div className="admin-stats-row">
+          <div className="admin-stat-box">
+            <span>Total Listings</span>
+            <strong>{stats.total_donations ?? 0}</strong>
+          </div>
+          <div className="admin-stat-box">
+            <span>Flagged / Needs Review</span>
+            <strong style={{ color: '#D97706' }}>{stats.flagged_count ?? 0}</strong>
+          </div>
+          <div className="admin-stat-box">
+            <span>Reviewed</span>
+            <strong style={{ color: '#2E7D32' }}>{stats.reviewed_count ?? 0}</strong>
+          </div>
+          <div className="admin-stat-box">
+            <span>Pending Review</span>
+            <strong>{stats.pending_review_count ?? 0}</strong>
+          </div>
+        </div>
+      </div>
+
+      {error && (
+        <div className="matches-alert-error">
+          <AlertTriangle size={18} />
+          <span>{error}</span>
+        </div>
+      )}
+
+      <div className="matches-toolbar">
+        <div className="matches-toolbar-controls">
+          <button
+            type="button"
+            className={`btn btn-sm ${filter === 'flagged' ? 'btn-primary' : 'btn-secondary'}`}
+            onClick={() => setFilter('flagged')}
+          >
+            Flagged / Human Review ({overview?.flagged_donations?.length || 0})
+          </button>
+          <button
+            type="button"
+            className={`btn btn-sm ${filter === 'all' ? 'btn-primary' : 'btn-secondary'}`}
+            onClick={() => setFilter('all')}
+          >
+            All Donations ({overview?.all_donations?.length || 0})
+          </button>
+        </div>
+      </div>
+
+      <div className="matches-grid">
+        {list.map((d) => (
+          <div key={d.id} className="ngo-match-card">
+            <div className="ngo-match-top">
+              <div>
+                <div className="ngo-name-row">
+                  <h3 className="ngo-name">{d.title || d.foodName}</h3>
+                  <span className="demo-profile-tag" style={{ textTransform: 'capitalize' }}>
+                    Status: {d.status}
+                  </span>
+                  {d.review_status && (
+                    <span className="assigned-ngo-tag" style={{ textTransform: 'capitalize' }}>
+                      Review: {d.review_status}
+                    </span>
+                  )}
+                </div>
+                <p className="ngo-meta">
+                  {d.quantityText} • {d.address_text || d.location}
+                  {d.reviewed_by ? ` • Reviewed by ${d.reviewed_by}` : ''}
+                </p>
+              </div>
+
+              <div className="admin-action-btns">
+                <button
+                  type="button"
+                  className="btn btn-sm btn-secondary"
+                  disabled={actionLoadingId === d.id}
+                  onClick={() => handleReviewDecision(d.id, 'approved')}
+                >
+                  <CheckCircle2 size={14} /> Approve
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-sm btn-secondary"
+                  disabled={actionLoadingId === d.id}
+                  onClick={() => handleReviewDecision(d.id, 'flagged')}
+                >
+                  <Flag size={14} /> Flag
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-sm btn-secondary"
+                  disabled={actionLoadingId === d.id}
+                  onClick={() => handleReviewDecision(d.id, 'rejected')}
+                >
+                  <XCircle size={14} /> Reject
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default AdminReviewPage;
-

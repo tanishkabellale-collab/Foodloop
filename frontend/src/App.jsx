@@ -15,6 +15,11 @@ import DonorForm from './components/donor/DonorForm';
 import MatchesView from './components/matches/MatchesView';
 import AnalyticsView from './components/analytics/AnalyticsView';
 
+/* ── Auth & Guards ───────────────────────────────────── */
+import { useAuth } from './context/AuthContext';
+import AuthPage from './components/auth/AuthPage';
+import UnauthorizedView from './components/common/UnauthorizedView';
+
 /* ── New Placeholder Pages ───────────────────────────── */
 import PickupDeliveryPage from './components/pages/PickupDeliveryPage';
 import AdminReviewPage from './components/pages/AdminReviewPage';
@@ -24,8 +29,19 @@ import './App.css';
 
 const API_URL = 'http://localhost:5001/api';
 const VALID_TABS = ['dashboard','donations','matches','analytics','create','pickup','admin','settings'];
+const ROUTE_ROLES = {
+  dashboard: ['DONOR', 'NGO', 'ADMIN'],
+  donations: ['DONOR', 'NGO', 'ADMIN'],
+  matches: ['DONOR', 'NGO', 'ADMIN'],
+  analytics: ['DONOR', 'NGO', 'ADMIN'],
+  create: ['DONOR', 'ADMIN'],
+  pickup: ['NGO', 'ADMIN'],
+  admin: ['ADMIN'],
+  settings: ['DONOR', 'NGO', 'ADMIN'],
+};
 
 function App() {
+  const { user, isAuthenticated, authLoading, logout } = useAuth();
   /* ── Tab / Routing State ───────────────────────── */
   const getInitialTab = () => {
     try {
@@ -59,6 +75,7 @@ function App() {
 
   /* ── Data Fetching ─────────────────────────────── */
   const fetchDonations = useCallback(async (showLoading = false) => {
+    if (!isAuthenticated) return;
     if (showLoading) setLoading(true);
     try {
       const res = await axios.get(`${API_URL}/donations`);
@@ -68,13 +85,17 @@ function App() {
     } finally {
       if (showLoading) setLoading(false);
     }
-  }, []);
+  }, [isAuthenticated]);
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      setDonations([]);
+      return;
+    }
     fetchDonations(true);
     const id = setInterval(() => fetchDonations(false), 5000);
     return () => clearInterval(id);
-  }, [fetchDonations]);
+  }, [fetchDonations, isAuthenticated]);
 
   /* ── Browser Back/Forward ──────────────────────── */
   useEffect(() => {
@@ -122,6 +143,27 @@ function App() {
     d => (d.status || 'available') === 'available' || d.status === 'submitted'
   ).length;
 
+  const userRole = user?.role || 'DONOR';
+  const canCreate = userRole === 'DONOR' || userRole === 'ADMIN';
+  const canAcceptCollect = userRole === 'NGO' || userRole === 'ADMIN';
+  const allowedRolesForTab = ROUTE_ROLES[activeTab] || ['DONOR', 'NGO', 'ADMIN'];
+  const isRouteAllowed = allowedRolesForTab.includes(userRole);
+
+  if (authLoading) {
+    return (
+      <div className="auth-shell">
+        <div className="card" style={{ padding: '2rem 2.5rem', textAlign: 'center' }}>
+          <div className="spinner" style={{ margin: '0 auto 0.75rem' }} />
+          <p style={{ color: 'var(--color-text-muted)', margin: 0 }}>Verifying FoodLoop session...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <AuthPage />;
+  }
+
   /* ── Render ────────────────────────────────────── */
   return (
     <div className="app-layout">
@@ -137,6 +179,7 @@ function App() {
         collapsed={sidebarCollapsed}
         onToggleCollapse={() => setSidebarCollapsed(prev => !prev)}
         mobileOpen={mobileMenuOpen}
+        userRole={userRole}
       />
 
       {/* Main Content Area */}
@@ -145,56 +188,68 @@ function App() {
           activeTab={activeTab}
           activeDonationsCount={activeCount}
           onMobileMenuToggle={() => setMobileMenuOpen(prev => !prev)}
+          user={user}
+          onLogout={logout}
         />
 
         <main className="app-content">
-          {activeTab === 'dashboard' && (
-            <DashboardView
-              donations={donations}
-              loading={loading}
-              onTabChange={handleTabChange}
-              onSelectDonation={setSelectedDonation}
+          {!isRouteAllowed ? (
+            <UnauthorizedView
+              userRole={userRole}
+              requiredRoles={allowedRolesForTab}
+              onBack={() => handleTabChange('dashboard')}
             />
-          )}
+          ) : (
+            <>
+              {activeTab === 'dashboard' && (
+                <DashboardView
+                  donations={donations}
+                  loading={loading}
+                  onTabChange={handleTabChange}
+                  onSelectDonation={setSelectedDonation}
+                />
+              )}
 
-          {activeTab === 'donations' && (
-            <DonationGrid
-              donations={donations}
-              loading={loading}
-              onRefresh={() => fetchDonations(true)}
-              onSelectDonation={setSelectedDonation}
-              onAccept={handleAccept}
-              onCollect={handleCollect}
-            />
-          )}
+              {activeTab === 'donations' && (
+                <DonationGrid
+                  donations={donations}
+                  loading={loading}
+                  onRefresh={() => fetchDonations(true)}
+                  onSelectDonation={setSelectedDonation}
+                  onAccept={canAcceptCollect ? handleAccept : undefined}
+                  onCollect={canAcceptCollect ? handleCollect : undefined}
+                />
+              )}
 
-          {activeTab === 'create' && (
-            <DonorForm onSuccess={() => fetchDonations(false)} />
-          )}
+              {activeTab === 'create' && canCreate && (
+                <DonorForm onSuccess={() => fetchDonations(false)} />
+              )}
 
-          {activeTab === 'matches' && (
-            <MatchesView
-              donations={donations}
-              onAccept={handleAccept}
-              onTabChange={handleTabChange}
-              onSelectDonation={setSelectedDonation}
-            />
-          )}
+              {activeTab === 'matches' && (
+                <MatchesView
+                  donations={donations}
+                  onAccept={canAcceptCollect ? handleAccept : undefined}
+                  onTabChange={handleTabChange}
+                  onSelectDonation={setSelectedDonation}
+                />
+              )}
 
-          {activeTab === 'analytics' && (
-            <AnalyticsView donations={donations} />
-          )}
+              {activeTab === 'analytics' && (
+                <AnalyticsView donations={donations} />
+              )}
 
-          {activeTab === 'pickup' && (
-            <PickupDeliveryPage onTabChange={handleTabChange} />
-          )}
+              {activeTab === 'pickup' && (
+                <PickupDeliveryPage onTabChange={handleTabChange} />
+              )}
 
-          {activeTab === 'admin' && (
-            <AdminReviewPage onTabChange={handleTabChange} />
-          )}
+              {activeTab === 'admin' && (
+                <AdminReviewPage onTabChange={handleTabChange} />
+              )}
 
-          {activeTab === 'settings' && (
-            <SettingsPage />
+              {activeTab === 'settings' && (
+                <SettingsPage />
+              )}
+            </>
           )}
         </main>
       </div>
@@ -204,8 +259,8 @@ function App() {
         <DonationDetailModal
           donation={selectedDonation}
           onClose={() => setSelectedDonation(null)}
-          onAccept={handleAccept}
-          onCollect={handleCollect}
+          onAccept={canAcceptCollect ? handleAccept : undefined}
+          onCollect={canAcceptCollect ? handleCollect : undefined}
         />
       )}
     </div>

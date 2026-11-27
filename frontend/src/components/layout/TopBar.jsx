@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bell, Search, User, Menu } from 'lucide-react';
+import { Bell, Search, User, Menu, LogOut } from 'lucide-react';
 
 const PAGE_TITLES = {
   dashboard: { title: 'Dashboard', subtitle: 'Platform overview and key metrics' },
@@ -12,7 +12,7 @@ const PAGE_TITLES = {
   create: { title: 'Create Donation', subtitle: 'Register new surplus food for rescue' },
 };
 
-const TopBar = ({ activeTab, activeDonationsCount = 0, onMobileMenuToggle }) => {
+const TopBar = ({ activeTab, activeDonationsCount = 0, onMobileMenuToggle, user, onLogout }) => {
   const page = PAGE_TITLES[activeTab] || PAGE_TITLES.dashboard;
 
   return (
@@ -47,14 +47,28 @@ const TopBar = ({ activeTab, activeDonationsCount = 0, onMobileMenuToggle }) => 
             <User size={16} />
           </div>
           <div className="topbar-profile-text">
-            <span className="topbar-profile-name">Demo User</span>
-            <span className="topbar-profile-role">Platform Admin</span>
+            <span className="topbar-profile-name">{user?.name || 'FoodLoop User'}</span>
+            <span className="topbar-profile-role">
+              {user?.role || 'USER'}{user?.is_demo ? ' • Demo' : ''}
+            </span>
           </div>
         </div>
+
+        {onLogout && (
+          <button
+            type="button"
+            className="topbar-logout-btn"
+            onClick={onLogout}
+            title="Sign Out"
+            aria-label="Sign Out"
+          >
+            <LogOut size={16} />
+            <span className="logout-label">Sign Out</span>
+          </button>
+        )}
       </div>
     </header>
   );
 };
 
 export default TopBar;
-

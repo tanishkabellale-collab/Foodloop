@@ -14,16 +14,18 @@ import {
 } from 'lucide-react';
 
 const NAV_ITEMS = [
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { id: 'donations', label: 'Donations', icon: Package },
-  { id: 'matches', label: 'NGO Matching', icon: GitFork },
-  { id: 'pickup', label: 'Pickup & Delivery', icon: Truck },
-  { id: 'analytics', label: 'Impact Analytics', icon: BarChart3 },
-  { id: 'admin', label: 'Admin Review', icon: ShieldCheck },
-  { id: 'settings', label: 'Settings', icon: Settings },
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, roles: ['DONOR', 'NGO', 'ADMIN'] },
+  { id: 'donations', label: 'Donations', icon: Package, roles: ['DONOR', 'NGO', 'ADMIN'] },
+  { id: 'matches', label: 'NGO Matching', icon: GitFork, roles: ['DONOR', 'NGO', 'ADMIN'] },
+  { id: 'pickup', label: 'Pickup & Delivery', icon: Truck, roles: ['NGO', 'ADMIN'] },
+  { id: 'analytics', label: 'Impact Analytics', icon: BarChart3, roles: ['DONOR', 'NGO', 'ADMIN'] },
+  { id: 'admin', label: 'Admin Review', icon: ShieldCheck, roles: ['ADMIN'] },
+  { id: 'settings', label: 'Settings', icon: Settings, roles: ['DONOR', 'NGO', 'ADMIN'] },
 ];
 
-const Sidebar = ({ activeTab, onTabChange, collapsed, onToggleCollapse, mobileOpen }) => {
+const Sidebar = ({ activeTab, onTabChange, collapsed, onToggleCollapse, mobileOpen, userRole = 'DONOR' }) => {
+  const visibleItems = NAV_ITEMS.filter((item) => item.roles.includes(userRole));
+  const canCreate = userRole === 'DONOR' || userRole === 'ADMIN';
   return (
     <aside className={`sidebar ${collapsed ? 'sidebar-collapsed' : ''} ${mobileOpen ? 'mobile-open' : ''}`}>
       {/* Logo Header */}
@@ -56,7 +58,7 @@ const Sidebar = ({ activeTab, onTabChange, collapsed, onToggleCollapse, mobileOp
       {/* Navigation */}
       <nav className="sidebar-nav">
         {!collapsed && <div className="sidebar-section-label">Main Menu</div>}
-        {NAV_ITEMS.map(item => {
+        {visibleItems.map(item => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
           return (
@@ -81,14 +83,16 @@ const Sidebar = ({ activeTab, onTabChange, collapsed, onToggleCollapse, mobileOp
         {!collapsed && (
           <div className="sidebar-footer-divider" />
         )}
-        <button
-          className="sidebar-cta"
-          onClick={() => onTabChange('create')}
-          title={collapsed ? 'Create Donation' : undefined}
-        >
-          <PlusCircle size={20} />
-          {!collapsed && <span>Create Donation</span>}
-        </button>
+        {canCreate && (
+          <button
+            className="sidebar-cta"
+            onClick={() => onTabChange('create')}
+            title={collapsed ? 'Create Donation' : undefined}
+          >
+            <PlusCircle size={20} />
+            {!collapsed && <span>Create Donation</span>}
+          </button>
+        )}
         {!collapsed && (
           <div className="sidebar-version">
             FoodLoop v1.0 — Rescue Platform
