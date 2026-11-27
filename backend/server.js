@@ -516,33 +516,21 @@ app.post('/api/ai/assess-image', (req, res) => {
       });
     }
 
-    const food_category = req.body.food_category;
-    if (!food_category) {
-      return res.status(400).json({
-        error: 'Food category is required for visual assessment.',
-        code: 'MISSING_CATEGORY'
-      });
-    }
+    const food_category = req.body.food_category || 'unspecified';
 
-    // For non-produce, short-circuit immediately without needing image buffer
-    if (food_category !== 'fresh_produce') {
-      try {
-        const result = await assessFoodImage(null, food_category);
-        return res.json(result);
-      } catch (unsupportedErr) {
-        return res.status(500).json({ error: unsupportedErr.message });
-      }
-    }
-
-    // For fresh produce, image buffer is required
+    // Extract uploaded image buffer
     let buffer = req.file ? req.file.buffer : null;
+    let mimeType = req.file ? req.file.mimetype : 'image/jpeg';
 
     // Fallback: check if existing image_url was passed
     if (!buffer && req.body.image_url) {
-      const localPath = path.join(__dirname, req.body.image_url.replace(/^\//, ''));
-      if (fs.existsSync(localPath)) {
+      const safeRel = path.normalize(req.body.image_url).replace(/^(\.\.[/\\])+/, '').replace(/^\//, '');
+      const localPath = path.join(__dirname, safeRel);
+      if (localPath.startsWith(UPLOADS_DIR) && fs.existsSync(localPath)) {
         try {
           buffer = fs.readFileSync(localPath);
+          const ext = path.extname(localPath).toLowerCase();
+          mimeType = ext === '.png' ? 'image/png' : ext === '.webp' ? 'image/webp' : 'image/jpeg';
         } catch (readErr) {
           console.error("Failed to read image from image_url:", readErr);
         }
@@ -552,16 +540,16 @@ app.post('/api/ai/assess-image', (req, res) => {
     if (!buffer) {
       return res.status(400).json({
         assessment_status: 'rejected',
-        error: 'Invalid image file. Only JPG, PNG, and WebP images up to 5 MB are supported.',
+        error: 'Invalid or missing image file. Only JPG, PNG, and WebP images up to 5 MB are supported.',
         code: 'INVALID_IMAGE'
       });
     }
 
     try {
-      const assessment = await assessFoodImage(buffer, food_category);
+      const assessment = await assessFoodImage(buffer, food_category, { mimeType });
       return res.json(assessment);
     } catch (aiErr) {
-      console.error('Inference Error:', aiErr);
+      console.error('AI Assessment Error:', aiErr);
       if (aiErr.code === 'INVALID_IMAGE') {
         return res.status(400).json({
           assessment_status: 'rejected',
@@ -569,10 +557,18 @@ app.post('/api/ai/assess-image', (req, res) => {
           code: 'INVALID_IMAGE'
         });
       }
+      if (aiErr.code === 'AI_TIMEOUT') {
+        return res.status(504).json({
+          assessment_status: 'failed',
+          reason: 'ai_timeout',
+          error: 'AI vision analysis timed out. You can retry or proceed with standard donation submission.',
+          code: 'AI_TIMEOUT'
+        });
+      }
       return res.status(503).json({
         assessment_status: 'failed',
         reason: 'inference_engine_unavailable',
-        error: 'AI visual assessment engine is currently unavailable. Please proceed with standard donation intake.',
+        error: 'AI visual assessment engine is currently unavailable. Please retry or proceed with standard donation intake.',
         code: 'SERVICE_UNAVAILABLE'
       });
     }
