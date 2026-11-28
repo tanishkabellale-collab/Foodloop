@@ -11,6 +11,13 @@ env/
 .env.*
 !.env.example
 
+# Runtime Databases & Generated Auth Stores
+*.db
+*.db-wal
+*.db-shm
+backend/data/*.db*
+backend/data/users.json
+
 # Python Caches & Bytecode
 __pycache__/
 *.py[cod]

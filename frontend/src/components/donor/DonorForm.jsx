@@ -1,27 +1,23 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
-import { 
-  Package, 
-  CheckCircle, 
-  AlertCircle, 
-  Camera, 
-  Upload, 
-  X, 
-  Clock, 
-  Thermometer, 
-  Calendar, 
-  MapPin, 
-  Scale, 
-  Sparkles,
+import {
+  Utensils,
+  Apple,
+  Wheat,
+  Package,
+  CheckCircle,
+  AlertCircle,
+  Camera,
+  X,
+  Clock,
+  MapPin,
+  ScanEye,
   Info,
   Check,
-  AlertTriangle,
-  HelpCircle
+  AlertTriangle
 } from 'lucide-react';
+import { API_URL } from '../../config';
 
-const API_URL = 'http://localhost:5001/api';
-
-// Helper to prefill pickup time (+3 hours default)
 const getDefaultPickupTime = () => {
   const d = new Date(Date.now() + 3 * 60 * 60 * 1000);
   d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
@@ -29,29 +25,29 @@ const getDefaultPickupTime = () => {
 };
 
 const CATEGORIES = [
-  { 
-    id: 'cooked_meals', 
-    label: 'Cooked Meals', 
-    icon: '🍲', 
-    desc: 'Prepared batches from catering, canteens, or kitchens' 
+  {
+    id: 'cooked_meals',
+    label: 'Cooked meals',
+    icon: Utensils,
+    desc: 'Prepared batches from catering, canteens, or kitchens'
   },
-  { 
-    id: 'fresh_produce', 
-    label: 'Fresh Produce', 
-    icon: '🍎', 
-    desc: 'Raw fruits, vegetables, and whole edible produce' 
+  {
+    id: 'fresh_produce',
+    label: 'Fresh produce',
+    icon: Apple,
+    desc: 'Raw fruits, vegetables, and whole edible produce'
   },
-  { 
-    id: 'bakery', 
-    label: 'Bakery Goods', 
-    icon: '🍞', 
-    desc: 'Bread loaves, buns, pastries, and baked goods' 
+  {
+    id: 'bakery',
+    label: 'Bakery goods',
+    icon: Wheat,
+    desc: 'Bread loaves, buns, pastries, and baked goods'
   },
-  { 
-    id: 'packaged_sealed', 
-    label: 'Packaged / Sealed', 
-    icon: '📦', 
-    desc: 'Factory-sealed grocery packages with best-before dates' 
+  {
+    id: 'packaged_sealed',
+    label: 'Packaged / sealed',
+    icon: Package,
+    desc: 'Factory-sealed grocery packages with best-before dates'
   }
 ];
 
@@ -63,22 +59,47 @@ const PREPARATION_TIMES = [
 ];
 
 const STORAGE_CONDITIONS = [
-  { id: 'room_temperature', label: 'Room Temperature' },
+  { id: 'room_temperature', label: 'Room temperature' },
   { id: 'refrigerated', label: 'Refrigerated' },
-  { id: 'hot_insulated', label: 'Hot / Insulated' }
+  { id: 'hot_insulated', label: 'Hot / insulated' }
 ];
 
 const QUANTITY_UNITS = [
   { id: 'servings', label: 'Servings (meals)' },
   { id: 'plates', label: 'Plates' },
-  { id: 'trays', label: 'Catering Trays' },
-  { id: 'boxes', label: 'Boxes / Cartons' }
+  { id: 'trays', label: 'Catering trays' },
+  { id: 'boxes', label: 'Boxes / cartons' }
 ];
 
 const PACKAGING_TYPES = [
-  { id: 'sealed_covered', label: 'Sealed / Covered' },
-  { id: 'open_loose', label: 'Open / Loose Trays' }
+  { id: 'sealed_covered', label: 'Sealed / covered' },
+  { id: 'open_loose', label: 'Open / loose trays' }
 ];
+
+const SectionHeading = ({ step, title }) => (
+  <div style={{
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+    marginBottom: '20px',
+    paddingBottom: '12px',
+    borderBottom: '1px solid var(--color-border)'
+  }}>
+    <span style={{
+      width: '24px',
+      height: '24px',
+      borderRadius: 'var(--radius-sm)',
+      backgroundColor: 'var(--color-ink)',
+      color: '#FFFFFF',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontWeight: 600,
+      fontSize: '12px'
+    }} className="mono">{step}</span>
+    <h3 style={{ fontSize: '16px', marginBottom: 0 }}>{title}</h3>
+  </div>
+);
 
 const DonorForm = ({ onSuccess }) => {
   const [formData, setFormData] = useState({
@@ -94,7 +115,9 @@ const DonorForm = ({ onSuccess }) => {
     expiry_date: '',
     packaging_type: 'sealed_covered',
     allergens: '',
-    special_note: ''
+    special_note: '',
+    latitude: '',
+    longitude: ''
   });
 
   const [photoFile, setPhotoFile] = useState(null);
@@ -102,6 +125,7 @@ const DonorForm = ({ onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [gpsStatus, setGpsStatus] = useState('');
 
   // AI Visual Assessment State
   const [aiLoading, setAiLoading] = useState(false);
@@ -109,6 +133,28 @@ const DonorForm = ({ onSuccess }) => {
   const [aiError, setAiError] = useState('');
 
   const fileInputRef = useRef(null);
+
+  const handleCaptureGps = () => {
+    if (!navigator.geolocation) {
+      setGpsStatus('Geolocation is not supported by this browser.');
+      return;
+    }
+    setGpsStatus('Acquiring GPS coordinates...');
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setFormData((prev) => ({
+          ...prev,
+          latitude: String(Math.round(pos.coords.latitude * 100000) / 100000),
+          longitude: String(Math.round(pos.coords.longitude * 100000) / 100000),
+        }));
+        setGpsStatus('GPS coordinates captured for NGO distance matching.');
+      },
+      (err) => {
+        setGpsStatus(`Unable to capture GPS (${err.message}). Address text will still work.`);
+      },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  };
 
   const handleTextChange = (e) => {
     const { name, value } = e.target;
@@ -131,7 +177,7 @@ const DonorForm = ({ onSuccess }) => {
 
       const res = await axios.post(`${API_URL}/ai/assess-image`, dataAi, {
         headers: { 'Content-Type': 'multipart/form-data' },
-        timeout: 18000
+        timeout: 35000
       });
 
       setAiResult(res.data);
@@ -194,48 +240,47 @@ const DonorForm = ({ onSuccess }) => {
 
   const validateForm = () => {
     if (!formData.title.trim()) {
-      return 'Please enter a clear Food Title or description.';
+      return 'Please enter a clear food title or description.';
     }
     if (!formData.food_category) {
-      return 'Please select a Food Category.';
+      return 'Please select a food category.';
     }
     if (!formData.dietary_type) {
-      return 'Please select Vegetarian or Non-Vegetarian dietary type.';
+      return 'Please select vegetarian or non-vegetarian dietary type.';
     }
     const qNum = parseFloat(formData.quantity);
     if (isNaN(qNum) || qNum <= 0) {
       return 'Quantity must be a positive number greater than 0.';
     }
     if (!formData.quantity_unit) {
-      return 'Please select a Quantity Unit.';
+      return 'Please select a quantity unit.';
     }
     if (!photoFile) {
       return 'A clear food photograph is required to register surplus.';
     }
     if (!formData.pickup_available_until) {
-      return 'Please specify the Pickup Available Until datetime.';
+      return 'Please specify the pickup available until datetime.';
     }
     const pickupDate = new Date(formData.pickup_available_until);
     if (isNaN(pickupDate.getTime()) || pickupDate.getTime() <= Date.now()) {
-      return 'Pickup Available Until must be a future date and time.';
+      return 'Pickup available until must be a future date and time.';
     }
     if (!formData.address_text.trim()) {
-      return 'Please provide the Pickup Address / Location.';
+      return 'Please provide the pickup address or location.';
     }
 
-    // Category conditionals
     if (formData.food_category === 'cooked_meals') {
       if (!formData.preparation_time) {
-        return 'Preparation Time is required for Cooked Meals.';
+        return 'Preparation time is required for cooked meals.';
       }
       if (!formData.current_storage) {
-        return 'Current Storage condition is required for Cooked Meals.';
+        return 'Current storage condition is required for cooked meals.';
       }
     }
 
     if (formData.food_category === 'packaged_sealed') {
       if (!formData.expiry_date.trim()) {
-        return 'Expiry / Best Before Date is required for Packaged Food.';
+        return 'Expiry / best-before date is required for packaged food.';
       }
     }
 
@@ -285,11 +330,15 @@ const DonorForm = ({ onSuccess }) => {
         data.append('special_note', formData.special_note.trim());
       }
 
+      if (formData.latitude !== '' && formData.longitude !== '') {
+        data.append('latitude', formData.latitude);
+        data.append('longitude', formData.longitude);
+      }
+
       if (photoFile) {
         data.append('photo', photoFile);
       }
 
-      // Attach AI visual assessment if completed
       if (aiResult && aiResult.assessment_status === 'completed') {
         data.append('ai_assessment', JSON.stringify({
           assessment_status: aiResult.assessment_status,
@@ -304,6 +353,11 @@ const DonorForm = ({ onSuccess }) => {
           confidence_score: aiResult.confidence_score,
           human_review_recommended: Boolean(aiResult.human_review_recommended),
           human_review_reason: aiResult.human_review_reason || null,
+          onnx_produce_screening: aiResult.onnx_produce_screening || null,
+          visual_assessment_label: aiResult.visual_assessment_label || null,
+          predicted_class: aiResult.predicted_class ?? null,
+          probability_fresh: aiResult.probability_fresh ?? null,
+          probability_rotten: aiResult.probability_rotten ?? null,
           model_version: aiResult.model_version,
           assessed_at: new Date().toISOString()
         }));
@@ -315,6 +369,7 @@ const DonorForm = ({ onSuccess }) => {
 
       setSuccess(true);
       handleRemovePhoto();
+      setGpsStatus('');
       setFormData({
         food_category: 'cooked_meals',
         title: '',
@@ -328,7 +383,9 @@ const DonorForm = ({ onSuccess }) => {
         expiry_date: '',
         packaging_type: 'sealed_covered',
         allergens: '',
-        special_note: ''
+        special_note: '',
+        latitude: '',
+        longitude: ''
       });
 
       if (onSuccess) {
@@ -348,33 +405,33 @@ const DonorForm = ({ onSuccess }) => {
   };
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto' }}>
-      {/* Title & Introduction */}
-      <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
-        <h1 style={{ fontSize: '2.1rem', color: 'var(--color-primary)', marginBottom: '0.5rem' }}>
-          Register Surplus Food
-        </h1>
-        <p style={{ fontSize: '1rem', color: 'var(--color-text-muted)', maxWidth: '580px', margin: '0 auto' }}>
-          Provide structured operational parameters so receiving NGOs and food banks can safely coordinate timely pickup.
+    <div className="page-enter" style={{ maxWidth: '780px', margin: '0 auto' }}>
+      <div style={{ marginBottom: '24px' }}>
+        <h2 style={{ fontSize: '22px', color: 'var(--color-ink)', marginBottom: '4px' }}>
+          Register surplus food
+        </h2>
+        <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', maxWidth: '600px' }}>
+          Enter structured operational parameters so receiving NGOs and couriers can coordinate pickup.
         </p>
       </div>
 
       {/* Success Notification */}
       {success && (
         <div className="card mb-6" style={{
-          backgroundColor: 'var(--color-secondary-subtle)',
-          borderColor: 'rgba(91, 140, 81, 0.3)',
+          backgroundColor: 'var(--color-pastel-green-subtle)',
+          borderColor: 'var(--color-pastel-green-strong)',
           display: 'flex',
           alignItems: 'center',
-          gap: '1rem'
+          gap: '12px',
+          padding: '16px 20px'
         }}>
-          <CheckCircle size={24} style={{ color: 'var(--color-secondary)', flexShrink: 0 }} />
+          <CheckCircle size={20} style={{ color: 'var(--color-pastel-green-ink)', flexShrink: 0 }} />
           <div>
-            <div style={{ fontWeight: 700, color: 'var(--color-primary)' }}>
-              Surplus Food Successfully Registered!
+            <div style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-pastel-green-ink)' }}>
+              Surplus batch registered
             </div>
-            <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>
-              Your listing and food photograph are now live in the FoodLoop coordination network.
+            <div style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>
+              Your listing and photograph are live in the coordination feed.
             </div>
           </div>
         </div>
@@ -384,163 +441,159 @@ const DonorForm = ({ onSuccess }) => {
       {errorMsg && (
         <div className="card mb-6" style={{
           backgroundColor: 'var(--color-danger-subtle)',
-          borderColor: 'rgba(217, 72, 59, 0.3)',
+          borderColor: 'rgba(194, 58, 43, 0.35)',
           display: 'flex',
           alignItems: 'center',
-          gap: '0.85rem'
+          gap: '12px',
+          padding: '16px 20px'
         }}>
-          <AlertCircle size={22} style={{ color: 'var(--color-danger)', flexShrink: 0 }} />
-          <div style={{ fontWeight: 600, color: 'var(--color-danger)', fontSize: '0.9rem' }}>
+          <AlertCircle size={18} style={{ color: 'var(--color-danger)', flexShrink: 0 }} />
+          <div style={{ fontWeight: 500, color: 'var(--color-danger)', fontSize: '14px' }}>
             {errorMsg}
           </div>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
 
         {/* SECTION 1: Food Category & Description */}
         <div className="card">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '1px solid var(--color-border)' }}>
-            <span style={{ 
-              width: '28px', 
-              height: '28px', 
-              borderRadius: '50%', 
-              backgroundColor: 'var(--color-primary)', 
-              color: '#FFFFFF', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
-              fontWeight: 700, 
-              fontSize: '0.8rem' 
-            }}>1</span>
-            <h3 style={{ fontSize: '1.2rem', marginBottom: 0 }}>Food Category &amp; Description</h3>
-          </div>
+          <SectionHeading step={1} title="Food category and description" />
 
-          {/* Category Cards */}
           <div className="form-group mb-6">
             <label className="form-label">
-              Select Food Category <span style={{ color: 'var(--color-accent)' }}>*</span>
+              Category <span style={{ color: 'var(--color-accent)' }}>*</span>
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {CATEGORIES.map(cat => {
                 const isSelected = formData.food_category === cat.id;
+                const IconComp = cat.icon;
                 return (
-                  <div
+                  <button
+                    type="button"
                     key={cat.id}
                     onClick={() => handleSelect('food_category', cat.id)}
                     style={{
-                      border: isSelected ? '2px solid var(--color-primary)' : '1.5px solid var(--color-border)',
+                      border: isSelected ? '1.5px solid var(--color-ink)' : '1px solid var(--color-border)',
                       backgroundColor: isSelected ? 'var(--color-bg-subtle)' : '#FFFFFF',
                       borderRadius: 'var(--radius-md)',
-                      padding: '1rem',
+                      padding: '16px',
                       cursor: 'pointer',
-                      transition: 'all 0.2s ease',
+                      textAlign: 'left',
+                      fontFamily: 'inherit',
+                      transition: 'border-color 150ms var(--ease-out), background-color 150ms var(--ease-out)',
                       display: 'flex',
                       flexDirection: 'column',
-                      gap: '0.35rem'
+                      gap: '8px'
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span style={{ fontSize: '1.4rem' }}>{cat.icon}</span>
+                      <div style={{
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: 'var(--radius-sm)',
+                        backgroundColor: isSelected ? 'var(--color-ink)' : 'var(--color-bg-base)',
+                        color: isSelected ? '#FFFFFF' : 'var(--color-ink)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}>
+                        <IconComp size={16} strokeWidth={1.65} />
+                      </div>
                       {isSelected && (
-                        <div style={{ width: '20px', height: '20px', borderRadius: '50%', backgroundColor: 'var(--color-primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <Check size={12} strokeWidth={3} />
+                        <div style={{
+                          width: '20px',
+                          height: '20px',
+                          borderRadius: '50%',
+                          backgroundColor: 'var(--color-pastel-green)',
+                          color: 'var(--color-pastel-green-ink)',
+                          border: '1px solid var(--color-pastel-green-strong)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}>
+                          <Check size={12} strokeWidth={2.2} />
                         </div>
                       )}
                     </div>
-                    <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-primary)' }}>
+                    <div style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-ink)' }}>
                       {cat.label}
                     </div>
-                    <div style={{ fontSize: '0.785rem', color: 'var(--color-text-muted)' }}>
+                    <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', lineHeight: 1.4 }}>
                       {cat.desc}
                     </div>
-                  </div>
+                  </button>
                 );
               })}
             </div>
           </div>
 
-          {/* Title */}
           <div className="form-group" style={{ marginBottom: 0 }}>
             <label className="form-label">
-              Food Title / Menu Description <span style={{ color: 'var(--color-accent)' }}>*</span>
+              Food title or menu description <span style={{ color: 'var(--color-accent)' }}>*</span>
             </label>
-            <input 
+            <input
               type="text"
               name="title"
               value={formData.title}
               onChange={handleTextChange}
-              placeholder="e.g. Fresh Red Apples, Mixed Veg Pulao &amp; Dal, Fresh Sandwich Loaves"
+              placeholder="e.g. Fresh red apples, mixed veg pulao and dal, sandwich loaves"
               className="form-input"
               required
             />
             <div className="form-helper">
-              Provide a clear title describing the surplus food items.
+              Provide a concise title describing the surplus batch.
             </div>
           </div>
         </div>
 
         {/* SECTION 2: Quantity & Dietary Profile */}
         <div className="card">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '1px solid var(--color-border)' }}>
-            <span style={{ 
-              width: '28px', 
-              height: '28px', 
-              borderRadius: '50%', 
-              backgroundColor: 'var(--color-primary)', 
-              color: '#FFFFFF', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
-              fontWeight: 700, 
-              fontSize: '0.8rem' 
-            }}>2</span>
-            <h3 style={{ fontSize: '1.2rem', marginBottom: 0 }}>Quantity &amp; Dietary Designation</h3>
-          </div>
+          <SectionHeading step={2} title="Quantity and dietary designation" />
 
-          {/* Dietary Selection */}
           <div className="form-group mb-6">
             <label className="form-label">
-              Dietary Designation <span style={{ color: 'var(--color-accent)' }}>*</span>
+              Dietary designation <span style={{ color: 'var(--color-accent)' }}>*</span>
             </label>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
               <button
                 type="button"
                 onClick={() => handleSelect('dietary_type', 'vegetarian')}
-                className={`btn btn-outline ${formData.dietary_type === 'vegetarian' ? 'btn-secondary' : ''}`}
-                style={{
-                  padding: '0.75rem',
-                  fontSize: '0.95rem',
-                  backgroundColor: formData.dietary_type === 'vegetarian' ? 'var(--color-primary)' : '#FFFFFF'
-                }}
+                className={`btn ${formData.dietary_type === 'vegetarian' ? 'btn-primary' : 'btn-outline'}`}
               >
-                <span>🟢</span>
+                <span style={{
+                  width: '8px',
+                  height: '8px',
+                  borderRadius: '50%',
+                  backgroundColor: '#5E9E59',
+                  display: 'inline-block'
+                }} />
                 <span>Vegetarian</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleSelect('dietary_type', 'non_vegetarian')}
-                className={`btn btn-outline ${formData.dietary_type === 'non_vegetarian' ? 'btn-secondary' : ''}`}
-                style={{
-                  padding: '0.75rem',
-                  fontSize: '0.95rem',
-                  backgroundColor: formData.dietary_type === 'non_vegetarian' ? 'var(--color-primary)' : '#FFFFFF'
-                }}
+                className={`btn ${formData.dietary_type === 'non_vegetarian' ? 'btn-primary' : 'btn-outline'}`}
               >
-                <span>🔴</span>
-                <span>Non-Vegetarian</span>
+                <span style={{
+                  width: '8px',
+                  height: '8px',
+                  borderRadius: '50%',
+                  backgroundColor: 'var(--color-accent)',
+                  display: 'inline-block'
+                }} />
+                <span>Non-vegetarian</span>
               </button>
             </div>
           </div>
 
-          {/* Quantity and Units */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="form-group">
               <label className="form-label">
-                Numeric Quantity <span style={{ color: 'var(--color-accent)' }}>*</span>
+                Numeric quantity <span style={{ color: 'var(--color-accent)' }}>*</span>
               </label>
-              <input 
+              <input
                 type="number"
                 name="quantity"
                 value={formData.quantity}
@@ -548,14 +601,14 @@ const DonorForm = ({ onSuccess }) => {
                 min="0.5"
                 step="any"
                 placeholder="25"
-                className="form-input"
+                className="form-input mono"
                 required
               />
             </div>
 
             <div className="form-group">
               <label className="form-label">
-                Measurement Unit <span style={{ color: 'var(--color-accent)' }}>*</span>
+                Measurement unit <span style={{ color: 'var(--color-accent)' }}>*</span>
               </label>
               <select
                 name="quantity_unit"
@@ -570,10 +623,9 @@ const DonorForm = ({ onSuccess }) => {
             </div>
           </div>
 
-          {/* Packaging Type */}
           <div className="form-group" style={{ marginBottom: 0 }}>
             <label className="form-label">
-              Packaging State <span style={{ fontSize: '0.785rem', color: 'var(--color-text-muted)' }}>(Recommended)</span>
+              Packaging state <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>(Recommended)</span>
             </label>
             <div className="flex gap-3">
               {PACKAGING_TYPES.map(pt => (
@@ -581,12 +633,7 @@ const DonorForm = ({ onSuccess }) => {
                   type="button"
                   key={pt.id}
                   onClick={() => handleSelect('packaging_type', pt.id)}
-                  className={`btn btn-outline flex-1 ${formData.packaging_type === pt.id ? 'btn-secondary' : ''}`}
-                  style={{
-                    padding: '0.6rem',
-                    fontSize: '0.85rem',
-                    backgroundColor: formData.packaging_type === pt.id ? 'var(--color-primary)' : '#FFFFFF'
-                  }}
+                  className={`btn btn-sm flex-1 ${formData.packaging_type === pt.id ? 'btn-primary' : 'btn-outline'}`}
                 >
                   {pt.label}
                 </button>
@@ -597,40 +644,24 @@ const DonorForm = ({ onSuccess }) => {
 
         {/* SECTION 3: Timing & Context Conditionals */}
         <div className="card">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '1px solid var(--color-border)' }}>
-            <span style={{ 
-              width: '28px', 
-              height: '28px', 
-              borderRadius: '50%', 
-              backgroundColor: 'var(--color-primary)', 
-              color: '#FFFFFF', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
-              fontWeight: 700, 
-              fontSize: '0.8rem' 
-            }}>3</span>
-            <h3 style={{ fontSize: '1.2rem', marginBottom: 0 }}>Timing &amp; Storage Conditions</h3>
-          </div>
+          <SectionHeading step={3} title="Timing and storage conditions" />
 
-          {/* Cooked Conditionals */}
           {formData.food_category === 'cooked_meals' && (
             <div style={{
-              backgroundColor: 'var(--color-bg-subtle)',
+              backgroundColor: 'var(--color-bg-base)',
               borderRadius: 'var(--radius-md)',
-              padding: '1.25rem',
+              padding: '16px',
               border: '1px solid var(--color-border)',
-              marginBottom: '1.25rem'
+              marginBottom: '16px'
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 700, color: 'var(--color-primary)', fontSize: '0.925rem', marginBottom: '1rem' }}>
-                <Clock size={16} />
-                <span>Cooked Food Context</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, color: 'var(--color-ink)', fontSize: '13px', marginBottom: '12px' }}>
+                <Clock size={15} strokeWidth={1.65} />
+                <span>Cooked food context</span>
               </div>
 
-              {/* Prep time */}
               <div className="form-group mb-4">
-                <label className="form-label" style={{ fontSize: '0.85rem' }}>
-                  Preparation Time <span style={{ color: 'var(--color-accent)' }}>*</span>
+                <label className="form-label" style={{ fontSize: '13px' }}>
+                  Preparation time <span style={{ color: 'var(--color-accent)' }}>*</span>
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {PREPARATION_TIMES.map(pt => (
@@ -638,12 +669,7 @@ const DonorForm = ({ onSuccess }) => {
                       type="button"
                       key={pt.id}
                       onClick={() => handleSelect('preparation_time', pt.id)}
-                      className={`btn btn-outline ${formData.preparation_time === pt.id ? 'btn-secondary' : ''}`}
-                      style={{
-                        padding: '0.5rem',
-                        fontSize: '0.785rem',
-                        backgroundColor: formData.preparation_time === pt.id ? 'var(--color-primary)' : '#FFFFFF'
-                      }}
+                      className={`btn btn-sm ${formData.preparation_time === pt.id ? 'btn-primary' : 'btn-outline'}`}
                     >
                       {pt.label}
                     </button>
@@ -651,10 +677,9 @@ const DonorForm = ({ onSuccess }) => {
                 </div>
               </div>
 
-              {/* Storage condition */}
               <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label" style={{ fontSize: '0.85rem' }}>
-                  Current Storage State <span style={{ color: 'var(--color-accent)' }}>*</span>
+                <label className="form-label" style={{ fontSize: '13px' }}>
+                  Current storage state <span style={{ color: 'var(--color-accent)' }}>*</span>
                 </label>
                 <div className="grid grid-cols-3 gap-2">
                   {STORAGE_CONDITIONS.map(sc => (
@@ -662,12 +687,7 @@ const DonorForm = ({ onSuccess }) => {
                       type="button"
                       key={sc.id}
                       onClick={() => handleSelect('current_storage', sc.id)}
-                      className={`btn btn-outline ${formData.current_storage === sc.id ? 'btn-secondary' : ''}`}
-                      style={{
-                        padding: '0.5rem',
-                        fontSize: '0.785rem',
-                        backgroundColor: formData.current_storage === sc.id ? 'var(--color-primary)' : '#FFFFFF'
-                      }}
+                      className={`btn btn-sm ${formData.current_storage === sc.id ? 'btn-primary' : 'btn-outline'}`}
                     >
                       {sc.label}
                     </button>
@@ -677,20 +697,19 @@ const DonorForm = ({ onSuccess }) => {
             </div>
           )}
 
-          {/* Packaged Conditionals */}
           {formData.food_category === 'packaged_sealed' && (
             <div style={{
-              backgroundColor: 'var(--color-bg-subtle)',
+              backgroundColor: 'var(--color-bg-base)',
               borderRadius: 'var(--radius-md)',
-              padding: '1.25rem',
+              padding: '16px',
               border: '1px solid var(--color-border)',
-              marginBottom: '1.25rem'
+              marginBottom: '16px'
             }}>
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">
-                  Expiry / Best Before Date <span style={{ color: 'var(--color-accent)' }}>*</span>
+                  Expiry / best-before date <span style={{ color: 'var(--color-accent)' }}>*</span>
                 </label>
-                <input 
+                <input
                   type="date"
                   name="expiry_date"
                   value={formData.expiry_date}
@@ -702,12 +721,11 @@ const DonorForm = ({ onSuccess }) => {
             </div>
           )}
 
-          {/* Pickup Available Until */}
           <div className="form-group" style={{ marginBottom: 0 }}>
             <label className="form-label">
-              Pickup Available Until <span style={{ color: 'var(--color-accent)' }}>*</span>
+              Pickup available until <span style={{ color: 'var(--color-accent)' }}>*</span>
             </label>
-            <input 
+            <input
               type="datetime-local"
               name="pickup_available_until"
               value={formData.pickup_available_until}
@@ -716,69 +734,58 @@ const DonorForm = ({ onSuccess }) => {
               required
             />
             <div className="form-helper">
-              Latest time food can be collected before donor facility closes.
+              Latest cutoff time before donor facility closes.
             </div>
           </div>
         </div>
 
         {/* SECTION 4: Food Photograph & AI Visual Assessment */}
         <div className="card">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '1px solid var(--color-border)' }}>
-            <span style={{ 
-              width: '28px', 
-              height: '28px', 
-              borderRadius: '50%', 
-              backgroundColor: 'var(--color-primary)', 
-              color: '#FFFFFF', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
-              fontWeight: 700, 
-              fontSize: '0.8rem' 
-            }}>4</span>
-            <h3 style={{ fontSize: '1.2rem', marginBottom: 0 }}>Food Photograph &amp; Condition Screening</h3>
-          </div>
+          <SectionHeading step={4} title="Food photograph and condition screening" />
 
           <label className="form-label">
-            Clear Food Photo for Condition Screening <span style={{ color: 'var(--color-accent)' }}>*</span>
+            Food photograph <span style={{ color: 'var(--color-accent)' }}>*</span>
           </label>
 
           {!photoPreview ? (
-            <div
+            <button
+              type="button"
               onClick={() => fileInputRef.current?.click()}
               style={{
-                border: '2px dashed var(--color-border)',
+                width: '100%',
+                border: '1.5px dashed var(--color-border-strong)',
                 borderRadius: 'var(--radius-lg)',
-                padding: '2.5rem 1.5rem',
+                padding: '32px 24px',
                 textAlign: 'center',
                 cursor: 'pointer',
                 backgroundColor: 'var(--color-bg-base)',
-                transition: 'all 0.2s ease'
+                fontFamily: 'inherit',
+                transition: 'border-color 150ms var(--ease-out)'
               }}
-              onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--color-accent)'}
-              onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--color-border)'}
+              onMouseOver={(e) => { e.currentTarget.style.borderColor = 'var(--color-accent)'; }}
+              onMouseOut={(e) => { e.currentTarget.style.borderColor = 'var(--color-border-strong)'; }}
             >
               <div style={{
-                width: '54px',
-                height: '54px',
-                borderRadius: '50%',
+                width: '44px',
+                height: '44px',
+                borderRadius: 'var(--radius-md)',
                 backgroundColor: '#FFFFFF',
+                border: '1px solid var(--color-border)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                margin: '0 auto 1rem',
-                color: 'var(--color-accent)',
-                boxShadow: 'var(--shadow-sm)'
+                margin: '0 auto 12px',
+                color: 'var(--color-accent)'
               }}>
-                <Camera size={26} />
+                <Camera size={20} strokeWidth={1.65} />
               </div>
-              <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--color-primary)', marginBottom: '0.25rem' }}>
-                Click or tap to upload food photo
+              <div style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-ink)', marginBottom: '4px' }}>
+                Select or capture food photograph
               </div>
-              <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
-                JPEG, PNG, or WebP up to 5 MB (One clear photo)
+              <div style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
+                JPEG, PNG, or WebP up to 5 MB
               </div>
-            </div>
+            </button>
           ) : (
             <div>
               <div style={{
@@ -787,12 +794,12 @@ const DonorForm = ({ onSuccess }) => {
                 overflow: 'hidden',
                 border: '1px solid var(--color-border)',
                 maxHeight: '260px',
-                backgroundColor: '#000'
+                backgroundColor: 'var(--color-ink)'
               }}>
-                <img 
-                  src={photoPreview} 
-                  alt="Donation preview" 
-                  style={{ width: '100%', height: '260px', objectFit: 'contain' }} 
+                <img
+                  src={photoPreview}
+                  alt="Donation preview"
+                  style={{ width: '100%', height: '260px', objectFit: 'contain' }}
                 />
                 <button
                   type="button"
@@ -801,99 +808,100 @@ const DonorForm = ({ onSuccess }) => {
                     position: 'absolute',
                     top: '12px',
                     right: '12px',
-                    backgroundColor: 'rgba(217, 72, 59, 0.9)',
-                    border: 'none',
+                    backgroundColor: 'var(--color-ink)',
+                    border: '1px solid rgba(255,255,255,0.2)',
                     borderRadius: '50%',
-                    width: '34px',
-                    height: '34px',
-                    color: 'white',
+                    width: '32px',
+                    height: '32px',
+                    color: '#FFFFFF',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    cursor: 'pointer',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.4)'
+                    cursor: 'pointer'
                   }}
+                  aria-label="Remove photo"
                   title="Remove photo"
                 >
-                  <X size={18} />
+                  <X size={16} />
                 </button>
               </div>
 
-              {/* Explicit Analyze / Re-analyze Action Bar */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', marginTop: '0.85rem', flexWrap: 'wrap' }}>
-                <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', marginTop: '12px', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }} className="mono">
                   {photoFile?.name} ({photoFile ? Math.max(1, Math.round(photoFile.size / 1024)) : 0} KB)
                 </span>
                 <button
                   type="button"
-                  className="btn btn-secondary"
+                  className="btn btn-secondary btn-sm"
                   disabled={aiLoading}
                   onClick={() => runAiAssessment(photoFile, formData.food_category)}
-                  style={{ padding: '0.45rem 0.9rem', fontSize: '0.825rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
                 >
-                  <Sparkles size={14} />
-                  <span>{aiLoading ? 'Analyzing...' : aiResult ? 'Re-analyze Photo' : 'Analyze Photo'}</span>
+                  <ScanEye size={14} strokeWidth={1.65} />
+                  <span>{aiLoading ? 'Analyzing...' : aiResult ? 'Re-analyze photo' : 'Analyze photo'}</span>
                 </button>
               </div>
 
-              {/* 1. AI Loading State */}
               {aiLoading && (
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.75rem',
-                  padding: '1rem 1.25rem',
+                  gap: '12px',
+                  padding: '12px 16px',
                   borderRadius: 'var(--radius-md)',
-                  backgroundColor: 'var(--color-bg-subtle)',
+                  backgroundColor: 'var(--color-bg-base)',
                   border: '1px solid var(--color-border)',
-                  marginTop: '1rem'
+                  marginTop: '12px'
                 }}>
-                  <div className="spinner" style={{ width: '18px', height: '18px' }}></div>
-                  <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--color-primary)' }}>
+                  <div className="spinner" style={{ width: '16px', height: '16px' }} />
+                  <div style={{ fontSize: '13px', fontWeight: 500, color: 'var(--color-ink)' }}>
                     Analyzing visible image characteristics...
                   </div>
                 </div>
               )}
 
-              {/* 2. AI Assessment Completed (Live Vision AI or Demo/Fallback) */}
               {aiResult && aiResult.assessment_status === 'completed' && (
                 <div style={{
-                  marginTop: '1rem',
-                  padding: '1.25rem',
+                  marginTop: '12px',
+                  padding: '16px',
                   borderRadius: 'var(--radius-md)',
-                  backgroundColor: aiResult.is_demo_fallback ? '#F8FAFC' : 'var(--color-secondary-subtle)',
-                  border: aiResult.is_demo_fallback ? '1px solid #CBD5E1' : '1px solid rgba(91, 140, 81, 0.35)'
+                  backgroundColor: aiResult.is_demo_fallback ? 'var(--color-bg-base)' : 'var(--color-pastel-green-subtle)',
+                  border: aiResult.is_demo_fallback ? '1px solid var(--color-border-strong)' : '1px solid var(--color-pastel-green-strong)'
                 }}>
-                  {/* Header + Mode Badge + Confidence */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.03em', textTransform: 'uppercase', color: 'var(--color-primary)' }}>
-                        <Sparkles size={14} style={{ color: 'var(--color-accent)' }} />
-                        <span>AI Image Assessment</span>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontWeight: 600, fontSize: '13px', color: 'var(--color-ink)' }}>
+                        <ScanEye size={15} strokeWidth={1.65} style={{ color: 'var(--color-accent)' }} />
+                        <span>Visual screening result</span>
                       </span>
                       <span style={{
-                        fontSize: '0.72rem',
-                        fontWeight: 700,
-                        padding: '0.18rem 0.55rem',
-                        borderRadius: '9999px',
-                        backgroundColor: aiResult.is_demo_fallback ? '#FEF3C7' : '#DCFCE7',
-                        color: aiResult.is_demo_fallback ? '#92400E' : '#166534',
-                        border: aiResult.is_demo_fallback ? '1px solid #FCD34D' : '1px solid #86EFAC'
+                        fontSize: '12px',
+                        fontWeight: 500,
+                        padding: '2px 8px',
+                        borderRadius: 'var(--radius-pill)',
+                        backgroundColor: aiResult.is_demo_fallback ? 'var(--color-warning-subtle)' : 'var(--color-pastel-green)',
+                        color: aiResult.is_demo_fallback ? 'var(--color-warning-ink)' : 'var(--color-pastel-green-ink)',
+                        border: aiResult.is_demo_fallback ? '1px solid rgba(217, 138, 26, 0.35)' : '1px solid var(--color-pastel-green-strong)'
                       }}>
                         {aiResult.is_demo_fallback
-                          ? 'DEMO / FALLBACK MODE (No API Key)'
-                          : `Live Vision AI (${aiResult.model_version})`}
+                          ? 'Fallback mode (no API key)'
+                          : aiResult.assessment_mode === 'local_onnx_produce'
+                          ? `Produce ONNX (${aiResult.model_version})`
+                          : aiResult.assessment_mode?.startsWith('hybrid_')
+                          ? `Hybrid AI (${aiResult.model_version})`
+                          : aiResult.assessment_mode === 'groq_vision_ai'
+                          ? `Groq Vision (${aiResult.model_version})`
+                          : `Live Vision (${aiResult.model_version})`}
                       </span>
                     </div>
 
-                    <span style={{
-                      fontSize: '0.75rem',
-                      fontWeight: 700,
-                      padding: '0.18rem 0.55rem',
-                      borderRadius: '6px',
+                    <span className="mono" style={{
+                      fontSize: '12px',
+                      fontWeight: 500,
+                      padding: '2px 8px',
+                      borderRadius: 'var(--radius-sm)',
                       backgroundColor: '#FFFFFF',
                       border: '1px solid var(--color-border)',
-                      color: 'var(--color-primary)',
+                      color: 'var(--color-ink)',
                       textTransform: 'capitalize'
                     }}>
                       Confidence: {aiResult.confidence_level || 'low'}
@@ -901,49 +909,78 @@ const DonorForm = ({ onSuccess }) => {
                     </span>
                   </div>
 
-                  {/* Human Review Warning */}
+                  {aiResult.onnx_produce_screening && (
+                    <div style={{
+                      padding: '8px 12px',
+                      borderRadius: 'var(--radius-sm)',
+                      backgroundColor: '#FFFFFF',
+                      border: '1px solid var(--color-border)',
+                      marginBottom: '12px',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      flexWrap: 'wrap',
+                      gap: '8px',
+                      fontSize: '13px'
+                    }}>
+                      <span>
+                        <strong style={{ color: 'var(--color-ink)', fontWeight: 600 }}>On-device produce screening:</strong>{' '}
+                        <span style={{
+                          fontWeight: 600,
+                          color: aiResult.onnx_produce_screening.visual_assessment_label === 'visually_acceptable'
+                            ? 'var(--color-pastel-green-ink)'
+                            : 'var(--color-danger)',
+                          textTransform: 'capitalize'
+                        }}>
+                          {(aiResult.onnx_produce_screening.visual_assessment_label || '').replace(/_/g, ' ')}
+                        </span>
+                      </span>
+                      <span className="mono" style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
+                        Fresh {Math.round((aiResult.onnx_produce_screening.probability_fresh || 0) * 100)}% · Deterioration {Math.round((aiResult.onnx_produce_screening.probability_rotten || 0) * 100)}%
+                      </span>
+                    </div>
+                  )}
+
                   {aiResult.human_review_recommended && (
                     <div style={{
                       display: 'flex',
                       alignItems: 'flex-start',
-                      gap: '0.5rem',
-                      padding: '0.65rem 0.85rem',
+                      gap: '8px',
+                      padding: '8px 12px',
                       borderRadius: 'var(--radius-sm)',
-                      backgroundColor: 'var(--color-warning-subtle)',
-                      border: '1px solid rgba(231, 165, 43, 0.45)',
-                      marginBottom: '0.85rem',
-                      fontSize: '0.82rem',
-                      color: '#78350F'
+                      backgroundColor: 'var(--color-accent-subtle)',
+                      border: '1px solid rgba(234, 93, 26, 0.3)',
+                      marginBottom: '12px',
+                      fontSize: '13px',
+                      color: 'var(--color-ink)'
                     }}>
-                      <AlertTriangle size={16} style={{ flexShrink: 0, marginTop: '2px', color: '#D97706' }} />
+                      <AlertTriangle size={15} style={{ flexShrink: 0, marginTop: '2px', color: 'var(--color-accent-ink)' }} />
                       <div>
-                        <strong>Human Review Recommended:</strong>{' '}
+                        <strong style={{ fontWeight: 600 }}>Human review recommended:</strong>{' '}
                         {aiResult.human_review_reason || 'Manual verification is required before dispatch.'}
                       </div>
                     </div>
                   )}
 
-                  {/* Suggested Category & Description */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem', marginBottom: '0.85rem' }}>
-                    <div style={{ fontSize: '0.84rem', color: 'var(--color-text-main)' }}>
-                      <strong style={{ color: 'var(--color-primary)' }}>Suggested Category:</strong>{' '}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '12px' }}>
+                    <div style={{ fontSize: '13px', color: 'var(--color-ink)' }}>
+                      <strong style={{ fontWeight: 600 }}>Suggested category:</strong>{' '}
                       <span style={{ textTransform: 'capitalize' }}>
                         {(aiResult.suggested_food_category || 'uncertain').replace(/_/g, ' ')}
                       </span>
                     </div>
-                    <div style={{ fontSize: '0.84rem', color: 'var(--color-text-main)', lineHeight: 1.45 }}>
-                      <strong style={{ color: 'var(--color-primary)' }}>Visible Description:</strong>{' '}
+                    <div style={{ fontSize: '13px', color: 'var(--color-ink)', lineHeight: 1.45 }}>
+                      <strong style={{ fontWeight: 600 }}>Visible description:</strong>{' '}
                       {aiResult.possible_food_description}
                     </div>
                   </div>
 
-                  {/* Packaging / Condition Observations */}
                   {Array.isArray(aiResult.packaging_condition_observations) && aiResult.packaging_condition_observations.length > 0 && (
-                    <div style={{ marginBottom: '0.75rem' }}>
-                      <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-primary)', marginBottom: '0.25rem' }}>
-                        Packaging &amp; Visible Condition Observations:
+                    <div style={{ marginBottom: '12px' }}>
+                      <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-ink)', marginBottom: '4px' }}>
+                        Condition observations:
                       </div>
-                      <ul style={{ margin: 0, paddingLeft: '1.15rem', fontSize: '0.81rem', color: 'var(--color-text-muted)', display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+                      <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '13px', color: 'var(--color-text-muted)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
                         {aiResult.packaging_condition_observations.map((obs, idx) => (
                           <li key={idx}>{obs}</li>
                         ))}
@@ -951,21 +988,20 @@ const DonorForm = ({ onSuccess }) => {
                     </div>
                   )}
 
-                  {/* Suggested Dietary Labels */}
                   {Array.isArray(aiResult.suggested_dietary_labels) && aiResult.suggested_dietary_labels.length > 0 && (
-                    <div style={{ marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
-                      <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-primary)' }}>
-                        Inferred Dietary Labels:
+                    <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                      <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-ink)' }}>
+                        Dietary hints:
                       </span>
                       {aiResult.suggested_dietary_labels.map((lbl, idx) => (
                         <span key={idx} style={{
-                          fontSize: '0.74rem',
-                          fontWeight: 600,
-                          padding: '0.15rem 0.55rem',
-                          borderRadius: '9999px',
+                          fontSize: '12px',
+                          fontWeight: 500,
+                          padding: '2px 8px',
+                          borderRadius: 'var(--radius-pill)',
                           backgroundColor: '#FFFFFF',
                           border: '1px solid var(--color-border)',
-                          color: 'var(--color-primary)'
+                          color: 'var(--color-ink)'
                         }}>
                           {lbl}
                         </span>
@@ -973,13 +1009,12 @@ const DonorForm = ({ onSuccess }) => {
                     </div>
                   )}
 
-                  {/* Missing Information for Donor */}
                   {Array.isArray(aiResult.missing_information) && aiResult.missing_information.length > 0 && (
-                    <div style={{ marginBottom: '0.85rem' }}>
-                      <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-primary)', marginBottom: '0.25rem' }}>
-                        Information Donor Should Confirm:
+                    <div style={{ marginBottom: '12px' }}>
+                      <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-ink)', marginBottom: '4px' }}>
+                        Details to confirm:
                       </div>
-                      <ul style={{ margin: 0, paddingLeft: '1.15rem', fontSize: '0.81rem', color: 'var(--color-text-muted)', display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+                      <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '13px', color: 'var(--color-text-muted)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
                         {aiResult.missing_information.map((item, idx) => (
                           <li key={idx}>{item}</li>
                         ))}
@@ -987,47 +1022,44 @@ const DonorForm = ({ onSuccess }) => {
                     </div>
                   )}
 
-                  {/* Mandatory Safety Disclaimer */}
-                  <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', borderTop: '1px solid rgba(0,0,0,0.08)', paddingTop: '0.65rem', lineHeight: 1.45 }}>
+                  <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', borderTop: '1px solid var(--color-border)', paddingTop: '8px', lineHeight: 1.45 }}>
                     {aiResult.safety_disclaimer || aiResult.disclaimer}
                   </div>
                 </div>
               )}
 
-              {/* 3. AI Error Notice with Retry (Non-Blocking) */}
               {aiError && (
                 <div style={{
-                  marginTop: '1rem',
-                  padding: '0.85rem 1rem',
+                  marginTop: '12px',
+                  padding: '12px 16px',
                   borderRadius: 'var(--radius-md)',
-                  backgroundColor: 'var(--color-warning-subtle)',
-                  border: '1px solid rgba(231, 165, 43, 0.35)',
+                  backgroundColor: 'var(--color-accent-subtle)',
+                  border: '1px solid rgba(234, 93, 26, 0.3)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  gap: '0.75rem',
+                  gap: '12px',
                   flexWrap: 'wrap'
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flex: 1, minWidth: '220px' }}>
-                    <AlertCircle size={17} style={{ color: '#D97706', flexShrink: 0 }} />
-                    <div style={{ fontSize: '0.825rem', color: 'var(--color-text-main)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, minWidth: '220px' }}>
+                    <AlertCircle size={16} style={{ color: 'var(--color-accent-ink)', flexShrink: 0 }} />
+                    <div style={{ fontSize: '13px', color: 'var(--color-ink)' }}>
                       {aiError}
                     </div>
                   </div>
                   <button
                     type="button"
-                    className="btn btn-secondary"
+                    className="btn btn-secondary btn-sm"
                     onClick={() => runAiAssessment(photoFile, formData.food_category)}
-                    style={{ padding: '0.35rem 0.75rem', fontSize: '0.78rem' }}
                   >
-                    Retry Analysis
+                    Retry analysis
                   </button>
                 </div>
               )}
             </div>
           )}
 
-          <input 
+          <input
             type="file"
             ref={fileInputRef}
             onChange={handlePhotoSelect}
@@ -1039,41 +1071,36 @@ const DonorForm = ({ onSuccess }) => {
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '0.5rem',
-              marginTop: '0.75rem',
-              fontSize: '0.8rem',
+              gap: '8px',
+              marginTop: '12px',
+              fontSize: '12px',
               color: 'var(--color-text-subtle)'
             }}>
-              <Sparkles size={14} style={{ color: 'var(--color-accent)' }} />
-              <span>Fresh produce photographs (apples, bananas, oranges) receive automated visual condition screening.</span>
+              <Info size={14} strokeWidth={1.65} style={{ color: 'var(--color-accent)', flexShrink: 0 }} />
+              <span>Fresh produce photographs receive local ONNX screening; all categories receive visual screening when enabled.</span>
             </div>
           )}
         </div>
 
         {/* SECTION 5: Pickup Location & Instructions */}
         <div className="card">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '1px solid var(--color-border)' }}>
-            <span style={{ 
-              width: '28px', 
-              height: '28px', 
-              borderRadius: '50%', 
-              backgroundColor: 'var(--color-primary)', 
-              color: '#FFFFFF', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
-              fontWeight: 700, 
-              fontSize: '0.8rem' 
-            }}>5</span>
-            <h3 style={{ fontSize: '1.2rem', marginBottom: 0 }}>Pickup Logistics &amp; Instructions</h3>
-          </div>
+          <SectionHeading step={5} title="Pickup logistics and coordinates" />
 
-          {/* Address */}
           <div className="form-group mb-4">
-            <label className="form-label">
-              Pickup Address / Location <span style={{ color: 'var(--color-accent)' }}>*</span>
-            </label>
-            <input 
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '6px' }}>
+              <label className="form-label" style={{ marginBottom: 0 }}>
+                Pickup address / location <span style={{ color: 'var(--color-accent)' }}>*</span>
+              </label>
+              <button
+                type="button"
+                className="btn btn-outline btn-sm"
+                onClick={handleCaptureGps}
+              >
+                <MapPin size={13} strokeWidth={1.65} />
+                <span>Use current GPS</span>
+              </button>
+            </div>
+            <input
               type="text"
               name="address_text"
               value={formData.address_text}
@@ -1082,65 +1109,95 @@ const DonorForm = ({ onSuccess }) => {
               className="form-input"
               required
             />
+            {gpsStatus && (
+              <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
+                {gpsStatus}
+              </div>
+            )}
           </div>
 
-          {/* Allergens & Note */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label">
+                Latitude <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>(Optional)</span>
+              </label>
+              <input
+                type="number"
+                step="any"
+                name="latitude"
+                value={formData.latitude}
+                onChange={handleTextChange}
+                placeholder="e.g. 18.6208"
+                className="form-input mono"
+              />
+            </div>
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label">
+                Longitude <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>(Optional)</span>
+              </label>
+              <input
+                type="number"
+                step="any"
+                name="longitude"
+                value={formData.longitude}
+                onChange={handleTextChange}
+                placeholder="e.g. 73.7470"
+                className="form-input mono"
+              />
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label className="form-label">
-                Major Allergens <span style={{ fontSize: '0.785rem', color: 'var(--color-text-muted)' }}>(Optional)</span>
+                Major allergens <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>(Optional)</span>
               </label>
-              <input 
+              <input
                 type="text"
                 name="allergens"
                 value={formData.allergens}
                 onChange={handleTextChange}
-                placeholder="e.g. Contains dairy, gluten, peanuts"
+                placeholder="e.g. Dairy, gluten, peanuts"
                 className="form-input"
               />
             </div>
 
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label className="form-label">
-                Special Pickup Note <span style={{ fontSize: '0.785rem', color: 'var(--color-text-muted)' }}>(Optional)</span>
+                Special pickup note <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>(Optional)</span>
               </label>
-              <input 
+              <input
                 type="text"
                 name="special_note"
                 value={formData.special_note}
                 onChange={handleTextChange}
-                placeholder="e.g. Use back loading bay; call donor on arrival"
+                placeholder="e.g. Use back loading bay; call on arrival"
                 className="form-input"
               />
             </div>
           </div>
         </div>
 
-        {/* SECTION 6: Review & Submit */}
-        <div style={{ textAlign: 'center', paddingTop: '0.5rem' }}>
-          <button 
-            type="submit" 
-            className="btn btn-primary"
+        {/* SECTION 6: Submit */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', paddingTop: '4px' }}>
+          <div style={{ fontSize: '12px', color: 'var(--color-text-subtle)', maxWidth: '460px' }}>
+            Listings remain open to matched NGOs until the cutoff deadline and are covered under Good Samaritan food donation terms.
+          </div>
+          <button
+            type="submit"
+            className="btn btn-orange"
             disabled={loading}
-            style={{ 
-              padding: '0.9rem 2.5rem', 
-              fontSize: '1.05rem', 
-              minWidth: '240px' 
-            }}
+            style={{ minHeight: '44px', padding: '12px 24px', fontSize: '15px' }}
           >
             {loading ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                <div className="spinner" style={{ width: '18px', height: '18px', borderTopColor: '#FFFFFF' }}></div>
-                <span>Submitting Surplus Listing...</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div className="spinner" style={{ width: '16px', height: '16px', borderTopColor: '#FFFFFF' }} />
+                <span>Submitting batch...</span>
               </div>
             ) : (
-              'Confirm & Register Surplus'
+              'Confirm and register surplus'
             )}
           </button>
-
-          <div style={{ marginTop: '0.85rem', fontSize: '0.8rem', color: 'var(--color-text-subtle)' }}>
-            Information is collected to coordinate surplus food pickup. Donors are covered under Good Samaritan food donation guidelines.
-          </div>
         </div>
 
       </form>

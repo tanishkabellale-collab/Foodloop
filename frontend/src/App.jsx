@@ -8,41 +8,42 @@ import TopBar from './components/layout/TopBar';
 /* ── Dashboard ───────────────────────────────────────── */
 import DashboardView from './components/dashboard/DashboardView';
 
-/* ── Existing Feature Views ──────────────────────────── */
+/* ── Feature Views ───────────────────────────────────── */
 import DonationGrid from './components/donations/DonationGrid';
 import DonationDetailModal from './components/donations/DonationDetailModal';
 import DonorForm from './components/donor/DonorForm';
 import MatchesView from './components/matches/MatchesView';
 import AnalyticsView from './components/analytics/AnalyticsView';
+import ErrorBoundary from './components/common/ErrorBoundary';
 
 /* ── Auth & Guards ───────────────────────────────────── */
-import { useAuth } from './context/AuthContext';
+import { useAuth } from './context/useAuth';
 import AuthPage from './components/auth/AuthPage';
 import UnauthorizedView from './components/common/UnauthorizedView';
 
-/* ── New Placeholder Pages ───────────────────────────── */
+/* ── Operations Pages ────────────────────────────────── */
 import PickupDeliveryPage from './components/pages/PickupDeliveryPage';
 import AdminReviewPage from './components/pages/AdminReviewPage';
 import SettingsPage from './components/pages/SettingsPage';
 
+import { API_URL } from './config';
 import './App.css';
 
-const API_URL = 'http://localhost:5001/api';
 const VALID_TABS = ['dashboard','donations','matches','analytics','create','pickup','admin','settings'];
 const ROUTE_ROLES = {
-  dashboard: ['DONOR', 'NGO', 'ADMIN'],
-  donations: ['DONOR', 'NGO', 'ADMIN'],
+  dashboard: ['DONOR', 'NGO', 'VOLUNTEER', 'ADMIN'],
+  donations: ['DONOR', 'NGO', 'VOLUNTEER', 'ADMIN'],
   matches: ['DONOR', 'NGO', 'ADMIN'],
-  analytics: ['DONOR', 'NGO', 'ADMIN'],
+  analytics: ['DONOR', 'NGO', 'VOLUNTEER', 'ADMIN'],
   create: ['DONOR', 'ADMIN'],
-  pickup: ['NGO', 'ADMIN'],
+  pickup: ['DONOR', 'NGO', 'VOLUNTEER', 'ADMIN'],
   admin: ['ADMIN'],
-  settings: ['DONOR', 'NGO', 'ADMIN'],
+  settings: ['DONOR', 'NGO', 'VOLUNTEER', 'ADMIN'],
 };
 
 function App() {
-  const { user, isAuthenticated, authLoading, logout } = useAuth();
-  /* ── Tab / Routing State ───────────────────────── */
+  const { user, token, isAuthenticated, authLoading, logout } = useAuth();
+
   const getInitialTab = () => {
     try {
       const params = new URLSearchParams(window.location.search);
@@ -50,8 +51,16 @@ function App() {
       if (tab && VALID_TABS.includes(tab)) return tab;
       if (params.get('view') === 'ngo') return 'donations';
       if (params.get('view') === 'donor') return 'create';
-    } catch (e) { /* fallback */ }
+    } catch { /* fallback */ }
     return 'dashboard';
+  };
+
+  const getInitialQuery = () => {
+    try {
+      return new URLSearchParams(window.location.search).get('q') || '';
+    } catch {
+      return '';
+    }
   };
 
   const [activeTab, setActiveTab] = useState(getInitialTab);
@@ -61,6 +70,12 @@ function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // Global search & live notifications
+  const [searchQuery, setSearchQuery] = useState(getInitialQuery);
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [realtimeConnected, setRealtimeConnected] = useState(false);
+
   /* ── Tab Navigation ────────────────────────────── */
   const handleTabChange = useCallback((tab) => {
     setActiveTab(tab);
@@ -69,11 +84,11 @@ function App() {
       const url = new URL(window.location.href);
       url.searchParams.set('tab', tab);
       window.history.pushState({}, '', url);
-    } catch (e) { /* ignore */ }
+    } catch { /* ignore */ }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  /* ── Data Fetching ─────────────────────────────── */
+  /* ── Data & Notifications Fetching ─────────────── */
   const fetchDonations = useCallback(async (showLoading = false) => {
     if (!isAuthenticated) return;
     if (showLoading) setLoading(true);
@@ -87,26 +102,135 @@ function App() {
     }
   }, [isAuthenticated]);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      setDonations([]);
-      return;
+  const fetchNotifications = useCallback(async () => {
+    if (!isAuthenticated) return;
+    try {
+      const res = await axios.get(`${API_URL}/notifications`);
+      setNotifications(res.data?.notifications || []);
+      setUnreadCount(res.data?.unread_count || 0);
+    } catch {
+      // Non-blocking notification failure
     }
-    fetchDonations(true);
-    const id = setInterval(() => fetchDonations(false), 5000);
-    return () => clearInterval(id);
-  }, [fetchDonations, isAuthenticated]);
+  }, [isAuthenticated]);
 
-  /* ── Browser Back/Forward ──────────────────────── */
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    let active = true;
+
+    Promise.all([
+      axios.get(`${API_URL}/donations`),
+      axios.get(`${API_URL}/notifications`).catch(() => ({ data: { notifications: [], unread_count: 0 } })),
+    ])
+      .then(([donRes, notifRes]) => {
+        if (!active) return;
+        setDonations(donRes.data);
+        setNotifications(notifRes.data?.notifications || []);
+        setUnreadCount(notifRes.data?.unread_count || 0);
+      })
+      .catch((error) => {
+        if (active) console.error('Failed to load workspace data:', error);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+
+    // Fallback polling interval (relaxed when SSE is connected)
+    const id = setInterval(() => {
+      fetchDonations(false);
+      fetchNotifications();
+    }, 15000);
+
+    return () => {
+      active = false;
+      clearInterval(id);
+    };
+  }, [fetchDonations, fetchNotifications, isAuthenticated]);
+
+  /* ── Server-Sent Events (Real-Time Feed) ───────── */
+  useEffect(() => {
+    if (!isAuthenticated || !token || typeof window.EventSource !== 'function') {
+      return undefined;
+    }
+
+    const sseUrl = `${API_URL}/events?token=${encodeURIComponent(token)}`;
+    const es = new EventSource(sseUrl);
+
+    const handleConnected = () => setRealtimeConnected(true);
+    const handleSync = () => {
+      fetchDonations(false);
+      fetchNotifications();
+    };
+
+    es.addEventListener('connected', handleConnected);
+    es.addEventListener('donation:created', handleSync);
+    es.addEventListener('donation:updated', handleSync);
+    es.addEventListener('delivery:updated', handleSync);
+    es.addEventListener('notification:new', fetchNotifications);
+    es.onerror = () => {
+      setRealtimeConnected(false);
+    };
+
+    return () => {
+      es.close();
+      setRealtimeConnected(false);
+    };
+  }, [isAuthenticated, token, fetchDonations, fetchNotifications]);
+
+  /* ── Browser Back/Forward & Escape Modal ───────── */
   useEffect(() => {
     const handlePop = () => {
       const params = new URLSearchParams(window.location.search);
       const tab = params.get('tab') || 'dashboard';
       setActiveTab(tab);
+      setSearchQuery(params.get('q') || '');
+    };
+    const handleKey = (e) => {
+      if (e.key === 'Escape') setSelectedDonation(null);
     };
     window.addEventListener('popstate', handlePop);
-    return () => window.removeEventListener('popstate', handlePop);
+    window.addEventListener('keydown', handleKey);
+    return () => {
+      window.removeEventListener('popstate', handlePop);
+      window.removeEventListener('keydown', handleKey);
+    };
   }, []);
+
+  /* ── Global Search Integration ─────────────────── */
+  const handleGlobalSearchChange = (q) => {
+    setSearchQuery(q);
+    try {
+      const url = new URL(window.location.href);
+      if (q) url.searchParams.set('q', q);
+      else url.searchParams.delete('q');
+      window.history.replaceState({}, '', url);
+    } catch { /* ignore */ }
+  };
+
+  const handleGlobalSearchSubmit = () => {
+    if (activeTab !== 'donations') {
+      handleTabChange('donations');
+    }
+  };
+
+  const handleMarkAllRead = async () => {
+    try {
+      await axios.patch(`${API_URL}/notifications/read-all`);
+      setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
+      setUnreadCount(0);
+    } catch { /* ignore */ }
+  };
+
+  const handleNotificationSelect = (notif) => {
+    if (notif.type?.startsWith('delivery') || notif.type === 'donation_accepted') {
+      handleTabChange('pickup');
+      return;
+    }
+    if (notif.type?.startsWith('admin') || notif.type === 'listing_expired') {
+      handleTabChange(user?.role === 'ADMIN' ? 'admin' : 'donations');
+      return;
+    }
+    handleTabChange('donations');
+  };
 
   /* ── Accept / Collect (Optimistic) ─────────────── */
   const handleAccept = async (id, ngoInfo = null) => {
@@ -120,6 +244,7 @@ function App() {
       if (selectedDonation?.id === id) setSelectedDonation(prev => ({ ...prev, ...patchUpdate }));
       await axios.patch(`${API_URL}/donations/${id}/accept`, ngoInfo || {});
       fetchDonations(false);
+      fetchNotifications();
     } catch (error) {
       console.error('Failed to accept donation:', error);
       fetchDonations(false);
@@ -132,6 +257,7 @@ function App() {
       if (selectedDonation?.id === id) setSelectedDonation(prev => ({ ...prev, status: 'collected' }));
       await axios.patch(`${API_URL}/donations/${id}/collect`);
       fetchDonations(false);
+      fetchNotifications();
     } catch (error) {
       console.error('Failed to collect donation:', error);
       fetchDonations(false);
@@ -164,15 +290,12 @@ function App() {
     return <AuthPage />;
   }
 
-  /* ── Render ────────────────────────────────────── */
   return (
     <div className="app-layout">
-      {/* Mobile Overlay */}
       {mobileMenuOpen && (
         <div className="sidebar-overlay" onClick={() => setMobileMenuOpen(false)} />
       )}
 
-      {/* Sidebar Navigation */}
       <Sidebar
         activeTab={activeTab}
         onTabChange={handleTabChange}
@@ -182,7 +305,6 @@ function App() {
         userRole={userRole}
       />
 
-      {/* Main Content Area */}
       <div className={`app-main ${sidebarCollapsed ? 'sidebar-is-collapsed' : ''}`}>
         <TopBar
           activeTab={activeTab}
@@ -190,6 +312,14 @@ function App() {
           onMobileMenuToggle={() => setMobileMenuOpen(prev => !prev)}
           user={user}
           onLogout={logout}
+          searchQuery={searchQuery}
+          onSearchChange={handleGlobalSearchChange}
+          onSearchSubmit={handleGlobalSearchSubmit}
+          notifications={notifications}
+          unreadCount={unreadCount}
+          onMarkAllRead={handleMarkAllRead}
+          onNotificationSelect={handleNotificationSelect}
+          realtimeConnected={realtimeConnected}
         />
 
         <main className="app-content">
@@ -200,7 +330,7 @@ function App() {
               onBack={() => handleTabChange('dashboard')}
             />
           ) : (
-            <>
+            <ErrorBoundary key={activeTab}>
               {activeTab === 'dashboard' && (
                 <DashboardView
                   donations={donations}
@@ -218,11 +348,13 @@ function App() {
                   onSelectDonation={setSelectedDonation}
                   onAccept={canAcceptCollect ? handleAccept : undefined}
                   onCollect={canAcceptCollect ? handleCollect : undefined}
+                  searchQuery={searchQuery}
+                  onSearchQueryChange={handleGlobalSearchChange}
                 />
               )}
 
               {activeTab === 'create' && canCreate && (
-                <DonorForm onSuccess={() => fetchDonations(false)} />
+                <DonorForm onSuccess={() => { fetchDonations(false); fetchNotifications(); }} />
               )}
 
               {activeTab === 'matches' && (
@@ -239,7 +371,10 @@ function App() {
               )}
 
               {activeTab === 'pickup' && (
-                <PickupDeliveryPage onTabChange={handleTabChange} />
+                <PickupDeliveryPage
+                  onTabChange={handleTabChange}
+                  onDonationsRefresh={fetchDonations}
+                />
               )}
 
               {activeTab === 'admin' && (
@@ -249,12 +384,11 @@ function App() {
               {activeTab === 'settings' && (
                 <SettingsPage />
               )}
-            </>
+            </ErrorBoundary>
           )}
         </main>
       </div>
 
-      {/* Donation Detail Modal (Global) */}
       {selectedDonation && (
         <DonationDetailModal
           donation={selectedDonation}

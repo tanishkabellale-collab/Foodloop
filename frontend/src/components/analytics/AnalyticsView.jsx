@@ -1,20 +1,19 @@
 import React from 'react';
-import { BarChart3, Database, PieChart, Layers, Clock, CheckCircle } from 'lucide-react';
+import { BarChart3, Database, PieChart, Layers } from 'lucide-react';
 
 const CATEGORY_NAMES = {
-  cooked_meals: 'Cooked Meals',
-  fresh_produce: 'Fresh Produce',
+  cooked_meals: 'Cooked meals',
+  fresh_produce: 'Fresh produce',
   bakery: 'Bakery',
-  packaged_sealed: 'Packaged / Sealed'
+  packaged_sealed: 'Packaged / sealed',
 };
 
 const AnalyticsView = ({ donations = [] }) => {
   const total = donations.length;
-  const active = donations.filter(d => (d.status || 'available') === 'available' || d.status === 'submitted').length;
-  const accepted = donations.filter(d => d.status === 'accepted').length;
-  const collected = donations.filter(d => d.status === 'collected').length;
+  const active = donations.filter((d) => (d.status || 'available') === 'available' || d.status === 'submitted').length;
+  const accepted = donations.filter((d) => d.status === 'accepted').length;
+  const collected = donations.filter((d) => d.status === 'collected').length;
 
-  // Compute category distribution directly from donations array
   const categoryCounts = donations.reduce((acc, d) => {
     const cat = d.food_category || 'cooked_meals';
     acc[cat] = (acc[cat] || 0) + 1;
@@ -27,101 +26,92 @@ const AnalyticsView = ({ donations = [] }) => {
     return acc;
   }, {});
 
+  const vegPct = total > 0 ? Math.round(((dietaryCounts.vegetarian || 0) / total) * 100) : 0;
+  const nonVegPct = total > 0 ? Math.round(((dietaryCounts.non_vegetarian || 0) / total) * 100) : 0;
+
   return (
-    <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
-      {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
+    <div className="page-enter" style={{ maxWidth: '1120px', margin: '0 auto' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-primary)', marginBottom: '0.25rem' }}>
-            <BarChart3 size={24} />
-            <h1 style={{ fontSize: '1.85rem', marginBottom: 0 }}>Platform Activity Telemetry</h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-ink)', marginBottom: '4px' }}>
+            <BarChart3 size={20} strokeWidth={1.65} />
+            <h2 style={{ fontSize: '24px', margin: 0 }}>Platform telemetry</h2>
           </div>
-          <p style={{ fontSize: '0.95rem', margin: 0 }}>
-            Real-time status breakdowns and category distributions computed from registered records.
+          <p style={{ fontSize: '14px', margin: 0 }}>
+            Real-time status breakdowns and category shares computed from SQLite records
           </p>
         </div>
 
-        <div style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '0.4rem',
-          padding: '0.35rem 0.8rem',
-          backgroundColor: 'var(--color-bg-subtle)',
-          borderRadius: '9999px',
-          fontSize: '0.8rem',
-          fontWeight: 600,
-          color: 'var(--color-text-muted)',
-          border: '1px solid var(--color-border)'
-        }}>
-          <Database size={14} />
-          <span>Application &amp; Demo Data</span>
+        <div className="category-pill mono">
+          <Database size={13} strokeWidth={1.65} />
+          <span>SQLite live records</span>
         </div>
       </div>
 
-      {/* Top Level Numerical Metrics */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <div className="card" style={{ padding: '1.25rem' }}>
-          <div style={{ fontSize: '0.825rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>Total Registered</div>
-          <div className="tabular-nums" style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--color-primary)', marginTop: '0.35rem' }}>
-            {total}
-          </div>
-          <div style={{ fontSize: '0.785rem', color: 'var(--color-text-subtle)', marginTop: '0.25rem' }}>Active database records</div>
+      {/* 4 Compact Stat Cards */}
+      <div className="dash-stats-grid mb-6">
+        <div className="dash-stat-card">
+          <span className="dash-stat-label">Total registered</span>
+          <span className="dash-stat-value">{total}</span>
+          <span className="dash-stat-subtitle">Cumulative batches</span>
         </div>
 
-        <div className="card" style={{ padding: '1.25rem' }}>
-          <div style={{ fontSize: '0.825rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>Available Surplus</div>
-          <div className="tabular-nums" style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--color-accent)', marginTop: '0.35rem' }}>
-            {active}
-          </div>
-          <div style={{ fontSize: '0.785rem', color: 'var(--color-text-subtle)', marginTop: '0.25rem' }}>Ready for NGO claim</div>
+        <div className="dash-stat-card">
+          <span className="dash-stat-label">Available surplus</span>
+          <span className="dash-stat-value" style={{ color: 'var(--color-pastel-green-ink)' }}>{active}</span>
+          <span className="dash-stat-subtitle">Open for NGO claim</span>
         </div>
 
-        <div className="card" style={{ padding: '1.25rem' }}>
-          <div style={{ fontSize: '0.825rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>Claimed Pickups</div>
-          <div className="tabular-nums" style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--color-secondary)', marginTop: '0.35rem' }}>
-            {accepted}
-          </div>
-          <div style={{ fontSize: '0.785rem', color: 'var(--color-text-subtle)', marginTop: '0.25rem' }}>En route / scheduled</div>
+        <div className="dash-stat-card">
+          <span className="dash-stat-label">Claimed pickups</span>
+          <span className="dash-stat-value" style={{ color: 'var(--color-accent-ink)' }}>{accepted}</span>
+          <span className="dash-stat-subtitle">Scheduled or en route</span>
         </div>
 
-        <div className="card" style={{ padding: '1.25rem' }}>
-          <div style={{ fontSize: '0.825rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>Rescues Completed</div>
-          <div className="tabular-nums" style={{ fontSize: '2rem', fontWeight: 800, color: '#5D2A9E', marginTop: '0.35rem' }}>
-            {collected}
-          </div>
-          <div style={{ fontSize: '0.785rem', color: 'var(--color-text-subtle)', marginTop: '0.25rem' }}>Confirmed by recipient</div>
+        <div className="dash-stat-card">
+          <span className="dash-stat-label">Rescues completed</span>
+          <span className="dash-stat-value">{collected}</span>
+          <span className="dash-stat-subtitle">Verified delivered</span>
         </div>
       </div>
 
-      {/* Breakdown Panels */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        {/* Category Breakdown */}
+      {/* Asymmetric Breakdown Row */}
+      <div className="dash-main-grid">
         <div className="card">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
-            <Layers size={18} style={{ color: 'var(--color-primary)' }} />
-            <h3 style={{ fontSize: '1.15rem', marginBottom: 0 }}>Category Distribution</h3>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+            <Layers size={16} strokeWidth={1.65} style={{ color: 'var(--color-text-muted)' }} />
+            <h3 style={{ fontSize: '16px', margin: 0 }}>Category distribution</h3>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            {['cooked_meals', 'fresh_produce', 'bakery', 'packaged_sealed'].map(cat => {
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {['cooked_meals', 'fresh_produce', 'bakery', 'packaged_sealed'].map((cat) => {
               const count = categoryCounts[cat] || 0;
               const pct = total > 0 ? Math.round((count / total) * 100) : 0;
-              const label = CATEGORY_NAMES[cat];
+              const barColor =
+                cat === 'cooked_meals'
+                  ? 'var(--color-ink)'
+                  : cat === 'fresh_produce'
+                  ? '#82C27C'
+                  : cat === 'bakery'
+                  ? 'var(--color-accent)'
+                  : '#9A948A';
 
               return (
                 <div key={cat}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem', marginBottom: '0.35rem' }}>
-                    <span style={{ fontWeight: 600, color: 'var(--color-text-main)' }}>{label}</span>
-                    <span className="tabular-nums" style={{ color: 'var(--color-text-muted)' }}>{count} ({pct}%)</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: '6px' }}>
+                    <span style={{ fontWeight: 500, color: 'var(--color-ink)' }}>{CATEGORY_NAMES[cat]}</span>
+                    <span className="mono" style={{ color: 'var(--color-text-muted)' }}>{count} ({pct}%)</span>
                   </div>
-                  <div style={{ height: '8px', backgroundColor: 'var(--color-bg-subtle)', borderRadius: '9999px', overflow: 'hidden' }}>
-                    <div style={{ 
-                      width: `${pct}%`, 
-                      height: '100%', 
-                      backgroundColor: cat === 'cooked_meals' ? 'var(--color-primary)' : cat === 'fresh_produce' ? 'var(--color-secondary)' : cat === 'bakery' ? 'var(--color-warning)' : 'var(--color-accent)',
-                      borderRadius: '9999px',
-                      transition: 'width 0.5s ease'
-                    }} />
+                  <div style={{ height: '8px', backgroundColor: 'var(--color-bg-base)', borderRadius: '4px', overflow: 'hidden' }}>
+                    <div
+                      style={{
+                        width: `${pct}%`,
+                        height: '100%',
+                        backgroundColor: barColor,
+                        borderRadius: '4px',
+                        transition: 'width 320ms var(--ease-out)',
+                      }}
+                    />
                   </div>
                 </div>
               );
@@ -129,58 +119,47 @@ const AnalyticsView = ({ donations = [] }) => {
           </div>
         </div>
 
-        {/* Dietary Distribution */}
         <div className="card">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
-            <PieChart size={18} style={{ color: 'var(--color-primary)' }} />
-            <h3 style={{ fontSize: '1.15rem', marginBottom: 0 }}>Dietary Classification</h3>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+            <PieChart size={16} strokeWidth={1.65} style={{ color: 'var(--color-text-muted)' }} />
+            <h3 style={{ fontSize: '16px', margin: 0 }}>Dietary classification</h3>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem', marginBottom: '0.35rem' }}>
-                <span style={{ fontWeight: 600, color: 'var(--color-text-main)' }}>🟢 Vegetarian</span>
-                <span className="tabular-nums" style={{ color: 'var(--color-text-muted)' }}>
-                  {dietaryCounts.vegetarian || 0} ({total > 0 ? Math.round(((dietaryCounts.vegetarian || 0) / total) * 100) : 0}%)
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: '6px' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontWeight: 500, color: 'var(--color-ink)' }}>
+                  <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#56A450' }} />
+                  <span>Vegetarian</span>
+                </span>
+                <span className="mono" style={{ color: 'var(--color-text-muted)' }}>
+                  {dietaryCounts.vegetarian || 0} ({vegPct}%)
                 </span>
               </div>
-              <div style={{ height: '8px', backgroundColor: 'var(--color-bg-subtle)', borderRadius: '9999px', overflow: 'hidden' }}>
-                <div style={{ 
-                  width: `${total > 0 ? Math.round(((dietaryCounts.vegetarian || 0) / total) * 100) : 0}%`, 
-                  height: '100%', 
-                  backgroundColor: '#2F6126',
-                  borderRadius: '9999px'
-                }} />
+              <div style={{ height: '8px', backgroundColor: 'var(--color-bg-base)', borderRadius: '4px', overflow: 'hidden' }}>
+                <div style={{ width: `${vegPct}%`, height: '100%', backgroundColor: '#82C27C', borderRadius: '4px' }} />
               </div>
             </div>
 
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem', marginBottom: '0.35rem' }}>
-                <span style={{ fontWeight: 600, color: 'var(--color-text-main)' }}>🔴 Non-Vegetarian</span>
-                <span className="tabular-nums" style={{ color: 'var(--color-text-muted)' }}>
-                  {dietaryCounts.non_vegetarian || 0} ({total > 0 ? Math.round(((dietaryCounts.non_vegetarian || 0) / total) * 100) : 0}%)
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: '6px' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontWeight: 500, color: 'var(--color-ink)' }}>
+                  <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: 'var(--color-accent)' }} />
+                  <span>Non-vegetarian</span>
+                </span>
+                <span className="mono" style={{ color: 'var(--color-text-muted)' }}>
+                  {dietaryCounts.non_vegetarian || 0} ({nonVegPct}%)
                 </span>
               </div>
-              <div style={{ height: '8px', backgroundColor: 'var(--color-bg-subtle)', borderRadius: '9999px', overflow: 'hidden' }}>
-                <div style={{ 
-                  width: `${total > 0 ? Math.round(((dietaryCounts.non_vegetarian || 0) / total) * 100) : 0}%`, 
-                  height: '100%', 
-                  backgroundColor: '#A32A2A',
-                  borderRadius: '9999px'
-                }} />
+              <div style={{ height: '8px', backgroundColor: 'var(--color-bg-base)', borderRadius: '4px', overflow: 'hidden' }}>
+                <div style={{ width: `${nonVegPct}%`, height: '100%', backgroundColor: 'var(--color-accent)', borderRadius: '4px' }} />
               </div>
             </div>
 
-            <div style={{
-              padding: '0.85rem',
-              borderRadius: 'var(--radius-md)',
-              backgroundColor: 'var(--color-bg-base)',
-              fontSize: '0.8rem',
-              color: 'var(--color-text-muted)',
-              lineHeight: 1.5,
-              marginTop: '0.5rem'
-            }}>
-              Telemetry is computed strictly from active local donations in <code>backend/data.json</code>.
+            <div className="dash-info-note" style={{ marginTop: '4px' }}>
+              <span>
+                Telemetry is computed from persisted donation batches in SQLite, including historical legacy records.
+              </span>
             </div>
           </div>
         </div>
@@ -190,4 +169,3 @@ const AnalyticsView = ({ donations = [] }) => {
 };
 
 export default AnalyticsView;
-

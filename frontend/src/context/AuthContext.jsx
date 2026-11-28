@@ -1,11 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import { API_URL } from '../config';
+import { AuthContext } from './useAuth';
 
-const API_URL = 'http://localhost:5001/api';
 const TOKEN_KEY = 'foodloop_auth_token';
 const USER_KEY = 'foodloop_auth_user';
-
-const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(() => localStorage.getItem(TOKEN_KEY) || '');
@@ -131,11 +130,5 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuth must be used inside AuthProvider');
-  return ctx;
 };
 

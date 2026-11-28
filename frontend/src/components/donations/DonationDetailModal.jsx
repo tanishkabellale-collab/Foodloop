@@ -1,23 +1,21 @@
-import React from 'react';
-import { 
-  X, 
-  MapPin, 
-  Clock, 
-  Scale, 
-  Thermometer, 
-  Calendar, 
-  ExternalLink, 
-  Sparkles, 
-  CheckCircle2, 
-  AlertCircle,
-  AlertTriangle,
-  HelpCircle,
-  FileText
+import React, { useEffect } from 'react';
+import {
+  X,
+  MapPin,
+  Clock,
+  Scale,
+  Thermometer,
+  Calendar,
+  ExternalLink,
+  ScanEye,
+  CheckCircle2,
+  AlertTriangle
 } from 'lucide-react';
 import StatusBadge from '../common/StatusBadge';
 import CategoryPill from '../common/CategoryPill';
 import UrgencyTimer from '../common/UrgencyTimer';
 import PlaceholderImage from '../common/PlaceholderImage';
+import { resolveAssetUrl } from '../../config';
 
 const LIFECYCLE_STEPS = [
   { key: 'submitted', label: '1. Registered' },
@@ -26,12 +24,21 @@ const LIFECYCLE_STEPS = [
   { key: 'collected', label: '4. Collected' }
 ];
 
-const DonationDetailModal = ({ 
-  donation, 
-  onClose, 
-  onAccept, 
-  onCollect 
+const DonationDetailModal = ({
+  donation,
+  onClose,
+  onAccept,
+  onCollect
 }) => {
+  useEffect(() => {
+    if (!donation || !onClose) return undefined;
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [donation, onClose]);
+
   if (!donation) return null;
 
   const {
@@ -60,7 +67,7 @@ const DonationDetailModal = ({
     ai_assessment
   } = donation;
 
-  const displayName = title || foodName || 'Surplus Food Listing';
+  const displayName = title || foodName || 'Surplus food listing';
   const displayLocation = address_text || location || 'Address on file';
   const displayExpiry = pickup_available_until || expiryTime;
   const displayQuantity = quantityText || (typeof quantity === 'number' ? `${quantity} ${quantity_unit || 'servings'}` : `${quantity || 1} servings`);
@@ -69,11 +76,8 @@ const DonationDetailModal = ({
   const isAccepted = status === 'accepted';
   const isCollected = status === 'collected';
 
-  const resolvedImageUrl = image_url 
-    ? (image_url.startsWith('http') ? image_url : `http://localhost:5001${image_url}`)
-    : null;
+  const resolvedImageUrl = resolveAssetUrl(image_url);
 
-  // Determine current lifecycle step index
   const getStepIndex = (st) => {
     switch ((st || '').toLowerCase()) {
       case 'submitted': return 0;
@@ -85,44 +89,44 @@ const DonationDetailModal = ({
   };
 
   const currentStep = getStepIndex(status);
+  const isVeg = dietary_type === 'vegetarian';
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div 
-        className="modal-sheet" 
+    <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-label={displayName}>
+      <div
+        className="modal-sheet"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
         <div className="modal-header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
             <StatusBadge status={status} />
             <CategoryPill category={food_category} />
           </div>
-          <button 
-            type="button" 
-            className="btn btn-ghost" 
-            style={{ padding: '0.4rem', borderRadius: '50%' }}
+          <button
+            type="button"
+            className="btn btn-ghost"
+            aria-label="Close modal"
+            style={{ minHeight: '32px', padding: '6px', borderRadius: 'var(--radius-md)' }}
             onClick={onClose}
           >
-            <X size={20} />
+            <X size={18} strokeWidth={1.65} />
           </button>
         </div>
 
-        {/* Body */}
         <div className="modal-body">
           {/* Main Photo Banner */}
-          <div style={{ 
-            width: '100%', 
-            height: '240px', 
-            borderRadius: 'var(--radius-lg)', 
-            overflow: 'hidden', 
-            marginBottom: '1.25rem',
-            backgroundColor: 'var(--color-bg-subtle)' 
+          <div style={{
+            width: '100%',
+            height: '240px',
+            borderRadius: 'var(--radius-lg)',
+            overflow: 'hidden',
+            marginBottom: '20px',
+            backgroundColor: 'var(--color-bg-subtle)'
           }}>
             {resolvedImageUrl ? (
-              <img 
-                src={resolvedImageUrl} 
-                alt={displayName} 
+              <img
+                src={resolvedImageUrl}
+                alt={displayName}
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
@@ -134,7 +138,7 @@ const DonationDetailModal = ({
                 }}
               />
             ) : null}
-            <div 
+            <div
               className="modal-placeholder-fallback"
               style={{ display: resolvedImageUrl ? 'none' : 'block', width: '100%', height: '100%' }}
             >
@@ -143,27 +147,27 @@ const DonationDetailModal = ({
           </div>
 
           {/* Title & Core Meta */}
-          <div style={{ marginBottom: '1.5rem' }}>
-            <h2 style={{ fontSize: '1.6rem', color: 'var(--color-primary)', marginBottom: '0.35rem' }}>
+          <div style={{ marginBottom: '20px' }}>
+            <h2 style={{ fontSize: '20px', color: 'var(--color-ink)', marginBottom: '4px' }}>
               {displayName}
             </h2>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap', color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', color: 'var(--color-text-muted)', fontSize: '13px' }}>
               <span>Registered {registeredTime}</span>
-              &bull;
-              <span>Ref ID #{id}</span>
+              <span>·</span>
+              <span className="mono">Ref #{id}</span>
             </div>
           </div>
 
           {/* Status Timeline */}
-          <div style={{ 
-            padding: '1.25rem', 
-            backgroundColor: 'var(--color-bg-base)', 
-            borderRadius: 'var(--radius-md)', 
+          <div style={{
+            padding: '16px',
+            backgroundColor: 'var(--color-bg-base)',
+            borderRadius: 'var(--radius-md)',
             border: '1px solid var(--color-border)',
-            marginBottom: '1.5rem'
+            marginBottom: '20px'
           }}>
-            <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-primary)', marginBottom: '0.85rem' }}>
-              Status Lifecycle
+            <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-ink)', marginBottom: '12px' }}>
+              Status lifecycle
             </div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
               {LIFECYCLE_STEPS.map((step, idx) => {
@@ -172,26 +176,26 @@ const DonationDetailModal = ({
 
                 return (
                   <div key={step.key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, zIndex: 2 }}>
-                    <div style={{
+                    <div className="mono" style={{
                       width: '28px',
                       height: '28px',
                       borderRadius: '50%',
-                      backgroundColor: isPassed ? 'var(--color-primary)' : 'var(--color-bg-surface)',
+                      backgroundColor: isCurrent ? 'var(--color-accent)' : isPassed ? 'var(--color-ink)' : 'var(--color-bg-surface)',
                       color: isPassed ? '#FFFFFF' : 'var(--color-text-muted)',
-                      border: isPassed ? '2px solid var(--color-primary)' : '2px solid var(--color-border)',
+                      border: isCurrent ? '1px solid var(--color-accent)' : isPassed ? '1px solid var(--color-ink)' : '1px solid var(--color-border-strong)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: '0.75rem',
-                      fontWeight: 700,
-                      marginBottom: '0.35rem'
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      marginBottom: '6px'
                     }}>
-                      {isPassed ? <CheckCircle2 size={16} /> : idx + 1}
+                      {isPassed ? <CheckCircle2 size={14} strokeWidth={1.75} /> : idx + 1}
                     </div>
-                    <span style={{ 
-                      fontSize: '0.75rem', 
-                      fontWeight: isCurrent ? 700 : 500, 
-                      color: isCurrent ? 'var(--color-primary)' : 'var(--color-text-muted)',
+                    <span style={{
+                      fontSize: '12px',
+                      fontWeight: isCurrent ? 600 : 500,
+                      color: isCurrent ? 'var(--color-ink)' : 'var(--color-text-muted)',
                       textAlign: 'center'
                     }}>
                       {step.label}
@@ -204,181 +208,293 @@ const DonationDetailModal = ({
 
           {/* Structured Parameters Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-            <div className="card" style={{ padding: '1rem' }}>
-              <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>Quantity &amp; Volume</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 700, fontSize: '1.05rem', color: 'var(--color-primary)' }}>
-                <Scale size={18} style={{ color: 'var(--color-accent)' }} />
+            <div className="card" style={{ padding: '16px' }}>
+              <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginBottom: '4px' }}>Quantity and volume</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, fontSize: '15px', color: 'var(--color-ink)' }}>
+                <Scale size={16} strokeWidth={1.65} style={{ color: 'var(--color-accent)' }} />
                 <span>{displayQuantity}</span>
               </div>
               {packaging_type && (
-                <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '0.2rem' }}>
-                  Packaging: {packaging_type === 'sealed_covered' ? 'Sealed / Covered' : 'Open / Loose'}
+                <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
+                  Packaging: {packaging_type === 'sealed_covered' ? 'Sealed / covered' : 'Open / loose'}
                 </div>
               )}
             </div>
 
-            <div className="card" style={{ padding: '1rem' }}>
-              <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>Dietary Profile</div>
-              <div style={{ fontWeight: 700, fontSize: '1.05rem', color: dietary_type === 'vegetarian' ? '#2F6126' : '#A32A2A' }}>
-                {dietary_type === 'vegetarian' ? '🟢 Vegetarian' : '🔴 Non-Vegetarian'}
+            <div className="card" style={{ padding: '16px' }}>
+              <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginBottom: '4px' }}>Dietary profile</div>
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                fontWeight: 600,
+                fontSize: '15px',
+                color: isVeg ? 'var(--color-pastel-green-ink)' : 'var(--color-accent-ink)'
+              }}>
+                <span style={{
+                  width: '8px',
+                  height: '8px',
+                  borderRadius: '50%',
+                  backgroundColor: isVeg ? '#5E9E59' : 'var(--color-accent)',
+                  display: 'inline-block'
+                }} />
+                <span>{isVeg ? 'Vegetarian' : 'Non-vegetarian'}</span>
               </div>
               {allergens ? (
-                <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '0.2rem' }}>
+                <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
                   Allergens: {allergens}
                 </div>
               ) : (
-                <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '0.2rem' }}>
+                <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
                   No allergen warnings specified
                 </div>
               )}
             </div>
 
-            <div className="card" style={{ padding: '1rem' }}>
-              <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>Pickup Deadline</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-primary)' }}>
-                <Clock size={16} />
+            <div className="card" style={{ padding: '16px' }}>
+              <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginBottom: '4px' }}>Pickup deadline</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, fontSize: '14px', color: 'var(--color-ink)' }}>
+                <Clock size={15} strokeWidth={1.65} />
                 <span>{displayExpiry ? new Date(displayExpiry).toLocaleString() : 'N/A'}</span>
               </div>
-              <div style={{ marginTop: '0.35rem' }}>
+              <div style={{ marginTop: '8px' }}>
                 <UrgencyTimer pickupAvailableUntil={displayExpiry} />
               </div>
             </div>
 
-            {/* Conditionals */}
             {preparation_time && (
-              <div className="card" style={{ padding: '1rem' }}>
-                <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>Cooked Food Storage</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600, fontSize: '0.95rem', color: 'var(--color-primary)' }}>
-                  <Thermometer size={16} style={{ color: 'var(--color-primary)' }} />
-                  <span>{current_storage ? current_storage.replace(/_/g, ' ') : 'Room Temperature'}</span>
+              <div className="card" style={{ padding: '16px' }}>
+                <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginBottom: '4px' }}>Cooked food storage</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, fontSize: '14px', color: 'var(--color-ink)' }}>
+                  <Thermometer size={15} strokeWidth={1.65} />
+                  <span style={{ textTransform: 'capitalize' }}>
+                    {current_storage ? current_storage.replace(/_/g, ' ') : 'Room temperature'}
+                  </span>
                 </div>
-                <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '0.2rem' }}>
+                <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
                   Prepared: {preparation_time.replace(/_/g, ' ')}
                 </div>
               </div>
             )}
 
             {expiry_date && (
-              <div className="card" style={{ padding: '1rem' }}>
-                <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>Package Best Before</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600, fontSize: '0.95rem', color: 'var(--color-primary)' }}>
-                  <Calendar size={16} />
-                  <span>{expiry_date}</span>
+              <div className="card" style={{ padding: '16px' }}>
+                <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginBottom: '4px' }}>Package best before</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, fontSize: '14px', color: 'var(--color-ink)' }}>
+                  <Calendar size={15} strokeWidth={1.65} />
+                  <span className="mono">{expiry_date}</span>
                 </div>
               </div>
             )}
           </div>
 
           {/* Pickup Address & Maps */}
-          <div className="card mb-6" style={{ padding: '1.25rem', backgroundColor: 'var(--color-bg-base)' }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
-              <MapPin size={20} style={{ color: 'var(--color-primary)', marginTop: '2px', flexShrink: 0 }} />
+          <div className="card mb-6" style={{ padding: '16px', backgroundColor: 'var(--color-bg-base)' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+              <MapPin size={18} strokeWidth={1.65} style={{ color: 'var(--color-accent)', marginTop: '2px', flexShrink: 0 }} />
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-primary)', marginBottom: '0.2rem' }}>
-                  Pickup Address
+                <div style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-ink)', marginBottom: '4px' }}>
+                  Pickup address
                 </div>
-                <div style={{ fontSize: '0.9rem', color: 'var(--color-text-main)', marginBottom: '0.5rem' }}>
+                <div style={{ fontSize: '13px', color: 'var(--color-text-main)', marginBottom: '8px' }}>
                   {displayLocation}
                 </div>
                 {special_note && (
-                  <div style={{ fontSize: '0.825rem', color: 'var(--color-text-muted)', marginBottom: '0.75rem', fontStyle: 'italic' }}>
-                    Note: "{special_note}"
+                  <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginBottom: '12px', fontStyle: 'italic' }}>
+                    Note: &ldquo;{special_note}&rdquo;
                   </div>
                 )}
-                <a 
+                <a
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(displayLocation)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn-outline"
-                  style={{ fontSize: '0.8rem', padding: '0.35rem 0.75rem', display: 'inline-flex', gap: '0.4rem' }}
+                  className="btn btn-outline btn-sm"
                 >
-                  <ExternalLink size={13} />
-                  <span>Open Directions in Google Maps</span>
+                  <ExternalLink size={13} strokeWidth={1.65} />
+                  <span>Open directions in Maps</span>
                 </a>
               </div>
             </div>
           </div>
 
-          {/* AI Visual Condition Assessment (Real or Placeholder) */}
-          {ai_assessment && ai_assessment.assessment_status === 'completed' ? (
-            <div style={{
-              padding: '1.25rem',
-              borderRadius: 'var(--radius-lg)',
-              backgroundColor: ai_assessment.visual_assessment_label === 'visually_acceptable' ? 'var(--color-secondary-subtle)' : 'var(--color-danger-subtle)',
-              border: ai_assessment.visual_assessment_label === 'visually_acceptable' ? '1px solid rgba(91, 140, 81, 0.3)' : '1px solid rgba(217, 72, 59, 0.3)',
-              marginBottom: '1rem'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--color-primary)' }}>
-                  <Sparkles size={14} style={{ color: 'var(--color-accent)' }} />
-                  <span>AI Visual Condition Assessment</span>
-                </div>
-                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>
-                  Model: {ai_assessment.model_version || 'resnet18_v1.0.0_foodloop'}
-                </span>
-              </div>
+          {/* AI Visual Condition Assessment (Gemini / Groq / Hybrid ONNX / Legacy ONNX) */}
+          {ai_assessment && ai_assessment.assessment_status === 'completed' ? (() => {
+            const isLegacyOnnx = Boolean(ai_assessment.visual_assessment_label) && !ai_assessment.possible_food_description;
+            const isAcceptable = ai_assessment.visual_assessment_label === 'visually_acceptable';
+            const isDemo = Boolean(ai_assessment.is_demo_fallback);
+            const bgColor = isLegacyOnnx
+              ? (isAcceptable ? 'var(--color-pastel-green-subtle)' : 'var(--color-danger-subtle)')
+              : (isDemo ? 'var(--color-bg-base)' : 'var(--color-pastel-green-subtle)');
+            const borderColor = isLegacyOnnx
+              ? (isAcceptable ? '1px solid var(--color-pastel-green-strong)' : '1px solid rgba(194, 58, 43, 0.35)')
+              : (isDemo ? '1px solid var(--color-border-strong)' : '1px solid var(--color-pastel-green-strong)');
 
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
-                <div style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.4rem',
-                  fontWeight: 800,
-                  fontSize: '1.05rem',
-                  color: ai_assessment.visual_assessment_label === 'visually_acceptable' ? '#2F6126' : '#A32A2A'
-                }}>
-                  {ai_assessment.visual_assessment_label === 'visually_acceptable' ? (
-                    <>
-                      <CheckCircle2 size={18} />
-                      <span>✓ Visually Acceptable</span>
-                    </>
-                  ) : (
-                    <>
-                      <AlertTriangle size={18} />
-                      <span>⚠ Visually Unsuitable</span>
-                    </>
-                  )}
-                </div>
-                <div className="tabular-nums" style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-primary)' }}>
-                  {Math.round((ai_assessment.confidence_score || 0) * 100)}% confidence
-                </div>
-              </div>
-
-              {/* Probabilities Breakdown */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', marginBottom: '0.85rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.825rem' }}>
-                  <span style={{ color: 'var(--color-text-muted)' }}>Fresh appearance:</span>
-                  <span className="tabular-nums" style={{ fontWeight: 600, color: 'var(--color-primary)' }}>
-                    {Math.round((ai_assessment.probability_fresh || 0) * 100)}%
+            return (
+              <div style={{
+                padding: '16px',
+                borderRadius: 'var(--radius-lg)',
+                backgroundColor: bgColor,
+                border: borderColor,
+                marginBottom: '16px'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, fontSize: '13px', color: 'var(--color-ink)' }}>
+                    <ScanEye size={15} strokeWidth={1.65} style={{ color: 'var(--color-accent)' }} />
+                    <span>Visual condition screening</span>
+                  </div>
+                  <span className="mono" style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text-muted)' }}>
+                    {isDemo
+                      ? 'Fallback mode'
+                      : `Model: ${ai_assessment.model_version || 'gemini-vision'}`}
                   </span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.825rem' }}>
-                  <span style={{ color: 'var(--color-text-muted)' }}>Visible deterioration:</span>
-                  <span className="tabular-nums" style={{ fontWeight: 600, color: 'var(--color-primary)' }}>
-                    {Math.round((ai_assessment.probability_rotten || 0) * 100)}%
-                  </span>
+
+                {isLegacyOnnx ? (
+                  <>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                      <div style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        fontWeight: 600,
+                        fontSize: '15px',
+                        color: isAcceptable ? 'var(--color-pastel-green-ink)' : 'var(--color-danger)'
+                      }}>
+                        {isAcceptable ? (
+                          <>
+                            <CheckCircle2 size={16} strokeWidth={1.75} />
+                            <span>Visually acceptable</span>
+                          </>
+                        ) : (
+                          <>
+                            <AlertTriangle size={16} strokeWidth={1.75} />
+                            <span>Visually unsuitable</span>
+                          </>
+                        )}
+                      </div>
+                      <div className="mono" style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-ink)' }}>
+                        {Math.round((ai_assessment.confidence_score || 0) * 100)}% confidence
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '12px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
+                        <span style={{ color: 'var(--color-text-muted)' }}>Fresh appearance:</span>
+                        <span className="mono" style={{ fontWeight: 600, color: 'var(--color-ink)' }}>
+                          {Math.round((ai_assessment.probability_fresh || 0) * 100)}%
+                        </span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
+                        <span style={{ color: 'var(--color-text-muted)' }}>Visible deterioration:</span>
+                        <span className="mono" style={{ fontWeight: 600, color: 'var(--color-ink)' }}>
+                          {Math.round((ai_assessment.probability_rotten || 0) * 100)}%
+                        </span>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', flexWrap: 'wrap' }}>
+                      <span style={{ fontSize: '13px', color: 'var(--color-text-main)' }}>
+                        <strong style={{ color: 'var(--color-ink)', fontWeight: 600 }}>Suggested category:</strong>{' '}
+                        <span style={{ textTransform: 'capitalize' }}>
+                          {(ai_assessment.suggested_food_category || 'uncertain').replace(/_/g, ' ')}
+                        </span>
+                      </span>
+                      <span className="mono" style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-ink)' }}>
+                        Confidence: {ai_assessment.confidence_level || 'low'}
+                        {typeof ai_assessment.confidence_score === 'number'
+                          ? ` (${Math.round(ai_assessment.confidence_score * 100)}%)`
+                          : ''}
+                      </span>
+                    </div>
+
+                    {ai_assessment.possible_food_description && (
+                      <div style={{ fontSize: '13px', color: 'var(--color-text-main)', lineHeight: 1.45 }}>
+                        <strong style={{ color: 'var(--color-ink)', fontWeight: 600 }}>Visible description:</strong>{' '}
+                        {ai_assessment.possible_food_description}
+                      </div>
+                    )}
+
+                    {ai_assessment.onnx_produce_screening && (
+                      <div style={{
+                        padding: '8px 12px',
+                        borderRadius: 'var(--radius-sm)',
+                        backgroundColor: '#FFFFFF',
+                        border: '1px solid var(--color-border)',
+                        fontSize: '12px',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        flexWrap: 'wrap',
+                        gap: '8px'
+                      }}>
+                        <span>
+                          <strong style={{ fontWeight: 600 }}>Produce model screening:</strong>{' '}
+                          {(ai_assessment.onnx_produce_screening.visual_assessment_label || '').replace(/_/g, ' ')}
+                        </span>
+                        <span className="mono">
+                          {Math.round((ai_assessment.onnx_produce_screening.confidence_score || 0) * 100)}% confidence
+                        </span>
+                      </div>
+                    )}
+
+                    {ai_assessment.human_review_recommended && (
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: '8px',
+                        padding: '8px 12px',
+                        borderRadius: 'var(--radius-sm)',
+                        backgroundColor: 'var(--color-accent-subtle)',
+                        border: '1px solid rgba(234, 93, 26, 0.3)',
+                        fontSize: '12px',
+                        color: 'var(--color-ink)'
+                      }}>
+                        <AlertTriangle size={14} style={{ flexShrink: 0, marginTop: '2px', color: 'var(--color-accent-ink)' }} />
+                        <span>
+                          <strong style={{ fontWeight: 600 }}>Human review recommended:</strong>{' '}
+                          {ai_assessment.human_review_reason || 'Manual verification is required before dispatch.'}
+                        </span>
+                      </div>
+                    )}
+
+                    {Array.isArray(ai_assessment.packaging_condition_observations) && ai_assessment.packaging_condition_observations.length > 0 && (
+                      <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '12px', color: 'var(--color-text-muted)' }}>
+                        {ai_assessment.packaging_condition_observations.map((obs, i) => (
+                          <li key={i}>{obs}</li>
+                        ))}
+                      </ul>
+                    )}
+
+                    {Array.isArray(ai_assessment.missing_information) && ai_assessment.missing_information.length > 0 && (
+                      <div style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
+                        <strong style={{ color: 'var(--color-ink)', fontWeight: 600 }}>Missing info to verify:</strong>{' '}
+                        {ai_assessment.missing_information.join(' · ')}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', borderTop: '1px solid var(--color-border)', paddingTop: '8px', lineHeight: 1.45 }}>
+                  {ai_assessment.safety_disclaimer || ai_assessment.disclaimer || 'AI image assessment observes visible characteristics only. It does NOT certify food safety or detect pathogens, toxins, or internal spoilage.'}
                 </div>
               </div>
-
-              {/* Disclaimer */}
-              <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', borderTop: '1px solid rgba(0,0,0,0.08)', paddingTop: '0.65rem', lineHeight: 1.45 }}>
-                {ai_assessment.disclaimer || 'AI operational triage only. Does not certify food safety or detect pathogens, toxins, or internal spoilage.'}
-              </div>
-            </div>
-          ) : (
+            );
+          })() : (
             <div style={{
-              padding: '1.25rem',
+              padding: '16px',
               borderRadius: 'var(--radius-lg)',
-              border: '1.5px dashed var(--color-border)',
+              border: '1px dashed var(--color-border-strong)',
               backgroundColor: '#FFFFFF',
               display: 'flex',
               alignItems: 'flex-start',
-              gap: '0.85rem'
+              gap: '12px'
             }}>
               <div style={{
                 width: '36px',
                 height: '36px',
-                borderRadius: '8px',
+                borderRadius: 'var(--radius-md)',
                 backgroundColor: 'var(--color-accent-subtle)',
                 color: 'var(--color-accent)',
                 display: 'flex',
@@ -386,16 +502,14 @@ const DonationDetailModal = ({
                 justifyContent: 'center',
                 flexShrink: 0
               }}>
-                <Sparkles size={18} />
+                <ScanEye size={18} strokeWidth={1.65} />
               </div>
               <div>
-                <div style={{ fontWeight: 700, fontSize: '0.925rem', color: 'var(--color-primary)', marginBottom: '0.15rem' }}>
-                  AI Visual Condition Screening
+                <div style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-ink)', marginBottom: '2px' }}>
+                  Manual volunteer review
                 </div>
-                <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-                  {food_category === 'fresh_produce' 
-                    ? 'AI visual screening verified at registration (Model Contract: ResNet-18 Produce Triage).' 
-                    : 'AI visual assessment is validated exclusively for fresh produce (apples, bananas, oranges). Other food categories undergo standard volunteer inspection.'}
+                <div style={{ fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.45 }}>
+                  No AI assessment payload was attached at registration. Standard human inspection is required before dispatch.
                 </div>
               </div>
             </div>
@@ -404,42 +518,42 @@ const DonationDetailModal = ({
 
         {/* Footer Actions */}
         <div className="modal-footer">
-          <button 
-            type="button" 
-            className="btn btn-outline" 
+          <button
+            type="button"
+            className="btn btn-outline"
             onClick={onClose}
           >
             Close
           </button>
 
           {isCollected ? (
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: '#5D2A9E', fontWeight: 700, fontSize: '0.9rem' }}>
-              <CheckCircle2 size={18} />
-              <span>Rescue Completed</span>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: 'var(--color-pastel-green-ink)', fontWeight: 600, fontSize: '14px' }}>
+              <CheckCircle2 size={16} strokeWidth={1.75} />
+              <span>Rescue completed</span>
             </div>
-          ) : isAccepted ? (
-            <button 
-              type="button" 
-              className="btn btn-secondary"
+          ) : isAccepted && onCollect ? (
+            <button
+              type="button"
+              className="btn btn-pastel"
               onClick={() => {
-                onCollect && onCollect(id);
+                onCollect(id);
                 onClose();
               }}
             >
-              Mark Collected
+              Mark collected
             </button>
-          ) : (
-            <button 
-              type="button" 
-              className="btn btn-primary"
+          ) : !isAccepted && onAccept ? (
+            <button
+              type="button"
+              className="btn btn-orange"
               onClick={() => {
-                onAccept && onAccept(id);
+                onAccept(id);
                 onClose();
               }}
             >
-              Accept Donation
+              Accept donation
             </button>
-          )}
+          ) : null}
         </div>
       </div>
     </div>

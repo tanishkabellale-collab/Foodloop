@@ -6,8 +6,12 @@ const { verifyToken } = require('../services/authService');
 
 function extractBearerToken(req) {
   const header = req.headers.authorization || '';
-  if (!header.startsWith('Bearer ')) return null;
-  return header.slice(7).trim();
+  if (header.startsWith('Bearer ')) return header.slice(7).trim();
+  // Support query token exclusively for Server-Sent Events (EventSource cannot set custom headers)
+  if (req.path === '/api/events' && typeof req.query?.token === 'string' && req.query.token.trim()) {
+    return req.query.token.trim();
+  }
+  return null;
 }
 
 /**
@@ -25,7 +29,7 @@ function createAuthMiddleware(authStore) {
     }
 
     try {
-      const claims = verifyToken(token);
+      const claims = verifyToken(token, authStore?.db || null);
       const user = authStore ? authStore.findById(claims.sub) : null;
       if (authStore && !user) {
         return res.status(401).json({

@@ -19,9 +19,14 @@
   "type": "commonjs",
   "dependencies": {
     "cors": "^2.8.6",
+    "dotenv": "^18.0.10",
     "express": "^5.2.1",
     "multer": "^2.5.0",
     "onnxruntime-node": "^1.20.0",
     "sharp": "^0.33.5"
+  },
+  "allowScripts": {
+    "onnxruntime-node@1.31.1": true,
+    "sharp@0.33.5": true
   }
 }

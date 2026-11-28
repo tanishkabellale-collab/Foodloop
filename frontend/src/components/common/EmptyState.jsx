@@ -11,39 +11,40 @@ const EmptyState = ({
   return (
     <div style={{
       textAlign: 'center',
-      padding: '3.5rem 1.5rem',
+      padding: '48px 24px',
       backgroundColor: 'var(--color-bg-surface)',
       borderRadius: 'var(--radius-lg)',
-      border: '1.5px dashed var(--color-border)',
+      border: '1px dashed var(--color-border-strong)',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      gap: '0.75rem',
-      margin: '1.5rem 0'
+      gap: '12px',
+      margin: '24px 0'
     }}>
       <div style={{
-        width: '54px',
-        height: '54px',
+        width: '48px',
+        height: '48px',
         borderRadius: '50%',
         backgroundColor: 'var(--color-bg-subtle)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        color: 'var(--color-primary)',
-        marginBottom: '0.25rem'
+        color: 'var(--color-ink)',
+        marginBottom: '4px'
       }}>
-        <Icon size={26} />
+        <Icon size={22} strokeWidth={1.65} />
       </div>
-      <h3 style={{ fontSize: '1.2rem', marginBottom: 0 }}>{title}</h3>
-      <p style={{ maxWidth: '420px', fontSize: '0.925rem', margin: 0 }}>
+      <h3 style={{ fontSize: '18px', marginBottom: 0 }}>{title}</h3>
+      <p style={{ maxWidth: '420px', fontSize: '14px', margin: 0 }}>
         {description}
       </p>
       {actionLabel && onAction && (
-        <button 
-          onClick={onAction} 
+        <button
+          type="button"
+          onClick={onAction}
           className="btn btn-outline"
-          style={{ marginTop: '0.75rem' }}
+          style={{ marginTop: '12px' }}
         >
           {actionLabel}
         </button>

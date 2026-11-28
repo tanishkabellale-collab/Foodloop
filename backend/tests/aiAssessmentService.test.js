@@ -47,6 +47,7 @@ test('4. Uses clearly labeled Demo/Fallback mode when GEMINI_API_KEY is missing'
   const result = await assessFoodImage(buf, 'cooked_meals', {
     mimeType: 'image/jpeg',
     apiKey: '',
+    groqApiKey: '',
   });
 
   assert.equal(result.assessment_status, 'completed');
@@ -136,5 +137,46 @@ test('6. Handles AI provider HTTP errors and timeouts gracefully', async () => {
       }),
     (err) => err.code === 'AI_TIMEOUT'
   );
+});
+
+test('7. Groq Vision fallback parses structured observations safely', async () => {
+  const buf = await createSampleJpegBuffer();
+  const mockFetch = async () => ({
+    ok: true,
+    json: async () => ({
+      choices: [
+        {
+          message: {
+            content: JSON.stringify({
+              suggested_food_category: 'bakery',
+              possible_food_description: 'Appears to be packaged bakery buns.',
+              packaging_condition_observations: ['Sealed plastic wrapper intact'],
+              suggested_dietary_labels: ['Appears vegetarian (unverified)'],
+              missing_information: ['Bake date and allergen label'],
+              confidence_level: 'medium',
+              confidence_score: 0.78,
+              human_review_recommended: true,
+              human_review_reason: 'Verify bake date manually.',
+            }),
+          },
+        },
+      ],
+    }),
+  });
+
+  const result = await assessFoodImage(buf, 'bakery', {
+    mimeType: 'image/jpeg',
+    apiKey: '',
+    groqApiKey: 'test-groq-key',
+    groqModel: 'qwen/qwen3.8-27b',
+    fetchImpl: mockFetch,
+  });
+
+  assert.equal(result.assessment_status, 'completed');
+  assert.equal(result.assessment_mode, 'groq_vision_ai');
+  assert.equal(result.model_version, 'qwen/qwen3.8-27b');
+  assert.equal(result.suggested_food_category, 'bakery');
+  assert.equal(result.confidence_score, 0.78);
+  assert.equal(result.safety_disclaimer, SAFETY_DISCLAIMER);
 });
 

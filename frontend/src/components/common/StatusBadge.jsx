@@ -8,48 +8,51 @@ const StatusBadge = ({ status = 'available', size = 'normal' }) => {
     available: {
       label: 'Available',
       className: 'status-badge-available',
-      icon: <CheckCircle2 size={12} />
+      icon: <CheckCircle2 size={12} strokeWidth={1.75} />,
     },
     submitted: {
       label: 'Submitted',
       className: 'status-badge-submitted',
-      icon: <Clock size={12} />
+      icon: <Clock size={12} strokeWidth={1.75} />,
     },
     accepted: {
-      label: 'Claimed / Accepted',
+      label: 'Claimed',
       className: 'status-badge-accepted',
-      icon: <PackageCheck size={12} />
+      icon: <PackageCheck size={12} strokeWidth={1.75} />,
     },
     collected: {
       label: 'Collected',
       className: 'status-badge-collected',
-      icon: <CheckCircle2 size={12} />
+      icon: <CheckCircle2 size={12} strokeWidth={1.75} />,
     },
     under_review: {
-      label: 'Under Review',
+      label: 'Under review',
       className: 'status-badge-submitted',
-      icon: <Clock size={12} />
+      icon: <Clock size={12} strokeWidth={1.75} />,
     },
     rejected: {
       label: 'Declined',
       className: 'status-badge-neutral',
-      icon: <AlertCircle size={12} />
+      icon: <AlertCircle size={12} strokeWidth={1.75} />,
     },
     cancelled: {
       label: 'Cancelled',
       className: 'status-badge-neutral',
-      icon: <AlertCircle size={12} />
-    }
+      icon: <AlertCircle size={12} strokeWidth={1.75} />,
+    },
   };
 
   const current = config[normStatus] || {
     label: normStatus,
     className: 'status-badge-neutral',
-    icon: <HelpCircle size={12} />
+    icon: <HelpCircle size={12} strokeWidth={1.75} />,
   };
 
   return (
-    <span className={`status-badge ${current.className}`} style={size === 'small' ? { fontSize: '0.7rem', padding: '0.15rem 0.5rem' } : {}}>
+    <span
+      className={`status-badge ${current.className}`}
+      style={size === 'small' ? { fontSize: '11px', padding: '2px 8px' } : undefined}
+    >
       {current.icon}
       <span>{current.label}</span>
     </span>
@@ -57,4 +60,3 @@ const StatusBadge = ({ status = 'available', size = 'normal' }) => {
 };
 
 export default StatusBadge;
-

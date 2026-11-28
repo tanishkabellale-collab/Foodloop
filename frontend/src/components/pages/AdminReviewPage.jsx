@@ -9,7 +9,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 
-const API_URL = 'http://localhost:5001/api';
+import { API_URL } from '../../config';
 
 const AdminReviewPage = () => {
   const [overview, setOverview] = useState(null);
@@ -18,22 +18,43 @@ const AdminReviewPage = () => {
   const [filter, setFilter] = useState('flagged'); // 'flagged' | 'all'
   const [actionLoadingId, setActionLoadingId] = useState(null);
 
+  const loadOverview = useCallback(async () => {
+    const res = await axios.get(`${API_URL}/admin/overview`);
+    return res.data;
+  }, []);
+
   const fetchOverview = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
-      const res = await axios.get(`${API_URL}/admin/overview`);
-      setOverview(res.data);
+      const data = await loadOverview();
+      setOverview(data);
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to load admin review queue.');
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [loadOverview]);
 
   useEffect(() => {
-    fetchOverview();
-  }, [fetchOverview]);
+    let active = true;
+    loadOverview()
+      .then((data) => {
+        if (active) {
+          setOverview(data);
+          setError('');
+        }
+      })
+      .catch((err) => {
+        if (active) setError(err.response?.data?.error || 'Failed to load admin review queue.');
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [loadOverview]);
 
   const handleReviewDecision = async (donationId, decision) => {
     setActionLoadingId(donationId);
@@ -66,41 +87,41 @@ const AdminReviewPage = () => {
       : overview?.all_donations || [];
 
   return (
-    <div className="matches-page">
+    <div className="matches-page page-enter">
       <div className="matches-header-card">
         <div className="matches-header-top">
           <div>
             <div className="matches-badge">
-              <ShieldCheck size={14} />
-              <span>RBAC Protected • Admin Oversight</span>
+              <ShieldCheck size={14} strokeWidth={1.65} />
+              <span>Admin oversight queue</span>
             </div>
-            <h2 className="matches-title">Admin Review Dashboard</h2>
+            <h2 className="matches-title">Admin review</h2>
             <p className="matches-subtitle">
-              Inspect flagged or AI-recommended listings, verify expired deadlines, and record auditable human review decisions.
+              Inspect flagged or AI-recommended listings, verify cutoff deadlines, and record auditable human review decisions.
             </p>
           </div>
           <button type="button" className="btn btn-secondary" onClick={fetchOverview} disabled={loading}>
             <RefreshCw size={15} className={loading ? 'spin-icon' : ''} />
-            <span>Refresh Queue</span>
+            <span>Refresh queue</span>
           </button>
         </div>
 
         <div className="admin-stats-row">
           <div className="admin-stat-box">
-            <span>Total Listings</span>
-            <strong>{stats.total_donations ?? 0}</strong>
+            <span>Total listings</span>
+            <strong className="tabular-nums">{stats.total_donations ?? 0}</strong>
           </div>
           <div className="admin-stat-box">
-            <span>Flagged / Needs Review</span>
-            <strong style={{ color: '#D97706' }}>{stats.flagged_count ?? 0}</strong>
+            <span>Flagged / needs review</span>
+            <strong className="tabular-nums" style={{ color: 'var(--color-accent-ink)' }}>{stats.flagged_count ?? 0}</strong>
           </div>
           <div className="admin-stat-box">
             <span>Reviewed</span>
-            <strong style={{ color: '#2E7D32' }}>{stats.reviewed_count ?? 0}</strong>
+            <strong className="tabular-nums" style={{ color: 'var(--color-pastel-green-ink)' }}>{stats.reviewed_count ?? 0}</strong>
           </div>
           <div className="admin-stat-box">
-            <span>Pending Review</span>
-            <strong>{stats.pending_review_count ?? 0}</strong>
+            <span>Pending review</span>
+            <strong className="tabular-nums">{stats.pending_review_count ?? 0}</strong>
           </div>
         </div>
       </div>

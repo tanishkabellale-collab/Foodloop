@@ -4,8 +4,9 @@
  * - Password hashing: Node built-in crypto.scryptSync with random 16-byte salt
  *   and crypto.timingSafeEqual verification.
  * - Tokens: Standard HMAC-SHA256 JWT (RFC 7519) with exp & jti claims.
- * - Token revocation: In-memory blacklist on logout (cleans expired entries).
- * - Persistence: JSON file at backend/data/users.json (never exposes password_hash).
+ * - Token revocation: Persisted in SQLite revoked_tokens when DB is attached,
+ *   with automatic expired entry pruning and in-memory fallback for standalone tests.
+ * - Persistence: SQLite users & ngos tables (or JSON fallback for isolated unit tests).
  */
 
 const crypto = require('crypto');
@@ -15,11 +16,12 @@ const path = require('path');
 const ROLES = {
   DONOR: 'DONOR',
   NGO: 'NGO',
+  VOLUNTEER: 'VOLUNTEER',
   ADMIN: 'ADMIN',
 };
 
 const VALID_ROLES = Object.values(ROLES);
-const PUBLIC_REGISTER_ROLES = [ROLES.DONOR, ROLES.NGO];
+const PUBLIC_REGISTER_ROLES = [ROLES.DONOR, ROLES.NGO, ROLES.VOLUNTEER];
 
 const DEFAULT_USERS_FILE = path.join(__dirname, '..', 'data', 'users.json');
 const TOKEN_TTL_SECONDS = parseInt(process.env.JWT_EXPIRES_IN_SECONDS, 10) || 86400;
@@ -31,7 +33,6 @@ function getJwtSecret() {
   if (process.env.NODE_ENV === 'production') {
     throw new Error('JWT_SECRET environment variable must be set (min 16 chars) in production.');
   }
-  // Local development fallback only — never used when JWT_SECRET is set
   return 'foodloop-local-dev-secret-change-in-production';
 }
 
@@ -64,14 +65,25 @@ function base64UrlDecode(str) {
   return Buffer.from(padded, 'base64').toString('utf8');
 }
 
-// Track revoked token JTIs on logout -> Map<jti, expEpochSeconds>
-const revokedTokens = new Map();
+const memoryRevokedTokens = new Map();
 
-function pruneRevokedTokens() {
+function pruneRevokedTokens(db) {
   const nowSec = Math.floor(Date.now() / 1000);
-  for (const [jti, exp] of revokedTokens.entries()) {
-    if (exp <= nowSec) revokedTokens.delete(jti);
+  if (db && db.sqlite) {
+    db.sqlite.prepare('DELETE FROM revoked_tokens WHERE exp <= ?').run(nowSec);
   }
+  for (const [jti, exp] of memoryRevokedTokens.entries()) {
+    if (exp <= nowSec) memoryRevokedTokens.delete(jti);
+  }
+}
+
+function isTokenRevoked(jti, db) {
+  if (!jti) return false;
+  if (db && db.sqlite) {
+    const row = db.sqlite.prepare('SELECT jti FROM revoked_tokens WHERE jti = ?').get(jti);
+    if (row) return true;
+  }
+  return memoryRevokedTokens.has(jti);
 }
 
 function signToken(user, options = {}) {
@@ -105,7 +117,7 @@ function signToken(user, options = {}) {
   };
 }
 
-function verifyToken(token) {
+function verifyToken(token, db = null) {
   if (!token || typeof token !== 'string') {
     const err = new Error('Authentication token is missing.');
     err.code = 'TOKEN_MISSING';
@@ -135,7 +147,7 @@ function verifyToken(token) {
   let claims;
   try {
     claims = JSON.parse(base64UrlDecode(payload));
-  } catch (e) {
+  } catch {
     const err = new Error('Invalid authentication token payload.');
     err.code = 'TOKEN_INVALID';
     throw err;
@@ -148,7 +160,7 @@ function verifyToken(token) {
     throw err;
   }
 
-  if (claims.jti && revokedTokens.has(claims.jti)) {
+  if (claims.jti && isTokenRevoked(claims.jti, db)) {
     const err = new Error('This session has been logged out. Please sign in again.');
     err.code = 'TOKEN_REVOKED';
     throw err;
@@ -157,15 +169,22 @@ function verifyToken(token) {
   return claims;
 }
 
-function revokeToken(token) {
+function revokeToken(token, db = null) {
   try {
-    const claims = verifyToken(token);
+    const claims = verifyToken(token, db);
     if (claims.jti && claims.exp) {
-      pruneRevokedTokens();
-      revokedTokens.set(claims.jti, claims.exp);
+      pruneRevokedTokens(db);
+      if (db && db.sqlite) {
+        db.sqlite.prepare('INSERT OR REPLACE INTO revoked_tokens (jti, exp) VALUES (?, ?)').run(
+          claims.jti,
+          claims.exp
+        );
+      } else {
+        memoryRevokedTokens.set(claims.jti, claims.exp);
+      }
     }
     return true;
-  } catch (e) {
+  } catch {
     return false;
   }
 }
@@ -184,57 +203,102 @@ function sanitizeUser(user) {
   };
 }
 
-function createAuthStore(usersFilePath = DEFAULT_USERS_FILE) {
-  let users = [];
+function buildDemoSeedList() {
+  return [
+    {
+      id: 'demo-user-donor',
+      name: 'RSCOE Canteen (Demo Donor)',
+      email: 'donor.demo@foodloop.local',
+      password: process.env.DEMO_DONOR_PASSWORD || 'DonorDemo!2026',
+      role: ROLES.DONOR,
+      organization: 'JSPM RSCOE Campus Canteen',
+      ngo_id: null,
+      is_demo: true,
+    },
+    {
+      id: 'demo-user-ngo',
+      name: 'Annapurna Kitchen (Demo NGO)',
+      email: 'ngo.demo@foodloop.local',
+      password: process.env.DEMO_NGO_PASSWORD || 'NgoDemo!2026',
+      role: ROLES.NGO,
+      organization: 'Annapurna Community Kitchen',
+      ngo_id: 'demo-ngo-1',
+      is_demo: true,
+    },
+    {
+      id: 'demo-user-volunteer',
+      name: 'Rohan Kulkarni (Demo Volunteer)',
+      email: 'volunteer.demo@foodloop.local',
+      password: process.env.DEMO_VOLUNTEER_PASSWORD || 'VolunteerDemo!2026',
+      role: ROLES.VOLUNTEER,
+      organization: 'FoodLoop Campus Fleet',
+      ngo_id: null,
+      is_demo: true,
+    },
+    {
+      id: 'demo-user-admin',
+      name: 'FoodLoop Reviewer (Demo Admin)',
+      email: 'admin.demo@foodloop.local',
+      password: process.env.DEMO_ADMIN_PASSWORD || 'AdminDemo!2026',
+      role: ROLES.ADMIN,
+      organization: 'FoodLoop Quality Oversight',
+      ngo_id: null,
+      is_demo: true,
+    },
+  ];
+}
 
-  function saveUsers() {
+/**
+ * Create an AuthStore backed by SQLite (preferred) or legacy JSON path.
+ */
+function createAuthStore(dbOrPath = DEFAULT_USERS_FILE) {
+  const isSqliteDb = Boolean(dbOrPath && typeof dbOrPath === 'object' && dbOrPath.sqlite);
+  const db = isSqliteDb ? dbOrPath : null;
+  const usersFilePath = !isSqliteDb ? (dbOrPath || DEFAULT_USERS_FILE) : null;
+
+  let jsonUsers = [];
+
+  function saveJsonUsers() {
     const dir = path.dirname(usersFilePath);
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
-    fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
+    fs.writeFileSync(usersFilePath, JSON.stringify(jsonUsers, null, 2));
   }
 
   function seedDemoUsers() {
     if (process.env.NODE_ENV === 'production') return;
+    const demoAccounts = buildDemoSeedList();
 
-    const demoAccounts = [
-      {
-        id: 'demo-user-donor',
-        name: 'RSCOE Canteen (Demo Donor)',
-        email: 'donor.demo@foodloop.local',
-        password: process.env.DEMO_DONOR_PASSWORD || 'DonorDemo!2026',
-        role: ROLES.DONOR,
-        organization: 'JSPM RSCOE Campus Canteen',
-        ngo_id: null,
-        is_demo: true,
-      },
-      {
-        id: 'demo-user-ngo',
-        name: 'Annapurna Kitchen (Demo NGO)',
-        email: 'ngo.demo@foodloop.local',
-        password: process.env.DEMO_NGO_PASSWORD || 'NgoDemo!2026',
-        role: ROLES.NGO,
-        organization: 'Annapurna Community Kitchen',
-        ngo_id: 'demo-ngo-1',
-        is_demo: true,
-      },
-      {
-        id: 'demo-user-admin',
-        name: 'FoodLoop Reviewer (Demo Admin)',
-        email: 'admin.demo@foodloop.local',
-        password: process.env.DEMO_ADMIN_PASSWORD || 'AdminDemo!2026',
-        role: ROLES.ADMIN,
-        organization: 'FoodLoop Quality Oversight',
-        ngo_id: null,
-        is_demo: true,
-      },
-    ];
+    if (db) {
+      db.withTransaction(() => {
+        const existsStmt = db.sqlite.prepare('SELECT id FROM users WHERE email = ?');
+        const insertStmt = db.sqlite.prepare(`
+          INSERT INTO users (id, name, email, password_hash, role, organization, ngo_id, is_demo, created_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?)
+        `);
+        for (const demo of demoAccounts) {
+          if (!existsStmt.get(demo.email)) {
+            insertStmt.run(
+              demo.id,
+              demo.name,
+              demo.email,
+              hashPassword(demo.password),
+              demo.role,
+              demo.organization,
+              demo.ngo_id,
+              new Date().toISOString()
+            );
+          }
+        }
+      });
+      return;
+    }
 
     let changed = false;
     for (const demo of demoAccounts) {
-      if (!users.some((u) => u.email === demo.email)) {
-        users.push({
+      if (!jsonUsers.some((u) => u.email === demo.email)) {
+        jsonUsers.push({
           id: demo.id,
           name: demo.name,
           email: demo.email,
@@ -248,21 +312,34 @@ function createAuthStore(usersFilePath = DEFAULT_USERS_FILE) {
         changed = true;
       }
     }
-    if (changed) saveUsers();
+    if (changed) saveJsonUsers();
   }
 
-  try {
-    if (fs.existsSync(usersFilePath)) {
-      users = JSON.parse(fs.readFileSync(usersFilePath, 'utf8'));
-      if (!Array.isArray(users)) users = [];
+  if (!db && usersFilePath) {
+    try {
+      if (fs.existsSync(usersFilePath)) {
+        jsonUsers = JSON.parse(fs.readFileSync(usersFilePath, 'utf8'));
+        if (!Array.isArray(jsonUsers)) jsonUsers = [];
+      }
+    } catch (err) {
+      console.error('Error reading users file:', err);
+      jsonUsers = [];
     }
-  } catch (err) {
-    console.error('Error reading users file:', err);
-    users = [];
   }
   seedDemoUsers();
 
-  function registerUser({ name, email, password, role, organization }) {
+  function registerUser({
+    name,
+    email,
+    password,
+    role,
+    organization,
+    location_text,
+    accepted_categories,
+    available_capacity_servings,
+    latitude,
+    longitude,
+  }) {
     const cleanName = (name || '').trim();
     const cleanEmail = (email || '').trim().toLowerCase();
     const upperRole = (role || ROLES.DONOR).trim().toUpperCase();
@@ -293,31 +370,88 @@ function createAuthStore(usersFilePath = DEFAULT_USERS_FILE) {
     }
 
     if (!PUBLIC_REGISTER_ROLES.includes(upperRole)) {
-      const err = new Error(`Role must be either ${PUBLIC_REGISTER_ROLES.join(' or ')}.`);
+      const err = new Error(`Role must be one of ${PUBLIC_REGISTER_ROLES.join(', ')}.`);
       err.status = 400;
       throw err;
     }
 
-    if (users.some((u) => u.email === cleanEmail)) {
+    const existing = db
+      ? db.sqlite.prepare('SELECT id FROM users WHERE email = ?').get(cleanEmail)
+      : jsonUsers.find((u) => u.email === cleanEmail);
+
+    if (existing) {
       const err = new Error('An account with this email address already exists.');
       err.status = 409;
       throw err;
     }
 
+    const userId = `user-${crypto.randomUUID()}`;
+    const cleanOrg = (organization || '').trim() || null;
+    const newNgoId = upperRole === ROLES.NGO ? `ngo-${crypto.randomUUID().slice(0, 8)}` : null;
+    const nowISO = new Date().toISOString();
+
     const newUser = {
-      id: `user-${crypto.randomUUID()}`,
+      id: userId,
       name: cleanName,
       email: cleanEmail,
       password_hash: hashPassword(password),
       role: upperRole,
-      organization: (organization || '').trim() || null,
-      ngo_id: null,
+      organization: cleanOrg,
+      ngo_id: newNgoId,
       is_demo: false,
-      created_at: new Date().toISOString(),
+      created_at: nowISO,
     };
 
-    users.push(newUser);
-    saveUsers();
+    if (db) {
+      db.withTransaction(() => {
+        db.sqlite.prepare(`
+          INSERT INTO users (id, name, email, password_hash, role, organization, ngo_id, is_demo, created_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?, 0, ?)
+        `).run(
+          newUser.id,
+          newUser.name,
+          newUser.email,
+          newUser.password_hash,
+          newUser.role,
+          newUser.organization,
+          newUser.ngo_id,
+          newUser.created_at
+        );
+
+        // Automatically create a matching-ready NGO profile for newly registered NGO users
+        if (upperRole === ROLES.NGO && newNgoId) {
+          const locText = (location_text || '').trim();
+          db.upsertNgo({
+            id: newNgoId,
+            owner_user_id: userId,
+            name: cleanOrg || cleanName,
+            organization_type: 'Receiving NGO',
+            is_demo: false,
+            accepted_categories: Array.isArray(accepted_categories) && accepted_categories.length > 0
+              ? accepted_categories
+              : ['cooked_meals', 'fresh_produce', 'bakery', 'packaged_sealed'],
+            accepted_dietary_types: ['vegetarian', 'non_vegetarian'],
+            excluded_allergens: [],
+            available_capacity_servings:
+              typeof available_capacity_servings === 'number' ? available_capacity_servings : 50,
+            max_capacity_servings:
+              typeof available_capacity_servings === 'number' ? available_capacity_servings : 50,
+            location_text: locText,
+            service_areas: locText ? [locText] : [],
+            latitude: typeof latitude === 'number' ? latitude : null,
+            longitude: typeof longitude === 'number' ? longitude : null,
+            pickup_capable: true,
+            operational_status: 'active',
+            response_time_minutes: 45,
+            verified: false,
+            created_at: nowISO,
+          });
+        }
+      });
+    } else {
+      jsonUsers.push(newUser);
+      saveJsonUsers();
+    }
 
     const safeUser = sanitizeUser(newUser);
     const { token, expiresAt } = signToken(newUser);
@@ -332,7 +466,10 @@ function createAuthStore(usersFilePath = DEFAULT_USERS_FILE) {
       throw err;
     }
 
-    const user = users.find((u) => u.email === cleanEmail);
+    const user = db
+      ? db.sqlite.prepare('SELECT * FROM users WHERE email = ?').get(cleanEmail)
+      : jsonUsers.find((u) => u.email === cleanEmail);
+
     if (!user || !verifyPassword(password, user.password_hash)) {
       const err = new Error('Invalid email or password.');
       err.status = 401;
@@ -345,13 +482,18 @@ function createAuthStore(usersFilePath = DEFAULT_USERS_FILE) {
   }
 
   function findById(id) {
-    const user = users.find((u) => u.id === id);
+    const user = db
+      ? db.sqlite.prepare('SELECT * FROM users WHERE id = ?').get(String(id))
+      : jsonUsers.find((u) => u.id === id);
     return sanitizeUser(user);
   }
 
   function listDemoAccounts() {
     if (process.env.NODE_ENV === 'production') return [];
-    return users.filter((u) => u.is_demo).map(sanitizeUser);
+    const list = db
+      ? db.sqlite.prepare('SELECT * FROM users WHERE is_demo = 1 ORDER BY role ASC').all()
+      : jsonUsers.filter((u) => u.is_demo);
+    return list.map(sanitizeUser);
   }
 
   return {
@@ -359,12 +501,14 @@ function createAuthStore(usersFilePath = DEFAULT_USERS_FILE) {
     loginUser,
     findById,
     listDemoAccounts,
+    db,
   };
 }
 
 module.exports = {
   ROLES,
   VALID_ROLES,
+  PUBLIC_REGISTER_ROLES,
   hashPassword,
   verifyPassword,
   signToken,
@@ -373,4 +517,3 @@ module.exports = {
   sanitizeUser,
   createAuthStore,
 };
-

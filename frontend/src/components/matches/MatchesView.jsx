@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import {
-  Sparkles,
+  GitFork,
   CheckCircle2,
   AlertTriangle,
   Info,
@@ -17,41 +17,41 @@ import {
   RefreshCw,
   ArrowRight,
   HelpCircle,
+  Eye,
 } from 'lucide-react';
-
-const API_URL = 'http://localhost:5001/api';
+import { API_URL } from '../../config';
 
 const TIER_STYLES = {
   excellent: {
-    bg: 'var(--color-secondary-subtle)',
-    color: 'var(--color-primary)',
-    border: 'rgba(91, 140, 81, 0.35)',
-    bar: '#2E7D32',
+    bg: 'var(--color-pastel-green)',
+    color: 'var(--color-pastel-green-ink)',
+    border: 'var(--color-pastel-green-strong)',
+    bar: '#6FB468',
   },
   good: {
-    bg: '#E8F3EE',
-    color: '#1E4D3E',
-    border: 'rgba(30, 77, 62, 0.25)',
-    bar: '#1E4D3E',
+    bg: 'var(--color-bg-subtle)',
+    color: 'var(--color-ink)',
+    border: 'var(--color-border-strong)',
+    bar: '#111110',
   },
   possible: {
-    bg: 'var(--color-warning-subtle)',
-    color: '#9A6700',
-    border: 'rgba(231, 165, 43, 0.4)',
-    bar: '#D97706',
+    bg: 'var(--color-accent-subtle)',
+    color: 'var(--color-accent-ink)',
+    border: 'rgba(234, 93, 26, 0.3)',
+    bar: '#EA5D1A',
   },
   low: {
     bg: 'var(--color-danger-subtle)',
-    color: '#A93226',
-    border: 'rgba(217, 72, 59, 0.3)',
-    bar: '#D9483B',
+    color: 'var(--color-danger)',
+    border: 'rgba(194, 58, 43, 0.3)',
+    bar: '#C23A2B',
   },
 };
 
 const formatCategory = (cat) =>
   cat ? cat.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) : 'Unspecified';
 
-const MatchesView = ({ donations = [], onAccept, onTabChange }) => {
+const MatchesView = ({ donations = [], onAccept, onTabChange, onSelectDonation }) => {
   const [selectedId, setSelectedId] = useState('');
   const [matchData, setMatchData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -66,22 +66,17 @@ const MatchesView = ({ donations = [], onAccept, onTabChange }) => {
   const [assigningId, setAssigningId] = useState(null);
   const [assignSuccessMsg, setAssignSuccessMsg] = useState('');
 
-  // Pick a sensible default donation (first available/submitted, or first in list)
-  useEffect(() => {
-    if (donations.length === 0) {
-      setSelectedId('');
-      return;
-    }
-    const stillExists = donations.some((d) => d.id === selectedId);
-    if (!selectedId || !stillExists) {
-      const preferred =
-        donations.find((d) => ['available', 'submitted'].includes((d.status || '').toLowerCase())) ||
-        donations[0];
-      setSelectedId(preferred.id);
-    }
+  // Derive active donation selection without synchronous setState inside useEffect
+  const effectiveSelectedId = useMemo(() => {
+    if (donations.length === 0) return '';
+    if (selectedId && donations.some((d) => d.id === selectedId)) return selectedId;
+    const preferred =
+      donations.find((d) => ['available', 'submitted'].includes((d.status || '').toLowerCase())) ||
+      donations[0];
+    return preferred.id;
   }, [donations, selectedId]);
 
-  const fetchMatches = async (donationId) => {
+  const fetchMatches = useCallback(async (donationId) => {
     if (!donationId) return;
     setLoading(true);
     setError('');
@@ -96,17 +91,37 @@ const MatchesView = ({ donations = [], onAccept, onTabChange }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    if (selectedId) {
-      fetchMatches(selectedId);
-    }
-  }, [selectedId]);
+    if (!effectiveSelectedId) return;
+    let active = true;
+    axios
+      .get(`${API_URL}/donations/${effectiveSelectedId}/matches`)
+      .then((res) => {
+        if (active) {
+          setMatchData(res.data);
+          setError('');
+        }
+      })
+      .catch((err) => {
+        if (active) {
+          console.error('Failed to load NGO matches:', err);
+          setError(err.response?.data?.error || 'Could not load NGO recommendations.');
+          setMatchData(null);
+        }
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [effectiveSelectedId]);
 
   const selectedDonation = useMemo(
-    () => donations.find((d) => d.id === selectedId) || matchData?.donation || null,
-    [donations, selectedId, matchData]
+    () => donations.find((d) => d.id === effectiveSelectedId) || matchData?.donation || null,
+    [donations, effectiveSelectedId, matchData]
   );
 
   const filteredMatches = useMemo(() => {
@@ -164,7 +179,7 @@ const MatchesView = ({ donations = [], onAccept, onTabChange }) => {
         `Donation "${selectedDonation.title || selectedDonation.foodName}" accepted and assigned to ${match.ngo_name}.`
       );
       fetchMatches(selectedDonation.id);
-    } catch (err) {
+    } catch {
       setError('Failed to assign NGO to this donation.');
     } finally {
       setAssigningId(null);
@@ -176,23 +191,22 @@ const MatchesView = ({ donations = [], onAccept, onTabChange }) => {
     ['available', 'submitted'].includes((selectedDonation.status || 'available').toLowerCase());
 
   return (
-    <div className="matches-page">
+    <div className="matches-page page-enter">
       {/* Header Banner */}
       <div className="matches-header-card">
         <div className="matches-header-top">
           <div>
             <div className="matches-badge">
-              <Sparkles size={14} />
-              <span>Explainable Weighted Matching Engine</span>
+              <GitFork size={13} strokeWidth={1.65} />
+              <span>Weighted compatibility scoring</span>
             </div>
-            <h2 className="matches-title">Intelligent NGO Matching</h2>
+            <h2 className="matches-title">NGO matching</h2>
             <p className="matches-subtitle">
-              Ranks demo NGO profiles against real donation records using a deterministic 100-point
-              compatibility model across category, location, capacity, urgency, dietary fit, and pickup readiness.
+              Ranks registered NGOs and demo profiles using a 100-point compatibility model across category, distance, capacity, urgency, dietary fit, and pickup readiness.
             </p>
           </div>
           <div className="matches-weights-pill">
-            <span className="weights-pill-title">Scoring Weights (100 pts)</span>
+            <span className="weights-pill-title">Scoring weights (100 pts)</span>
             <div className="weights-pill-items">
               <span>Category 25</span>
               <span>Location 20</span>
@@ -235,7 +249,7 @@ const MatchesView = ({ donations = [], onAccept, onTabChange }) => {
               <select
                 id="donation-match-select"
                 className="matches-select"
-                value={selectedId}
+                value={effectiveSelectedId}
                 onChange={(e) => {
                   setSelectedId(e.target.value);
                   setAssignSuccessMsg('');
@@ -255,15 +269,27 @@ const MatchesView = ({ donations = [], onAccept, onTabChange }) => {
             )}
           </div>
 
-          <button
-            type="button"
-            className="btn btn-secondary matches-refresh-btn"
-            onClick={() => selectedId && fetchMatches(selectedId)}
-            disabled={loading || !selectedId}
-          >
-            <RefreshCw size={15} className={loading ? 'spin-icon' : ''} />
-            <span>Re-evaluate</span>
-          </button>
+          <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
+            {onSelectDonation && selectedDonation && (
+              <button
+                type="button"
+                className="btn btn-outline matches-refresh-btn"
+                onClick={() => onSelectDonation(selectedDonation)}
+              >
+                <Eye size={15} />
+                <span>View Details</span>
+              </button>
+            )}
+            <button
+              type="button"
+              className="btn btn-secondary matches-refresh-btn"
+              onClick={() => effectiveSelectedId && fetchMatches(effectiveSelectedId)}
+              disabled={loading || !effectiveSelectedId}
+            >
+              <RefreshCw size={15} className={loading ? 'spin-icon' : ''} />
+              <span>Re-evaluate</span>
+            </button>
+          </div>
         </div>
 
         {selectedDonation && (
@@ -553,6 +579,10 @@ const MatchesView = ({ donations = [], onAccept, onTabChange }) => {
                       <span className="ngo-status-locked">
                         Donation already {selectedDonation?.status}
                       </span>
+                    ) : !onAccept ? (
+                      <span className="ngo-status-locked">
+                        NGO / Admin role assigns pickup
+                      </span>
                     ) : isConfirming ? (
                       <div className="ngo-confirm-box">
                         <span>Confirm assignment?</span>
@@ -611,12 +641,12 @@ const MatchesView = ({ donations = [], onAccept, onTabChange }) => {
                                 style={{
                                   width: `${f.data_available ? pct : 0}%`,
                                   backgroundColor: !f.data_available
-                                    ? '#CBD5E1'
+                                    ? 'var(--color-bg-subtle-hover)'
                                     : pct >= 70
-                                    ? '#2E7D32'
+                                    ? 'var(--color-pastel-green-strong)'
                                     : pct >= 40
-                                    ? '#D97706'
-                                    : '#D9483B',
+                                    ? 'var(--color-accent)'
+                                    : 'var(--color-danger)',
                                 }}
                               />
                             </div>
